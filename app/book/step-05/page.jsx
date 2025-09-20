@@ -105,6 +105,7 @@ function Page() {
       );
 
       if(response?.data?.status_code === 200){
+        console.log(response?.data?.data)
         payNowReservation(response?.data?.data);
       }else{
         setSubmitLoader(false);
@@ -160,7 +161,7 @@ function Page() {
           </h3>
         }
       />
-      <div className="!pb-32 py-[20px] mt-[70px] sm:mt-[90px] sm:py-[30px] max-w-[1400px] mx-auto w-[95%]">
+      <div className="!pb-[80px] py-[2px] mt-[70px] sm:mt-[90px] sm:py-[30px] max-w-[1400px] mx-auto w-[95%]">
         <div className="mt-[10px] flex justify-start items-start gap-5 flex-col lg:flex-row">
           <PolicyLeftContent />
           <SideBar step={5} />
