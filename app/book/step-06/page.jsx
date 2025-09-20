@@ -25,7 +25,7 @@ function Page() {
 
 
   return (
-    <div>
+    <div className="bg-white" >
       <BookNavBar
         child={
           <h3 className="text-center text-[17px] w-full font-semibold">
