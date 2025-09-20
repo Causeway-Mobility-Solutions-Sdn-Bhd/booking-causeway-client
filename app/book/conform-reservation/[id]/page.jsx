@@ -33,11 +33,7 @@ export default function Page() {
   return (
     <div>
       <h1>Reservation Confirmation</h1>
-      {conformeReservation ? (
-        <pre>{JSON.stringify(conformeReservation, null, 2)}</pre>
-      ) : (
-        <p>Loading...</p>
-      )}
+      
     </div>
   );
 }
