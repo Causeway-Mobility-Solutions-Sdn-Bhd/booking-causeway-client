@@ -1,21 +1,18 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { useAppSelector } from "@/store/hooks"; 
+import { useAppSelector } from "@/store/hooks";
 
 const logos = [
-  "/partners/brand-1.webp",
-  "/partners/brand-2.webp",
-  "/partners/brand-3.webp",
-  "/partners/brand-4.webp",
-  "/partners/brand-5.webp",
-  "/partners/brand-6.webp",
-  "/partners/brand-7.webp",
-  "/partners/brand-8.webp",
-  "/partners/brand-9.webp",
-  "/partners/brand-10.webp",
-  "/partners/brand-11.webp",
-  "/partners/brand-12.webp",
+  "/media-logos/media-logos-01.webp",
+  "/media-logos/media-logos-02.webp",
+  "/media-logos/media-logos-03.webp",
+  "/media-logos/media-logos-04.webp",
+  "/media-logos/media-logos-05.webp",
+  "/media-logos/media-logos-06.webp",
+  "/media-logos/media-logos-07.webp",
+  "/media-logos/media-logos-08.webp",
+  "/media-logos/media-logos-09.webp",
 ];
 
 function Features() {
@@ -56,14 +53,13 @@ function Features() {
               key={`first-${index}`}
               className="shrink-0 px-4 w-[30%] sm:w-[25%] md:w-[12.5%] lg:w-[10%] flex items-center justify-center"
             >
-              <div className="relative aspect-[7/3] sm:aspect-[5/2] w-full max-w-[200px]">
+              <div className="relative aspect-[7/3] sm:aspect-[7/3]  w-full max-w-[200px]">
                 <Image
                   src={logo}
                   alt={`Brand ${index + 1}`}
                   loading="lazy"
                   fill
-                  sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 12vw"
-                  className="object-contain opacity-60 hover:opacity-100 transition-opacity duration-300"
+                  className="object-contain transition-opacity duration-300 h-0 sm:h-[300px]"
                 />
               </div>
             </div>

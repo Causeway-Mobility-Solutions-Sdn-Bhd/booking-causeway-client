@@ -9,12 +9,14 @@ import Image from "next/image";
 
 
 const slides = [
-  { id: 1, img: "/special-offers/special-banner-01.webp" },
-  { id: 2, img: "/special-offers/special-banner-02.webp" },
-  { id: 3, img: "/special-offers/special-banner-03.webp" },
-  { id: 4, img: "/special-offers/special-banner-01.webp" },
-  { id: 5, img: "/special-offers/special-banner-02.webp" },
-  { id: 6, img: "/special-offers/special-banner-03.webp" },
+  { id: 1, img: "/special-offers/special-banner-01.png" },
+  { id: 2, img: "/special-offers/special-banner-02.png" },
+  { id: 3, img: "/special-offers/special-banner-03.png" },
+  { id: 4, img: "/special-offers/special-banner-04.png" },
+  { id: 1, img: "/special-offers/special-banner-01.png" },
+  { id: 2, img: "/special-offers/special-banner-02.png" },
+  { id: 3, img: "/special-offers/special-banner-03.png" },
+  { id: 4, img: "/special-offers/special-banner-04.png" },
 ];
 
 function SpecialOffer() {
