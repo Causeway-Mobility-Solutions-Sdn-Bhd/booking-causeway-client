@@ -11,6 +11,7 @@ import PolicyLeftContent from "./_components/PolicyLeftContent";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/store/hooks";
 import {
+  setFinalPaymentLink,
   setReservation,
   setSelectedAdditionalCharges,
   setSelectedVehicle,
@@ -22,6 +23,8 @@ function Page() {
   const dispatch = useDispatch();
 
   const [loader, setLoader] = useState(false);
+  const [submitLoader, setSubmitLoader] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -93,6 +96,61 @@ function Page() {
     fetchData();
   }, []);
 
+  const conformReservation = async () => {
+    setSubmitLoader(true);
+
+    try {
+      const response = await hqApi.post(
+        "car-rental/reservations/conform-reservation"
+      );
+
+      if(response?.data?.status_code === 200){
+        payNowReservation(response?.data?.data);
+      }else{
+        setSubmitLoader(false);
+      }
+
+      console.log("Reservation confirmed:", response?.data?.data);
+    } catch (error) {
+      console.error("Error confirming reservation:", error);
+    }
+  };
+
+  const payNowReservation = async (reservedReservationDetail) => {
+    const reservation = reservedReservationDetail?.reservation || {};
+    const outstandingBalance =reservedReservationDetail?.total?.outstanding_balance?.amount || "0.00";
+    const reservationId = reservation?.id || "N/A";
+    const paymentDue = (parseFloat(outstandingBalance) * 0.1).toFixed(2);
+    const reservationUid = reservation?.uuid;
+    const domain = window.location.origin;
+
+    await hqApi
+      .post("car-rental/reservations/process-payment", null, {
+        params: {
+          amount: paymentDue,
+          item_id: reservationId,
+          label: `Reservation ${reservationId}`,
+          description: `Payment From API - Reservation ${reservationId}`,
+          external_redirect: `${domain}/book/conform-reservation/${reservationUid}`,
+        },
+      })
+      .then((res) => {
+        if (res?.status == 200) {
+          console.log(res?.data)
+          const paymentLink = res?.data?.payment_gateways_transaction?.external_url
+          console.log(res?.data?.payment_gateways_transaction?.external_url)
+          
+          dispatch(setFinalPaymentLink(paymentLink))
+        router.push(`/book/step-06?ssid=${currentUUID}`);
+        }
+      })
+      .catch((err) => {
+        setSubmitLoader(false);
+      }).finally(() => {
+        setSubmitLoader(false);
+      });
+  };
+
   return (
     <div>
       <BookNavBar
@@ -109,7 +167,12 @@ function Page() {
         </div>
       </div>
 
-      <PriceBottomBar step={5} fetchLoader={loader} />
+      <PriceBottomBar
+        step={5}
+        fetchLoader={loader}
+        submitLoader={submitLoader}
+        onSubmit={conformReservation}
+      />
     </div>
   );
 }

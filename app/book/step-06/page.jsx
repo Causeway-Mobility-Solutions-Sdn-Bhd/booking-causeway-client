@@ -1,118 +1,50 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import BookNavBar from "../_components/BookNavBar";
 import SideBar from "../_components/SideBar";
-import { format } from "date-fns";
-import hqApi from "@/lib/hqApi";
-import { useRouter } from "next/navigation";
-import PriceBottomBar from "../_components/PriceBottomBar";
 
-import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/store/hooks";
-import {
-  setReservation,
-  setSelectedAdditionalCharges,
-  setSelectedVehicle,
-} from "@/store/slices/reservationSlice";
-import PaymentForm from "./_components/PaymentForm";
+import PaymentIframe from "./_components/PaymentIframe";
+import { useRouter } from "next/navigation";
 
 function Page() {
   const reservation = useAppSelector((state) => state.reservation.reservation);
-  const currentUUID = useAppSelector((state) => state.reservation.currentUUID);
-  const dispatch = useDispatch();
+  const finalPaymentLink = useAppSelector((state) => state.reservation.finalPaymentLink);
+  const router = useRouter()
 
-  const submitFormRef = useRef();
-  const [loader, setLoader] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
-    // if (!reservation?.customer_id) {
-    //   router.push(`/`);
-    // }
-  }, [reservation]);
-
-  const fetchData = async () => {
-    try {
-      if (reservation?.vehicle_class_id && currentUUID) {
-        setLoader(true);
-        const requestData = {
-          pick_up_date: reservation?.pick_up_date
-            ? format(reservation.pick_up_date, "yyyy-MM-dd")
-            : null,
-          pick_up_time: reservation?.pick_up_time || null,
-          return_date: reservation?.return_date
-            ? format(reservation.return_date, "yyyy-MM-dd")
-            : null,
-          return_time: reservation?.return_time || null,
-          pick_up_location: reservation?.pick_up_location?.id || null,
-          return_location: reservation?.return_location?.id || null,
-          brand_id: reservation?.brand_id ?? null,
-          vehicle_class_id: reservation?.vehicle_class_id,
-        };
-
-        const params = new URLSearchParams();
-
-        for (const key in requestData) {
-          if (requestData[key] !== null && requestData[key] !== undefined) {
-            params.append(key, requestData[key]);
-          }
-        }
-
-        if (reservation?.selected_additional_charges) {
-          reservation?.selected_additional_charges?.forEach((charge) => {
-            params.append("additional_charges", charge);
-          });
-        } else {
-          params.append("additional_charges", "20");
-        }
-
-        const response = await hqApi.post(
-          `car-rental/reservations/additional-charges?${params.toString()}`,
-          {}
-        );
-
-        if (response?.status === 200) {
-          dispatch(setReservation(response?.data?.reservation));
-          dispatch(setSelectedVehicle(response?.data?.selected_vehicle));
-          dispatch(
-            setSelectedAdditionalCharges(
-              response?.data?.selected_additional_charges
-            )
-          );
-          setLoader(false);
-        } else {
-          setLoader(false);
-        }
+    if (!reservation?.customer_id) {
+      router.push(`/`);
+    }else{
+      if(finalPaymentLink === ""){
+        router.push(`/`);
       }
-    } catch (error) {
-      console.log(error);
-      setLoader(false);
     }
-  };
+  }, [reservation , finalPaymentLink]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   return (
     <div>
       <BookNavBar
         child={
           <h3 className="text-center text-[17px] w-full font-semibold">
-            Policies
+            Conform Payment
           </h3>
         }
       />
       <div className="!pb-32 py-[20px] mt-[70px] sm:mt-[90px] sm:py-[30px] max-w-[1400px] mx-auto w-[95%]">
         <div className="mt-[10px] flex justify-start items-start gap-5 flex-col lg:flex-row">
           <div className="flex-1 w-full">
-            <PaymentForm submitFormRef={submitFormRef} />
+            {
+              finalPaymentLink && (<PaymentIframe />)
+            }
           </div>
           <SideBar step={7} />
         </div>
       </div>
 
-      <PriceBottomBar step={7} fetchLoader={loader} />
+      {/* <PriceBottomBar step={7} fetchLoader={loader} /> */}
     </div>
   );
 }

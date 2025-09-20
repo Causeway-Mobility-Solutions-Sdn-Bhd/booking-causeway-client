@@ -26,18 +26,24 @@ export default function BookLayoutClient({ children }) {
         const reservation = res?.data;
 
         if (!reservation) {
-          console.log("redirect")
+          console.log("redirect");
           router.replace("/");
           return;
         }
 
         dispatch(setCurrentUUID(reservation._id));
         dispatch(setReservation(reservation));
+        console.log(reservation);
 
         if (ssidFromUrl !== reservation._id) {
           const params = new URLSearchParams(searchParams.toString());
-          params.set("ssid", reservation._id);
-          router.replace(`${pathname}?${params.toString()}`);
+          const parts = pathname.split("/");
+          const segment = parts[2];
+          
+          if(segment !== "conform-reservation"){
+            params.set("ssid", reservation._id);
+            router.replace(`${pathname}?${params.toString()}`);
+          }
         }
 
         setSessionState("valid");

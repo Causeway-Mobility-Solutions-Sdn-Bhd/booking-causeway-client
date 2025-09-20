@@ -129,7 +129,7 @@ const UpgradeDrawer = ({
   return (
     <Drawer open={isDrawerOpen} onOpenChange={handleDrawerChange}>
       <DrawerTrigger asChild>
-        <Button className="items-center bg-cPrimary basis-[50%] sm:basis-[10%] h-[53px] text-white">
+        <Button disabled={finalLoader} className="items-center bg-cPrimary basis-[40%] sm:basis-[10%] h-[53px] text-white">
           {finalLoader ? (
             <Spinner size={20} color="#fff" thickness={3} />
           ) : (

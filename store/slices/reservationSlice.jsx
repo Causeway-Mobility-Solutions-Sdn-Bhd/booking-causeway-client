@@ -10,6 +10,7 @@ const initialState = {
   selectedVehicle: {},
   additionalCharges: [],
   selectedAdditionalCharges: [],
+  finalPaymentLink : "",
 };
 
 const reservationSlice = createSlice({
@@ -44,6 +45,9 @@ const reservationSlice = createSlice({
     setSelectedAdditionalCharges(state, action) {
       state.selectedAdditionalCharges = action.payload;
     },
+    setFinalPaymentLink(state, action) {
+      state.finalPaymentLink = action.payload;
+    },
   },
 });
 
@@ -57,6 +61,7 @@ export const {
   setSelectedVehicle,
   setAdditionalCharges,
   setSelectedAdditionalCharges,
+  setFinalPaymentLink,
 } = reservationSlice.actions;
 
 export default reservationSlice.reducer;

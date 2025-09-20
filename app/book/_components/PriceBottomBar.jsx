@@ -50,7 +50,7 @@ function PriceBottomBar({
         ) : (
           <Button
             onClick={handlePress}
-            className={`items-center bg-cPrimary basis-[50%] h-[53px] text-white ${
+            className={`items-center bg-cPrimary basis-[40%] h-[53px] text-white ${
               submitLoader ? "opacity-50 cursor-not-allowed" : ""
             }`}
             disabled={submitLoader}
@@ -109,8 +109,8 @@ const BottomBarSkeleton = () => {
     <div className="bg-white border-t border-gray-200 fixed bottom-0 p-3 left-0 right-0 z-50">
       {/* Mobile (sm:hidden) */}
       <div className="flex items-center justify-between gap-2 sm:hidden">
-        <Skeleton className="h-[53px] w-1/2 rounded-lg" />
-        <Skeleton className="h-[53px] w-1/2 rounded-lg" />
+        <Skeleton className="flex-1 h-[53px] w-1/2 rounded-lg" />
+        <Skeleton className="basis-[40%] h-[53px] w-1/2 rounded-lg" />
       </div>
 
       {/* Desktop (hidden sm:flex) */}
