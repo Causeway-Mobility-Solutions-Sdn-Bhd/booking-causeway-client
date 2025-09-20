@@ -25,7 +25,7 @@ function Page() {
 
 
   return (
-    <div className="bg-white" >
+    <div>
       <BookNavBar
         child={
           <h3 className="text-center text-[17px] w-full font-semibold">
@@ -33,7 +33,7 @@ function Page() {
           </h3>
         }
       />
-      <div className="!pb-32 py-[20px] mt-[70px] sm:mt-[90px] sm:py-[30px] max-w-[1400px] mx-auto w-[95%]">
+      <div className="!pb-32 py-[20px] mt-[50px] sm:mt-[90px] sm:py-[30px] max-w-[1400px] mx-auto w-[95%]">
         <div className="mt-[10px] flex justify-start items-start gap-5 flex-col lg:flex-row">
           <div className="flex-1 w-full">
             {
