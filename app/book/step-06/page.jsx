@@ -29,7 +29,7 @@ function Page() {
       <BookNavBar
         child={
           <h3 className="text-center text-[17px] w-full font-semibold">
-            Conform Payment
+            Confirm Payment
           </h3>
         }
       />
