@@ -67,7 +67,7 @@ function Partners() {
   );
 
   return (
-    <section className="w-[90%] sm:w-[95%] max-w-[1400px] mx-auto mt-[30px]">
+    <section className="w-[90%] sm:w-[95%] max-w-[1400px] mx-auto mt-[30px] pb-[80px]">
       <TitleHead name="Partners" />
 
       <div className="relative">
