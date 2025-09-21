@@ -54,7 +54,7 @@ function PickupReturnLocationDrawer({
     };
 
     fetchData();
-  }, []);
+  }, [isDrawerOpen]);
 
   const transformLocationsByBrand = (locations) => {
     const brandMap = new Map();

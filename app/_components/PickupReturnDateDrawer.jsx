@@ -14,18 +14,8 @@ import { FaRegCalendar } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { showErrorToast } from "../_lib/toast";
-const TimePickerDrawer = dynamic(
-  () => import("@/components/custom/TimePickerDrawer"),
-  {
-    ssr: false,
-  }
-);
-const MultiMonthCalendar = dynamic(
-  () => import("@/components/custom/MultiMonthCalendar"),
-  {
-    ssr: false,
-  }
-);
+import TimePickerDrawer from "@/components/custom/TimePickerDrawer";
+import MultiMonthCalendar from "@/components/custom/MultiMonthCalendar";
 
 function PickupReturnDateDrawer({ booking, setBooking }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
