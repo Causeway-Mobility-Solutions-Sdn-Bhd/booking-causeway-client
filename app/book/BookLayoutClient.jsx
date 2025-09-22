@@ -33,7 +33,6 @@ export default function BookLayoutClient({ children }) {
 
         dispatch(setCurrentUUID(reservation._id));
         dispatch(setReservation(reservation));
-        console.log(reservation);
 
         if (ssidFromUrl !== reservation._id) {
           const params = new URLSearchParams(searchParams.toString());
