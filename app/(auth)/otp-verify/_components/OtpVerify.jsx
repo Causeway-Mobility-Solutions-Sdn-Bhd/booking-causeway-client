@@ -1,0 +1,226 @@
+"use client";
+import React, { useState, useRef, useEffect } from "react";
+import { ArrowLeft, RefreshCw } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+function OtpVerify({ type, email = "user@example.com" }) {
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [resendTimer, setResendTimer] = useState(30);
+  const [canResend, setCanResend] = useState(false);
+  const inputRefs = useRef([]);
+  const router = useRouter()
+
+  const onBack = () => {
+    router.push('/signup')
+  }
+
+  useEffect(() => {
+    if (resendTimer > 0) {
+      const timer = setTimeout(() => {
+        setResendTimer(resendTimer - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setCanResend(true);
+    }
+  }, [resendTimer]);
+
+  const handleOTPChange = (index, value) => {
+    if (value.length > 1) return;
+
+    if (value && !/^\d$/.test(value)) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+    setError(""); 
+
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+
+  const handleKeyDown = (index, e) => {
+    if (e.key === "Backspace") {
+      if (!otp[index] && index > 0) {
+        inputRefs.current[index - 1]?.focus();
+        const newOtp = [...otp];
+        newOtp[index - 1] = "";
+        setOtp(newOtp);
+      } else {
+        const newOtp = [...otp];
+        newOtp[index] = "";
+        setOtp(newOtp);
+      }
+    }
+  };
+
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pastedText = e.clipboardData.getData("text").replace(/\D/g, "");
+    if (pastedText.length === 6) {
+      const newOtp = pastedText.split("").slice(0, 6);
+      setOtp(newOtp);
+      inputRefs.current[5]?.focus();
+    }
+  };
+
+  const handleVerify = async () => {
+    const otpValue = otp.join("");
+    
+    if (otpValue.length !== 6) {
+      setError("Please enter complete OTP");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      if (otpValue === "123456") {
+        console.log("OTP verified successfully:", otpValue);
+      } else {
+        setError("Invalid OTP. Please try again.");
+      }
+    } catch (err) {
+      setError("Verification failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (!canResend) return;
+    
+    setCanResend(false);
+    setResendTimer(30);
+    setError("");
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log("OTP resent to:", email);
+    } catch (err) {
+      setError("Failed to resend OTP. Please try again.");
+      setCanResend(true);
+      setResendTimer(0);
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-lg w-full max-w-sm p-5 md:p-6 relative">
+      {type === "primary" && (
+        <>
+          {/* Back Button */}
+          <button
+            onClick={onBack}
+            className="absolute top-5 left-5 text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <ArrowLeft size={20} />
+          </button>
+
+          {/* Title */}
+          <div className="text-center mb-6 mt-2">
+            <h2 className="text-2xl font-bold mb-2">Verify OTP</h2>
+            <p className="text-gray-600 text-sm">
+              We've sent a 6-digit code to
+            </p>
+            <p className="text-cPrimary font-medium text-sm">{email}</p>
+          </div>
+        </>
+      )}
+
+      <div>
+        {/* OTP Input Fields */}
+        <div className="mb-6">
+          <div className="flex justify-center space-x-3 mb-4">
+            {otp.map((digit, index) => (
+              <input
+                key={index}
+                ref={el => inputRefs.current[index] = el}
+                type="text"
+                inputMode="numeric"
+                maxLength="1"
+                value={digit}
+                onChange={(e) => handleOTPChange(index, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(index, e)}
+                onPaste={index === 0 ? handlePaste : undefined}
+                className={`w-12 h-12 text-center text-lg font-semibold border-2 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all ${
+                  error
+                    ? "border-red-500 focus:ring-red-300"
+                    : digit
+                    ? "border-cPrimary focus:ring-cPrimary/50"
+                    : "border-gray-200 focus:ring-cPrimary/50"
+                }`}
+              />
+            ))}
+          </div>
+          
+          {error && (
+            <p className="text-red-500 text-[12px] text-center mb-2">
+              {error}
+            </p>
+          )}
+        </div>
+
+        {/* Verify Button */}
+        <button
+          onClick={handleVerify}
+          disabled={isLoading || otp.join("").length !== 6}
+          className={`w-full font-semibold py-3 px-4 rounded-lg cursor-pointer mb-4 transition-colors ${
+            isLoading || otp.join("").length !== 6
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-cPrimary text-white hover:bg-cPrimary/90"
+          }`}
+        >
+          {isLoading ? (
+            <div className="flex items-center justify-center">
+              <RefreshCw size={16} className="animate-spin mr-2" />
+              Verifying...
+            </div>
+          ) : (
+            "Verify OTP"
+          )}
+        </button>
+
+        {/* Resend Section */}
+        <div className="text-center">
+          <span className="text-gray-600 text-sm">
+            Didn't receive the code?{" "}
+          </span>
+          {canResend ? (
+            <button
+              onClick={handleResend}
+              className="text-cSecondary font-medium text-sm hover:underline transition-colors"
+            >
+              Resend OTP
+            </button>
+          ) : (
+            <span className="text-gray-400 text-sm">
+              Resend in {resendTimer}s
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Back to Login Link */}
+      {type === "primary" && (
+        <div className="text-center mt-4">
+          <Link
+            href="/login"
+            className="text-cSecondary font-medium text-sm hover:underline transition-colors"
+          >
+            Back to Login
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default OtpVerify;
