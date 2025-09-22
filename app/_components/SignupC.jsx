@@ -1,12 +1,22 @@
 "use client";
 import React, { useState } from "react";
-import { Eye, EyeOff, X } from "lucide-react";
+import { Eye, EyeOff, RefreshCw, X } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import hqApi from "@/lib/hqApi";
+import { useRouter } from "next/navigation";
+import Spinner from "@/components/custom/Spinner";
+import { showErrorToast, showSuccessToast } from "../_lib/toast";
+import { useAppDispatch } from "@/store/hooks";
+import { setUnVerifideUser } from "@/store/slices/authSlie";
 
 function SignupC() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const route = useRouter();
+
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -25,9 +35,29 @@ function SignupC() {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const onSubmit = (data) => {
-    console.log("Form data:", data);
-    // Handle form submission here
+  const onSubmit = async (data) => {
+    setLoader(true);
+    try {
+      const regData = {
+        firstName: data?.firstName,
+        lastName: data?.lastName,
+        email: data?.email,
+        password: data?.password,
+      };
+      const res = await hqApi.post("auth/register", regData);
+      if (res?.status === 200) {
+        showSuccessToast(
+          "Account Created Successfully! Please Enter OTP to verify your email."
+        );
+        dispatch(setUnVerifideUser(res?.data?.user))
+        route.push("otp-verify");
+      }
+      console.log(res);
+      setLoader(false);
+    } catch (err) {
+      setLoader(false);
+      showErrorToast(err?.response?.data?.message);
+    }
   };
 
   // Get the first error field name
@@ -203,10 +233,15 @@ function SignupC() {
 
         {/* Sign Up Button */}
         <button
+          disabled={loader}
           onClick={handleSubmit(onSubmit)}
-          className="w-full bg-cPrimary text-white font-semibold py-3 px-4 rounded-lg cursor-pointer mb-4 hover:bg-cPrimary/90 transition-colors"
+          className="w-full bg-cPrimary text-white font-semibold h-12 px-4 rounded-lg cursor-pointer mb-4 hover:bg-cPrimary/90 transition-colors flex justify-center items-center"
         >
-          Sign up
+          {loader ? (
+            <Spinner size={20} color="#fff" thickness={3} />
+          ) : (
+            <span>Sign up</span>
+          )}
         </button>
       </div>
 

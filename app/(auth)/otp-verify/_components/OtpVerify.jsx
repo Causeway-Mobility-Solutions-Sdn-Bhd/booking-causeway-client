@@ -3,19 +3,22 @@ import React, { useState, useRef, useEffect } from "react";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/store/hooks";
+import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
+import hqApi from "@/lib/hqApi";
 
-function OtpVerify({ type, email = "user@example.com" }) {
+function OtpVerify({ type }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [resendTimer, setResendTimer] = useState(30);
+  const [resendTimer, setResendTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
   const inputRefs = useRef([]);
-  const router = useRouter()
+  const router = useRouter();
+  const unVerifyUser = useAppSelector((state) => state.auth.unVerifideUser);
 
   const onBack = () => {
-    router.push('/signup')
-  }
+    router.push("/signup");
+  };
 
   useEffect(() => {
     if (resendTimer > 0) {
@@ -36,13 +39,11 @@ function OtpVerify({ type, email = "user@example.com" }) {
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-    setError(""); 
 
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
   };
-
 
   const handleKeyDown = (index, e) => {
     if (e.key === "Backspace") {
@@ -71,25 +72,27 @@ function OtpVerify({ type, email = "user@example.com" }) {
 
   const handleVerify = async () => {
     const otpValue = otp.join("");
-    
+
     if (otpValue.length !== 6) {
-      setError("Please enter complete OTP");
+      showErrorToast("Please enter complete OTP");
       return;
     }
 
     setIsLoading(true);
-    setError("");
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      if (otpValue === "123456") {
-        console.log("OTP verified successfully:", otpValue);
-      } else {
-        setError("Invalid OTP. Please try again.");
+      const res = await hqApi.post("auth/verify", {
+        code: otpValue,
+      });
+
+      if (res?.status === 200) {
+        showSuccessToast("Email verified successfully");
+        router.push("/");
       }
     } catch (err) {
-      setError("Verification failed. Please try again.");
+      showErrorToast(
+        err?.response?.data?.message || "Verification failed. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -97,16 +100,18 @@ function OtpVerify({ type, email = "user@example.com" }) {
 
   const handleResend = async () => {
     if (!canResend) return;
-    
+
     setCanResend(false);
-    setResendTimer(30);
-    setError("");
-    
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log("OTP resent to:", email);
+      const res = await hqApi.post("auth/resend-verify", {
+        email: unVerifyUser?.email,
+      });
+       if (res?.status === 200) {
+        setResendTimer(30);
+        showSuccessToast("OTP resent successfully")
+      }
     } catch (err) {
-      setError("Failed to resend OTP. Please try again.");
+      showErrorToast(err?.response?.data?.message || "Failed to resend OTP. Please try again.");
       setCanResend(true);
       setResendTimer(0);
     }
@@ -130,7 +135,9 @@ function OtpVerify({ type, email = "user@example.com" }) {
             <p className="text-gray-600 text-sm">
               We've sent a 6-digit code to
             </p>
-            <p className="text-cPrimary font-medium text-sm">{email}</p>
+            <p className="text-cPrimary font-medium text-sm">
+              {unVerifyUser?.email}
+            </p>
           </div>
         </>
       )}
@@ -142,7 +149,7 @@ function OtpVerify({ type, email = "user@example.com" }) {
             {otp.map((digit, index) => (
               <input
                 key={index}
-                ref={el => inputRefs.current[index] = el}
+                ref={(el) => (inputRefs.current[index] = el)}
                 type="text"
                 inputMode="numeric"
                 maxLength="1"
@@ -150,22 +157,10 @@ function OtpVerify({ type, email = "user@example.com" }) {
                 onChange={(e) => handleOTPChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
                 onPaste={index === 0 ? handlePaste : undefined}
-                className={`w-12 h-12 text-center text-lg font-semibold border-2 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all ${
-                  error
-                    ? "border-red-500 focus:ring-red-300"
-                    : digit
-                    ? "border-cPrimary focus:ring-cPrimary/50"
-                    : "border-gray-200 focus:ring-cPrimary/50"
-                }`}
+                className={`w-12 h-12 text-center text-lg font-semibold border-2 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all $`}
               />
             ))}
           </div>
-          
-          {error && (
-            <p className="text-red-500 text-[12px] text-center mb-2">
-              {error}
-            </p>
-          )}
         </div>
 
         {/* Verify Button */}
