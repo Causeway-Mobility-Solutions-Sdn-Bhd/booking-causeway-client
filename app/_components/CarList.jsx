@@ -43,8 +43,23 @@ function CarList() {
         ]);
         setVehicleClasses(resVehicles?.data);
         setVehicleType(resVehcileType?.data);
-      } catch (err) {
-        console.log("err : ", err);
+      } catch (error) {
+        if (error.response) {
+          console.error(
+            "HQ API error:",
+            error.response.status,
+            error.response.data
+          );
+        } else if (error.request) {
+          console.error("HQ API no response:", error.request);
+        } else {
+          console.error("HQ API setup error:", error.message);
+        }
+
+        res.status(error.response?.status || 500).json({
+          message:
+            error.response?.data?.message || "Failed to fetch vehicle types",
+        });
       } finally {
         console.log("vehicle classes fetched");
       }
@@ -57,7 +72,11 @@ function CarList() {
       {/* Header */}
       <TitleHead name={"Pick Your Ride"} />
 
-      <CarType vehicleType={vehicleType} activeType={activeType} filterVehicle={filterVehicle} />
+      <CarType
+        vehicleType={vehicleType}
+        activeType={activeType}
+        filterVehicle={filterVehicle}
+      />
 
       {/* Car Carousel */}
       <Carousel
@@ -93,8 +112,5 @@ function CarList() {
     </div>
   );
 }
-
-
-
 
 export default CarList;
