@@ -3,18 +3,16 @@ import React, { useState, useRef, useEffect } from "react";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAppSelector } from "@/store/hooks";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 import hqApi from "@/lib/hqApi";
 
-function OtpVerify({ type }) {
+function OtpVerify({ type , email }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
   const [resendTimer, setResendTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
   const inputRefs = useRef([]);
   const router = useRouter();
-  const unVerifyUser = useAppSelector((state) => state.auth.unVerifideUser);
 
   const onBack = () => {
     router.push("/signup");
@@ -104,7 +102,7 @@ function OtpVerify({ type }) {
     setCanResend(false);
     try {
       const res = await hqApi.post("auth/resend-verify", {
-        email: unVerifyUser?.email,
+        email: email,
       });
        if (res?.status === 200) {
         setResendTimer(30);
@@ -136,7 +134,7 @@ function OtpVerify({ type }) {
               We've sent a 6-digit code to
             </p>
             <p className="text-cPrimary font-medium text-sm">
-              {unVerifyUser?.email}
+              {email}
             </p>
           </div>
         </>

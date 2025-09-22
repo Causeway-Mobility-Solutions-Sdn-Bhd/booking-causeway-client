@@ -50,7 +50,7 @@ function SignupC() {
           "Account Created Successfully! Please Enter OTP to verify your email."
         );
         dispatch(setUnVerifideUser(res?.data?.user))
-        route.push("otp-verify");
+        route.push(`otp-verify/${res?.data?.user?.clientToken}`);
       }
       console.log(res);
       setLoader(false);
