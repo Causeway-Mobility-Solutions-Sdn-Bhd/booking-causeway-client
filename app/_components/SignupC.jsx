@@ -7,16 +7,12 @@ import hqApi from "@/lib/hqApi";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/custom/Spinner";
 import { showErrorToast, showSuccessToast } from "../_lib/toast";
-import { useAppDispatch } from "@/store/hooks";
-import { setUnVerifideUser } from "@/store/slices/authSlie";
 
 function SignupC() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loader, setLoader] = useState(false);
   const route = useRouter();
-
-  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -49,7 +45,6 @@ function SignupC() {
         showSuccessToast(
           "Account Created Successfully! Please Enter OTP to verify your email."
         );
-        dispatch(setUnVerifideUser(res?.data?.user))
         route.push(`otp-verify/${res?.data?.user?.clientToken}`);
       }
       console.log(res);
@@ -60,7 +55,6 @@ function SignupC() {
     }
   };
 
-  // Get the first error field name
   const getFirstErrorField = () => {
     const errorFields = [
       "firstName",
