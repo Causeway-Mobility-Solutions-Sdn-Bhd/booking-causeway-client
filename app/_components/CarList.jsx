@@ -44,22 +44,11 @@ function CarList() {
         setVehicleClasses(resVehicles?.data);
         setVehicleType(resVehcileType?.data);
       } catch (error) {
-        if (error.response) {
-          console.error(
-            "HQ API error:",
-            error.response.status,
-            error.response.data
-          );
-        } else if (error.request) {
-          console.error("HQ API no response:", error.request);
-        } else {
-          console.error("HQ API setup error:", error.message);
-        }
-
-        res.status(error.response?.status || 500).json({
-          message:
-            error.response?.data?.message || "Failed to fetch vehicle types",
-        });
+        console.error(
+          "HQ API error:",
+          error.response.status,
+          error.response.data
+        );
       } finally {
         console.log("vehicle classes fetched");
       }

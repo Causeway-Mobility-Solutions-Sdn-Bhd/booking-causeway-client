@@ -27,7 +27,7 @@ export default function OtpVerifyPage() {
         setError(true)
         router.push('/auth/register')
         console.error("Verify token error:", err);
-        showErrorToast("Something went wrong. Please try again.");
+        showErrorToast(err?.response?.data?.message || "Invalid or expired verification link.");
         setLoading(false);
       }
     };
@@ -35,7 +35,7 @@ export default function OtpVerifyPage() {
     verifyToken();
   }, [clientToken]);
 
-  if (loading) {
+  if (loading || error) {
     return (
       <div className="flex items-center justify-center h-screen text-lg">
         Checking verification link...
