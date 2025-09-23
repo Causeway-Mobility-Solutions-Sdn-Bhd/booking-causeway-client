@@ -3,30 +3,48 @@ import React, { useState } from "react";
 import { Eye, EyeOff, X } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import hqApi from "@/lib/hqApi";
+import { showErrorToast, showSuccessToast } from "../_lib/toast";
+import Spinner from "@/components/custom/Spinner";
+import { useRouter } from "next/navigation";
 
 function LoginC({ type }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    mode: "onSubmit", // Validate only on submit
+    mode: "onSubmit", 
   });
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const onSubmit = (data) => {
-    console.log("Form data:", data);
+  const onSubmit = async (data) => {
+    setLoader(true);
+    try {
+      const regData = {
+        email: data?.email,
+        password: data?.password,
+      };
+      const res = await hqApi.post("auth/login", regData);
+      if (res?.status === 200) {
+        showSuccessToast("Loged successfully");
+        router.push("/");
+      }
+      setLoader(false);
+    } catch (err) {
+      setLoader(false);
+      showErrorToast(err?.response?.data?.message);
+    }
   };
 
-  // Email validation pattern
   const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-
-  // Password validation pattern - at least 8 chars, 1 uppercase, 1 lowercase, 1 special char
   const passwordPattern =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]).{8,}$/;
 
@@ -105,10 +123,7 @@ function LoginC({ type }) {
 
         {/* Forgot Password Link */}
         <div className="mb-3">
-          <a
-            href="#"
-            className="text-cSecondary text-sm font-medium"
-          >
+          <a href="#" className="text-cSecondary text-sm font-medium">
             Forgot password
           </a>
         </div>
@@ -116,9 +131,13 @@ function LoginC({ type }) {
         {/* Sign In Button */}
         <button
           onClick={handleSubmit(onSubmit)}
-          className="w-full bg-cPrimary text-white font-semibold py-3 px-4 rounded-lg cursor-pointer mb-4 hover:bg-cPrimary/90 transition-colors"
+          className="w-full bg-cPrimary text-white font-semibold flex justify-center items-center py-3 px-4 rounded-lg cursor-pointer mb-4 hover:bg-cPrimary/90 transition-colors"
         >
-          Sign in
+          {loader ? (
+            <Spinner size={20} color="#fff" thickness={3} />
+          ) : (
+            <span>Sign In</span>
+          )}
         </button>
       </div>
 

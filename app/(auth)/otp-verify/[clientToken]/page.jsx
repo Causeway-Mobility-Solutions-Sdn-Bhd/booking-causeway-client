@@ -8,7 +8,6 @@ import hqApi from "@/lib/hqApi";
 
 export default function OtpVerifyPage() {
   const { clientToken } = useParams();
-  console.log("clientToken:", clientToken); 
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
@@ -21,12 +20,10 @@ export default function OtpVerifyPage() {
       try {
         const res = await hqApi.post(`/auth/verify-client/${clientToken}`)
         setUserData(res.data?.data);
-        console.log("User data:", res.data?.data);  
         setLoading(false);
       } catch (err) {
         setError(true)
         router.push('/auth/register')
-        console.error("Verify token error:", err);
         showErrorToast(err?.response?.data?.message || "Invalid or expired verification link.");
         setLoading(false);
       }
