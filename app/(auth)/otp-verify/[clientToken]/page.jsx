@@ -23,7 +23,7 @@ export default function OtpVerifyPage() {
         setLoading(false);
       } catch (err) {
         setError(true)
-        router.push('/auth/register')
+        router.push('/signup')
         showErrorToast(err?.response?.data?.message || "Invalid or expired verification link.");
         setLoading(false);
       }

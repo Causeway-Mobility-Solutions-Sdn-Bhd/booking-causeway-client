@@ -1,4 +1,4 @@
-import LoginC from "@/app/_components/LoginC";
+import LoginC from "../../_components/LoginC";
 
 export default function Login() {
   return (
