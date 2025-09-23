@@ -25,6 +25,7 @@ export default function OtpVerifyPage() {
         setLoading(false);
       } catch (err) {
         setError(true)
+        router.push('/auth/register')
         console.error("Verify token error:", err);
         showErrorToast("Something went wrong. Please try again.");
         setLoading(false);
@@ -38,20 +39,6 @@ export default function OtpVerifyPage() {
     return (
       <div className="flex items-center justify-center h-screen text-lg">
         Checking verification link...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen text-red-500">
-        <p className="mb-4">{error}</p>
-        <button
-          onClick={() => router.push("/register")}
-          className="px-4 py-2 bg-blue-600 text-white rounded"
-        >
-          Go back to Register
-        </button>
       </div>
     );
   }
