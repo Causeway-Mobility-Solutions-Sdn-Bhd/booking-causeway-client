@@ -5,14 +5,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 import hqApi from "@/lib/hqApi";
+import { useDispatch } from "react-redux";
+import { setLogedUserUser } from "@/store/slices/authSlie";
 
 function OtpVerify({ type , email }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
   const [resendTimer, setResendTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
+
   const inputRefs = useRef([]);
   const router = useRouter();
+  const dispatch = useDispatch()
 
   const onBack = () => {
     router.push("/signup");
@@ -84,6 +88,7 @@ function OtpVerify({ type , email }) {
       });
 
       if (res?.status === 200) {
+        dispatch(setLogedUserUser(res?.data?.user))
         showSuccessToast("Email verified successfully");
         router.push("/");
       }

@@ -18,7 +18,7 @@ import { showErrorToast } from "@/app/_lib/toast";
 import { format } from "date-fns";
 import { useAppSelector } from "@/store/hooks";
 import { useDispatch } from "react-redux";
-import { setSelectedVehicleClasses } from "@/store/slices/reservationSlice";
+import { setSelectedVehicleClasses, setVehicleLoader } from "@/store/slices/reservationSlice";
 
 function SortDrawer({
   isDrawerOpen,

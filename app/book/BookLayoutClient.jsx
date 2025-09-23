@@ -57,6 +57,7 @@ export default function BookLayoutClient({ children }) {
   }, [searchParams]);
 
   if (sessionState === "checking") {
+    console.log("checking session");
     return (
       <div className="h-[100vh] flex justify-center items-center">
         <Spinner size={30} color={"#2dbdb6"} thickness={4} />
