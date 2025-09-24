@@ -1,4 +1,3 @@
-// hooks/useCountryData.js
 import { useState, useEffect } from "react";
 
 export const useCountryData = () => {
