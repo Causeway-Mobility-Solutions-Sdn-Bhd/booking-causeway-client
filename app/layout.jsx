@@ -4,6 +4,7 @@ import BlackBg from "@/components/custom/BlackBg";
 import { Toaster } from "sonner";
 import Providers from "./provider";
 import RefreshTokenLoader from "./_components/RefreshTokenLoader";
+import UnderDevelpment from "@/components/custom/UnderDevelpment";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -26,7 +27,14 @@ export default function RootLayout({ children }) {
         <link rel="preload" as="image" href="/banner/banner.webp" />
       </head>
       <body className={`${poppins.variable} antialiased`}>
-          <Providers>
+        {
+          process.env.Development === "Procution" ?
+          <>
+            (<UnderDevelpment />)
+          </>
+          :
+          (
+            <Providers>
             {children}
             {/* <RefreshTokenLoader /> */}
             <BlackBg />
@@ -38,6 +46,9 @@ export default function RootLayout({ children }) {
               duration={5000}
             />
           </Providers>
+          )
+        }
+          
       </body>
     </html>
   );

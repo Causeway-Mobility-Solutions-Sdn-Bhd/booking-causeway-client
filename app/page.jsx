@@ -14,48 +14,21 @@ import TopRanked from "./_components/Topranked";
 import { Wrench } from "lucide-react";
 
 export default function Home() {
- console.log("Environment:", process.env.NODE_ENV); 
+  console.log("Environment:", process.env.NODE_ENV);
   return (
-    <>
-      {process.env.NODE_ENV === "production" ? ( 
-        <UnderDevelopment />
-      ) : (
-        <div>
-          <Nav isPrimary={false} />
-          <Banner />
-          <Feauters />
-          <SpecialOffer />
-          <BottomBar page="Home" />
-          <SideBar />
-          <CarList />
-          <TopRanked />
-          <WhyCauseway />
-          <Partners />
-        </div>
-      )}
-    </>
-  );
-}
-
-function UnderDevelopment() {
-  return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="text-center max-w-md">
-        <div className="mb-6">
-          <Wrench className="w-16 h-16 text-blue-500 mx-auto mb-4" />
-        </div>
-
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Under Development
-        </h1>
-
-        <p className="text-gray-600 mb-6">
-          We're working hard to bring you something great. Please check back
-          soon!
-        </p>
-
-        <div className="text-sm text-gray-500">Coming Soon</div>
-      </div>
+    <div>
+      <Nav isPrimary={false} />
+      <Banner />
+      <Feauters />
+      <SpecialOffer />
+      <BottomBar page="Home" />
+      <SideBar />
+      <CarList />
+      <TopRanked />
+      <WhyCauseway />
+      <Partners />
     </div>
   );
 }
+
+
