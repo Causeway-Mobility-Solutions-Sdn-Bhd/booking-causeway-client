@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
           (
             <Providers>
             {children}
-            {/* <RefreshTokenLoader /> */}
+            <RefreshTokenLoader />
             <BlackBg />
             <Toaster
               position="top-left"
