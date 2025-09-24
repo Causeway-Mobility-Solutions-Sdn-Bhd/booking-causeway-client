@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${poppins.variable} antialiased`}>
         {
-          process.env.Development === "Procution" ?
+          process.env.Development === 'Production'?
           <>
             (<UnderDevelpment />)
           </>
@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
           (
             <Providers>
             {children}
-            <RefreshTokenLoader />
+            {/* <RefreshTokenLoader /> */}
             <BlackBg />
             <Toaster
               position="top-left"

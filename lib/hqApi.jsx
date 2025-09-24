@@ -11,20 +11,20 @@ const hqApi = axios.create({
   withCredentials: true,
 });
 
-// hqApi.interceptors.request.use(
-//   (config) => {
-//     const reservationAttemptId =
-//       typeof window !== "undefined"
-//         ? localStorage.getItem("ssid")
-//         : null;
+hqApi.interceptors.request.use(
+  (config) => {
+    const reservationAttemptId =
+      typeof window !== "undefined"
+        ? localStorage.getItem("ssid")
+        : null;
 
-//     if (reservationAttemptId) {
-//       config.headers["reservation-attempt-id"] = reservationAttemptId;
-//     }
+    if (reservationAttemptId) {
+      config.headers["reservation-attempt-id"] = reservationAttemptId;
+    }
 
-//     return config;
-//   },
-//   (error) => Promise.reject(error)
-// );
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 export default hqApi;
