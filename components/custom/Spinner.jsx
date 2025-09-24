@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 function Spinner({ size = 16, color = '#333', thickness = 2 }) {
   const spinnerStyle = {
@@ -16,11 +15,5 @@ function Spinner({ size = 16, color = '#333', thickness = 2 }) {
     />
   );
 }
-
-Spinner.propTypes = {
-  size: PropTypes.number,
-  color: PropTypes.string,
-  thickness: PropTypes.number,
-};
 
 export default Spinner;
