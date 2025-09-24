@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
       <body className={`${poppins.variable} antialiased`}>
           <Providers>
             {children}
-            <RefreshTokenLoader />
+            {/* <RefreshTokenLoader /> */}
             <BlackBg />
             <Toaster
               position="top-left"
