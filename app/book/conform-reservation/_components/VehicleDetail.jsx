@@ -3,13 +3,7 @@ import { useAppSelector } from "@/store/hooks";
 import Image from "next/image";
 import React from "react";
 
-function VehicleDetail() {
-  const selectedVehicle = useAppSelector(
-    (state) => state.reservation.selectedVehicle
-  );
-
-  console.log(selectedVehicle);
-
+function VehicleDetail({ selectedVehicle }) {
   return (
     <div className="bg-white w-full sm:w-[450px] flex justify-start items-center gap-2 shadow-sm rounded-lg overflow-hidden px-4 py-2.5 mb-5">
       <div className="relative">
@@ -23,7 +17,7 @@ function VehicleDetail() {
         )}
       </div>
       <div className="flex-1">
-        <h3 className="text-[18px] font-semibold">{selectedVehicle?.name}</h3>
+        <h3 className="text-[18px] font-semibold">{selectedVehicle?.label}</h3>
         <div className="flex flex-wrap justify-start  gap-2.5 mt-1">
           {selectedVehicle?.features?.map((f) => (
             <div
