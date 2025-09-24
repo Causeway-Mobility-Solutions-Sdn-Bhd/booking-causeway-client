@@ -7,7 +7,7 @@ import React from "react";
 import { useAppDispatch } from "@/store/hooks";
 import { setOpenBg, setSidebarOpen } from "@/store/slices/generalSlice";
 
-function Nav({isMain = true , value = ""}) {
+function Nav({ isMain = true, value = "" }) {
   const dispatch = useAppDispatch();
 
   const handleOpenSidebar = () => {
@@ -34,7 +34,9 @@ function Nav({isMain = true , value = ""}) {
             height={70}
           />
         ) : (
-          <h3 className="block sm:hidden absolute left-[50%] translate-x-[-50%] font-semibold text-[17px]" >{value}</h3>
+          <h3 className="block sm:hidden absolute left-[50%] translate-x-[-50%] font-semibold text-[17px]">
+            {value}
+          </h3>
         )}
 
         <div className="basis-[90%] hidden justify-end items-center w-full text-cGr sm:flex">

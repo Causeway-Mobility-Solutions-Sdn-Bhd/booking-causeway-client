@@ -10,7 +10,7 @@ const PaymentSuccessBar = ({ reservationNumber = "#JB04636" }) => {
   };
 
   return (
-    <div className="mt-[50px] sm:mt-[90px] bg-cSecondary rounded-b-2xl py-11 px-20 xs:px-52 md:px-24 lg:px-52">
+    <div className=" bg-cSecondary rounded-b-2xl py-11 px-20 xs:px-52 md:px-24 lg:px-52">
       <div className="max-w-[1400px] mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex flex-col md:flex-row items-center gap-4 flex-1 justify-center md:justify-start">
@@ -33,7 +33,7 @@ const PaymentSuccessBar = ({ reservationNumber = "#JB04636" }) => {
             <p className="text-white text-xs font-light">Reservation Number:</p>
             <div className="flex items-center gap-2">
               <span className="text-white font-bold text-md sm:text-base">
-                {reservationNumber}
+                {"#" + reservationNumber}
               </span>
 
               <button
