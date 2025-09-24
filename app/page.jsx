@@ -18,7 +18,7 @@ export default function Home() {
   return (
    <>
     {
-      process.env.NODE_ENV !== 'production' ? (<UnderDevelopment />) :
+      process.env.NODE_ENV === 'production' ? (<UnderDevelopment />) :
       (
           <div>
       <Nav isPrimary={false} />
