@@ -9,6 +9,7 @@ import { setOpenBg, setSidebarOpen } from "@/store/slices/generalSlice";
 
 function Nav({isMain = true , value = ""}) {
   const dispatch = useAppDispatch();
+  console.log("Environment:", process.env.NODE_ENV)
 
   const handleOpenSidebar = () => {
     dispatch(setOpenBg(true));

@@ -11,10 +11,7 @@ import SpecialOffer from "./_components/SpecialOffer";
 import Feauters from "./_components/Feauters";
 import TopRanked from "./_components/Topranked";
 
-import { Wrench } from "lucide-react";
-
 export default function Home() {
-  console.log("Environment:", process.env.NODE_ENV);
   return (
     <div>
       <Nav isPrimary={false} />
