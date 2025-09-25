@@ -56,15 +56,16 @@ const UpgradeDrawer = ({
   finalLoader,
 }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("basic");
+  const [selectedOption, setSelectedOption] = useState("economy");
 
   useEffect(() => {
     const selectedIds = Object.keys(selectedCharges).map(Number);
-    if (selectedIds?.includes(20)) {
-      setSelectedOption("basic");
-    } else {
-      setSelectedOption("econamy");
-    }
+    setSelectedOption("economy");
+    // if (selectedIds?.includes(20)) {
+    //   setSelectedOption("basic");
+    // } else {
+    //   setSelectedOption("econamy");
+    // }
   }, [isDrawerOpen]);
 
   const handleDrawerChange = (open) => {
@@ -84,52 +85,72 @@ const UpgradeDrawer = ({
   };
 
   const handleOptionSelect = (option, id) => {
-    const selectedIds = Object.keys(selectedCharges).map(Number);
+    // const selectedIds = Object.keys(selectedCharges).map(Number);
 
-    const isAlreadySelected = selectedIds.includes(id);
+    // const isAlreadySelected = selectedIds.includes(id);
 
-    if (isAlreadySelected) {
-      setSelectedOption(option);
-      return;
-    }
+    // if (isAlreadySelected) {
+    //   setSelectedOption(option);
+    //   return;
+    // }
 
-    setSelectedCharges((prev) => {
-      const updated = { ...prev };
+    // setSelectedCharges((prev) => {
+    //   const updated = { ...prev };
 
-      const otherOptions = options
-        .map((opt) => opt.id)
-        .filter((optionId) => optionId !== id);
+    //   const otherOptions = options
+    //     .map((opt) => opt.id)
+    //     .filter((optionId) => optionId !== id);
 
-      otherOptions.forEach((otherId) => {
-        if (updated[otherId]) {
-          delete updated[otherId];
-        }
-      });
+    //   otherOptions.forEach((otherId) => {
+    //     if (updated[otherId]) {
+    //       delete updated[otherId];
+    //     }
+    //   });
 
-      updated[id] = { quantity: 0 };
+    //   updated[id] = { quantity: 0 };
 
-      return updated;
-    });
+    //   return updated;
+    // });
 
     setSelectedOption(option);
   };
 
-  const transformSelectedCharges = () => {
-    return Object.entries(selectedCharges).map(([id, { quantity }]) => {
+  const transformSelectedCharges = (id) => {
+    const protectionIds = [9, 10, 11, 20];
+    let newSelectedCharges = { ...selectedCharges };
+
+    protectionIds.forEach((pid) => {
+      if (newSelectedCharges[pid]) {
+        delete newSelectedCharges[pid];
+      }
+    });
+
+    newSelectedCharges[id] = { quantity: 0 };
+    setSelectedCharges(newSelectedCharges);
+
+    return Object.entries(newSelectedCharges).map(([id, { quantity }]) => {
       const parsedId = parseInt(id, 10);
       return quantity === 0 ? `${parsedId}` : `${parsedId}_${quantity}`;
     });
   };
 
   const conformNextStep = () => {
-    const ac = transformSelectedCharges();
+    const ac = transformSelectedCharges(11);
+    fetchData(ac, true);
+  };
+
+  const conformNoThanks = () => {
+    const ac = transformSelectedCharges(20);
     fetchData(ac, true);
   };
 
   return (
     <Drawer open={isDrawerOpen} onOpenChange={handleDrawerChange}>
       <DrawerTrigger asChild>
-        <Button disabled={finalLoader} className="items-center bg-cPrimary basis-[40%] sm:basis-[10%] h-[53px] text-white">
+        <Button
+          disabled={finalLoader}
+          className="items-center bg-cPrimary basis-[40%] sm:basis-[10%] h-[53px] text-white"
+        >
           {finalLoader ? (
             <Spinner size={20} color="#fff" thickness={3} />
           ) : (
@@ -235,7 +256,11 @@ const UpgradeDrawer = ({
         {/* Footer */}
         <div className="px-4 pb-6 space-y-3">
           <p className="text-center text-sm text-gray-600">
-            {selectedOption === "economy" ? (
+            <>
+              Upgrade to Economy at{" "}
+              <span className="font-bold text-black">+RM80/day</span>
+            </>
+            {/* {selectedOption === "economy" ? (
               <>
                 Upgrade to Economy at{" "}
                 <span className="font-bold text-black">+RM80/day</span>
@@ -245,7 +270,7 @@ const UpgradeDrawer = ({
                 Selected:{" "}
                 <span className="font-bold text-black">Basic Plan</span>
               </>
-            )}
+            )} */}
           </p>
 
           <button
@@ -256,15 +281,18 @@ const UpgradeDrawer = ({
               <Spinner size={20} color="#fff" thickness={3} />
             ) : (
               <>
-                {selectedOption === "economy"
-                  ? "Upgrade to Economy"
-                  : "Continue with Basic"}
+                <span>Upgrade to Economy</span>
               </>
+              // <>
+              //   {selectedOption === "economy"
+              //     ? "Upgrade to Economy"
+              //     : "Continue with Basic"}
+              // </>
             )}
           </button>
 
           <button
-            onClick={() => handleDrawerChange(false)}
+            onClick={conformNoThanks}
             className="block mx-auto text-sm text-gray-500 underline hover:text-gray-700 transition-colors"
           >
             No, thanks

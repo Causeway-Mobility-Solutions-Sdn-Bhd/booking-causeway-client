@@ -33,7 +33,6 @@ function CurrencyDrawer() {
     setIsDrawerOpen(false)
   };
 
-  console.log("filterCurrencies", filterCurrencies);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,7 +64,6 @@ function CurrencyDrawer() {
     );
     setFilterCurrencies(filtered);
     setSearchTerm(value);
-    console.log(value);
   };
 
   return (
