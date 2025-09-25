@@ -18,6 +18,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Spinner from "@/components/custom/Spinner";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setIsDifferentReturnLocation } from "@/store/slices/reservationSlice";
+import { showErrorToast } from "../_lib/toast";
 
 function PickupReturnLocationDrawer({
   name,
@@ -37,6 +38,9 @@ function PickupReturnLocationDrawer({
   );
 
   useEffect(() => {
+    if (bookingLocation?.brandId) {
+      setSelectedBrandLocations(bookingLocation?.brandId);
+    }
     const fetchData = async () => {
       try {
         const [brandsRes, locationsRes] = await Promise.all([
@@ -90,13 +94,18 @@ function PickupReturnLocationDrawer({
         pickupLocationName: selectedLocation.name,
         brandId: selectedLocation.brand_id,
       }));
+      setSelectedBrandLocations(selectedLocation.brand_id);
     }
     if (name === "Return Point") {
-      setBookingLocation((prev) => ({
-        ...prev,
-        returnLocation: selectedLocation.id,
-        returnLocationName: selectedLocation.name,
-      }));
+      if (bookingLocation?.pickupLocation) {
+        setBookingLocation((prev) => ({
+          ...prev,
+          returnLocation: selectedLocation.id,
+          returnLocationName: selectedLocation.name,
+        }));
+      } else {
+        showErrorToast("Please Select Pickup Point First");
+      }
     }
 
     if (name === "Pickup & Return Point") {
@@ -255,73 +264,105 @@ function PickupReturnLocationDrawer({
                 {/* Filter Buttons */}
                 <div className="overflow-x-auto flex-shrink-0">
                   <div className="py-[15px] pl-[10px] flex justify-start gap-2 w-max">
-                    <div
-                      className={`rounded-full cursor-pointer py-2 px-4 font-semibold ${
-                        selectedBrandLocations === 0
-                          ? "border-2 border-cSecondary text-cSecondary"
-                          : "border border-ctextGray text-ctextGray"
-                      }`}
-                      onClick={() => filterLocations(searchTerm, 0)}
-                    >
-                      <p className="text-center text-[12px]">All Location</p>
-                    </div>
-                    {locationBrands?.map((brand) => (
+                    {name !== "Return Point" ? (
                       <div
-                        key={brand.id}
                         className={`rounded-full cursor-pointer py-2 px-4 font-semibold ${
-                          selectedBrandLocations === brand.id
+                          selectedBrandLocations === 0
                             ? "border-2 border-cSecondary text-cSecondary"
                             : "border border-ctextGray text-ctextGray"
                         }`}
-                        onClick={() => filterLocations(searchTerm, brand?.id)}
+                        onClick={() => filterLocations(searchTerm, 0)}
                       >
-                        <p className="text-center text-[12px]">{brand?.name}</p>
+                        <p className="text-center text-[12px]">All Location</p>
                       </div>
-                    ))}
+                    ) : (
+                      !bookingLocation?.brandId && (
+                        <div
+                          className={`rounded-full cursor-pointer py-2 px-4 font-semibold ${
+                            selectedBrandLocations === 0
+                              ? "border-2 border-cSecondary text-cSecondary"
+                              : "border border-ctextGray text-ctextGray"
+                          }`}
+                          onClick={() => filterLocations(searchTerm, 0)}
+                        >
+                          <p className="text-center text-[12px]">
+                            All Location
+                          </p>
+                        </div>
+                      )
+                    )}
+                    
+                    {locationBrands
+                      ?.filter((bf) =>
+                        name === "Return Point" && bookingLocation?.brandId
+                          ? bf?.id === bookingLocation?.brandId
+                          : true
+                      )
+                      .map((brand) => (
+                        <div
+                          key={brand.id}
+                          className={`rounded-full cursor-pointer py-2 px-4 font-semibold ${
+                            selectedBrandLocations === brand.id
+                              ? "border-2 border-cSecondary text-cSecondary"
+                              : "border border-ctextGray text-ctextGray"
+                          }`}
+                          onClick={() => filterLocations(searchTerm, brand?.id)}
+                        >
+                          <p className="text-center text-[12px]">
+                            {brand?.name}
+                          </p>
+                        </div>
+                      ))}
                   </div>
                 </div>
 
                 <div className="flex-1 overflow-y-auto">
                   <div>
-                    {filteredLocations?.map((brand) => (
-                      <div key={brand.brand_id}>
-                        <div className="bg-[#F0F0F0] px-[10px] py-[8px] font-semibold">
-                          {brand?.brand_name}
-                        </div>
+                    {filteredLocations
+                      ?.filter((bf) =>
+                        name === "Return Point" && bookingLocation?.brandId
+                          ? bf?.brand_id === bookingLocation?.brandId
+                          : true
+                      )
+                      .map((brand) => (
+                        <div key={brand.brand_id}>
+                          <div className="bg-[#F0F0F0] px-[10px] py-[8px] font-semibold">
+                            {brand?.brand_name}
+                          </div>
 
-                        <RadioGroup
-                          className="px-[10px]"
-                          value={
-                            name === "Pickup Point"
-                              ? bookingLocation?.pickupLocation?.toString()
-                              : name === "Return Point"
-                              ? bookingLocation?.returnLocation?.toString()
-                              : bookingLocation?.pickupLocation?.toString()
-                          }
-                          onValueChange={(val) =>
-                            handleBookingLocationChange(val)
-                          }
-                        >
-                          {brand?.locations?.map((location) => (
-                            <div
-                              key={location?.id}
-                              className="py-[4px] w-full border-b flex items-center space-x-2 cursor-pointer"
-                            >
-                              <RadioGroupItem
-                                value={location.id.toString()}
-                                id={`location-${location.id}`}
-                              />
-                              <Label
-                                className="w-full cursor-pointer py-[10px]"
-                                htmlFor={`location-${location?.id}`}
+                          <RadioGroup
+                            className="px-[10px]"
+                            value={
+                              name === "Pickup Point"
+                                ? bookingLocation?.pickupLocation?.toString()
+                                : name === "Return Point"
+                                ? bookingLocation?.returnLocation?.toString()
+                                : bookingLocation?.pickupLocation?.toString()
+                            }
+                            onValueChange={(val) =>
+                              handleBookingLocationChange(val)
+                            }
+                          >
+                            {brand?.locations?.map((location) => (
+                              <div
+                                key={location?.id}
+                                className="py-[4px] w-full border-b flex items-center space-x-2 cursor-pointer"
                               >
-                                {location?.name}
-                              </Label>
-                            </div>
-                          ))}
-                        </RadioGroup>
-                      </div>
-                    ))}
+                                <RadioGroupItem
+                                  value={location.id.toString()}
+                                  id={`location-${location.id}`}
+                                />
+                                <Label
+                                  className="w-full cursor-pointer py-[10px]"
+                                  htmlFor={`location-${location?.id}`}
+                                >
+                                  {location?.name}
+                                </Label>
+                              </div>
+                            ))}
+                          </RadioGroup>
+                        </div>
+                      ))}
                   </div>
                 </div>
               </>

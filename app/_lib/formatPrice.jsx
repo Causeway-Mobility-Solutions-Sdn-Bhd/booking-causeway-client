@@ -10,7 +10,7 @@ export function useFormatPrice() {
     const rate =
       allCurrencies?.find((cur) => cur?.code === currency)
         ?.exchange_rate || 1;
-    const amount = rate * price.usd_amount;
+    const amount = rate * price?.usd_amount;
     console.log("changed amount", amount);
 
     return `${currency?.toUpperCase()} ${amount.toFixed(0)}`;

@@ -86,7 +86,7 @@ function SearchFillter({
         brand_id: bookingLocation?.brandId ?? null,
         sort_by: "lowToHigh",
         isCreate: !isMid,
-        isEdit:isMid
+        isEdit: isMid,
       };
 
       const response = await hqApi.post(
@@ -99,10 +99,10 @@ function SearchFillter({
           setLoader(false);
           dispatch(setReservation(response?.data?.reservation));
           const reservation = response?.data?.reservation;
-          const sessionIDNew = reservation?._id
-          
+          const sessionIDNew = reservation?._id;
+
           if (!isMid) {
-            localStorage.setItem("ssid" , sessionIDNew)
+            localStorage.setItem("ssid", sessionIDNew);
             dispatch(setSelectedVehicleClasses(response?.data?.VehicleClasses));
             router.push(`/book/step-02?ssid=${sessionIDNew}`);
             handleReset();
@@ -115,7 +115,7 @@ function SearchFillter({
         }
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
       setLoader(false);
       if (err?.response) {
         showErrorToast(err?.response?.data?.message);
@@ -135,11 +135,29 @@ function SearchFillter({
 
   const handleDifferentLocation = (checked) => {
     dispatch(setIsDifferentReturnLocation(checked === true));
-    if (!isDifferentReturnLocation) {
+    console.log("checked", checked, reservation);
+    if (!checked) {
       setBookingLocation((prev) => ({
         ...prev,
         returnLocation: prev.pickupLocation,
         returnLocationName: prev.pickupLocationName,
+      }));
+    } else {
+      setBookingLocation((prev) => ({
+        ...prev,
+        pickupLocation: reservation?.pick_up_location
+          ? reservation?.pick_up_location?.id
+          : null,
+        returnLocation: reservation?.return_location
+          ? reservation?.return_location?.id
+          : null,
+        pickupLocationName: reservation?.pick_up_location
+          ? reservation?.pick_up_location?.name
+          : null,
+        returnLocationName: reservation?.return_location
+          ? reservation?.return_location?.name
+          : null,
+        brandId: reservation?.brand_id ? reservation?.brand_id : null,
       }));
     }
   };

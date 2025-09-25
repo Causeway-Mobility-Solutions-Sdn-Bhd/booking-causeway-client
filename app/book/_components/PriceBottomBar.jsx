@@ -68,7 +68,7 @@ function PriceBottomBar({
         {/* Price Section */}
         <div className="flex items-center gap-2 rounded-lg px-4 py-2">
           <div className="flex flex-col">
-            <span className="text-sm text-gray-600">Total ({currency})</span>
+            <span className="text-sm text-gray-600">Total ({currency?.toUpperCase()})</span>
             <span className="text-[16px] font-bold text-gray-900">
               {formatPrice(
                 selectedVehicle?.total_price_with_mandatory_charges_and_taxes
