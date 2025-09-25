@@ -2,9 +2,8 @@
 import React from "react";
 import { Wrench, MessageCircle } from "lucide-react";
 
-function UnderDevelopment() {
+function Page() {
   const handleTalkWithAgent = () => {
-    // Replace with your contact method
     window.open("tel:+1-800-123-4567", "_blank");
   };
 
@@ -67,4 +66,4 @@ function UnderDevelopment() {
   );
 }
 
-export default UnderDevelopment;
+export default Page;

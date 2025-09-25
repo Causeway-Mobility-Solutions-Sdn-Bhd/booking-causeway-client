@@ -15,7 +15,7 @@ function BottomBar({ page = 'other' }) {
     },
     {
       name: "Book",
-      href: "/book",
+      href: "/manage-booking",
       icon: <IoIosSearch size={25} />,
     },
     {

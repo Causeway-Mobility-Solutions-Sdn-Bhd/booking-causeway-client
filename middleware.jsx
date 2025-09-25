@@ -1,31 +1,30 @@
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
-  const { pathname } = req.nextUrl;
-  const refreshToken = req.cookies.get("refreshToken")?.value;
-  console.log("Middleware is running" , refreshToken);
+  const pathname = req.nextUrl.pathname;
+  const env = process.env.STAGE;
 
-  const authPages = ["/login", "/signup"];
-  const otpVerify = pathname.startsWith("/otp-verify");
+  if (env === "development") {
+    const devRoutes = ["/login", "/signup", "/otp-verify", "/profile", "/manage-booking"];
+    const isDevRoute = devRoutes.some((route) => pathname.startsWith(route));
 
-  if (authPages.includes(pathname) || otpVerify) {
-    if (refreshToken) {
-      return NextResponse.redirect(new URL("/profile", req.url));
+    if (isDevRoute) {
+      return NextResponse.redirect(new URL("/feature-development", req.url));
     }
-    return NextResponse.next(); 
+  } else if (env === "production") {
+    return NextResponse.redirect(new URL("/under-development", req.url));
   }
 
-  const protectPages = ["/profile"]
-  if (protectPages.includes(pathname)) {
-    if (!refreshToken) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
-    return NextResponse.next();
-  }
-
-  return NextResponse.next(); 
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/login", "/signup", "/otp-verify/:id*", "/profile",]
+  matcher: [
+    "/login",
+    "/signup",
+    "/otp-verify/:id*",
+    "/profile",
+    "/manage-booking",
+    "/",
+  ],
 };

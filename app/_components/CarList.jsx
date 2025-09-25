@@ -46,7 +46,6 @@ function CarList() {
       } catch (error) {
         console.error(
           "HQ API error:",
-          error.response.status,
           error.response.data
         );
       } finally {
