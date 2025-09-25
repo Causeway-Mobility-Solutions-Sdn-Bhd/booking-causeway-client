@@ -25,7 +25,7 @@ function BottomBar({ page = 'other' }) {
     },
     {
       name: "Chat",
-      href: "/chat",
+      href: "/support",
       icon: <IoChatbox size={20} />,
     },
   ];
