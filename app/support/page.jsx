@@ -81,7 +81,7 @@ function page() {
 
         {/* Road Side Assistance Section */}
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-3">Road Side Assistance</h3>
+          <h3 className="text-[18px] font-bold leading-[28px] tracking-[2%] text-black mb-3" style={{fontFamily: 'Poppins'}}>Road Side Assistance</h3>
           <div className="bg-white rounded-lg shadow-sm">
             <div 
               className="px-4 py-3 flex items-center justify-between cursor-pointer hover:bg-gray-50"
@@ -98,7 +98,7 @@ function page() {
 
         {/* Complaints Section */}
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-3">Complaints</h3>
+          <h3 className="text-[18px] font-bold leading-[28px] tracking-[2%] text-black mb-3" style={{fontFamily: 'Poppins'}}>Complaints</h3>
           <div className="bg-white rounded-lg shadow-sm">
             <div 
               className="px-4 py-3 flex items-center justify-between cursor-pointer hover:bg-gray-50"
