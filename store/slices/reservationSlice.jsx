@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { set } from "date-fns";
 
 const initialState = {
   isDifferentReturnLocation: false,
   selectedVehicleClasses: [],
   reservation: {},
   vehicleLoader: true,
-  currency: "MYR",
+  currency: "myr",
+  allCurrencies: [],
   currentUUID: "",
   selectedVehicle: {},
   additionalCharges: [],
@@ -48,6 +50,9 @@ const reservationSlice = createSlice({
     setFinalPaymentLink(state, action) {
       state.finalPaymentLink = action.payload;
     },
+    setAllCurrencies(state, action) {
+      state.allCurrencies = action.payload;
+    }
   },
 });
 
@@ -62,6 +67,7 @@ export const {
   setAdditionalCharges,
   setSelectedAdditionalCharges,
   setFinalPaymentLink,
+  setAllCurrencies,
 } = reservationSlice.actions;
 
 export default reservationSlice.reducer;

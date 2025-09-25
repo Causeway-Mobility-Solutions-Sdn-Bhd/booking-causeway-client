@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setCurrency } from "@/store/slices/reservationSlice";
+import CurrencyDrawer from "@/app/_components/CurrencyDrawer";
 
 const currencies = ["MYR", "USD"];
 
@@ -53,7 +54,8 @@ function BookNavBar({ topBar, child }) {
           <div className="block sm:hidden absolute left-[50%] translate-x-[-50%] w-full">
             {child}
           </div>
-          <DropdownMenu>
+          <CurrencyDrawer />
+          {/* <DropdownMenu>
             <DropdownMenuTrigger className="z-100">
               <div className="text-cSecondary cursor-pointer z-100 text-cGreen font-bold flex justify-center gap-0 items-center">
                 <span>{currency}</span> <MdKeyboardArrowDown size={20} />{" "}
@@ -73,7 +75,7 @@ function BookNavBar({ topBar, child }) {
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
         </div>
       </div>
       <div className="border-t border-cGrayLight">{topBar}</div>

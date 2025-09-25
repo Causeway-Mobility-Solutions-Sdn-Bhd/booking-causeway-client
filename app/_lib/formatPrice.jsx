@@ -2,20 +2,17 @@ import { useAppSelector } from "@/store/hooks";
 
 export function useFormatPrice() {
   const currency = useAppSelector((state) => state.reservation.currency);
-  return (price = "MYR") => {
-    if (!price) return `${currency} 0.00`;
+  const allCurrencies = useAppSelector(
+    (state) => state.reservation.allCurrencies
+  );
+  return (price) => {
+    console.log("price", price);
+    const rate =
+      allCurrencies?.find((cur) => cur?.code === currency)
+        ?.exchange_rate || 1;
+    const amount = rate * price.usd_amount;
+    console.log("changed amount", amount);
 
-    let amount = 0;
-    let icon = "RM";
-
-    if (currency === "USD") {
-      amount = parseFloat(price.usd_amount || "0");
-      icon = "USD";
-    } else {
-      amount = parseFloat(price.amount || "0");
-      icon = "RM";
-    }
-
-    return `${icon} ${amount.toFixed(2)}`;
+    return `${currency?.toUpperCase()} ${amount.toFixed(0)}`;
   };
 }
