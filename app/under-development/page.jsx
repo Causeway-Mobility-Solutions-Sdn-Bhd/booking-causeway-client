@@ -4,7 +4,9 @@ import { Wrench, MessageCircle } from "lucide-react";
 
 function Page() {
   const handleTalkWithAgent = () => {
-    window.open("tel:+1-800-123-4567", "_blank");
+    const phoneNumber = "60166201542"; // Include country code, no + or spaces
+    const message = encodeURIComponent("Hi! I need assistance."); // Optional pre-filled message
+    window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
   };
 
   return (

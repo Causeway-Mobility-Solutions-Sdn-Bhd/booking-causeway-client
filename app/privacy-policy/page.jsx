@@ -10,6 +10,7 @@ export default function TermsConditionsPage() {
     <div className="relative">
       <Nav isMain={false} value="Privacy Policy" />
       <SideBar />
+        {/* Privacy Policy Should Come here */}
       <BottomBar />
     </div>
   );
