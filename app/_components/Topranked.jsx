@@ -68,7 +68,7 @@ function TopRanked() {
   }, [api]);
 
   return (
-    <section className="w-full mt-[30px] relative z-10">
+    <section className="w-full mt-[40px] relative z-10">
       <div className="w-[90%] sm:w-[95%] max-w-[1400px] mx-auto">
         <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
            
