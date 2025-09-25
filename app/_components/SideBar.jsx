@@ -1,65 +1,69 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { setOpenBg, setSidebarOpen } from "@/store/slices/generalSlice";
 import { usePathname } from "next/navigation";
-import { FaHome } from "react-icons/fa";
-import { IoIosSearch } from "react-icons/io";
-import { BsPersonFill } from "react-icons/bs";
-import { IoChatbox } from "react-icons/io5";
+import Link from "next/link";
 
-function BottomBar() {
-  const pathname = usePathname(); // Current path
+const links = [
+  { label: "Manage Booking", href: "/manage-booking" },
+  { label: "Support", href: "/support" },
+  { label: "Partnership", href: "/partnership" },
+  { label: "Terms & Condition", href: "/terms-and-condition" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+];
 
-  const navItems = [
-    {
-      name: "Home",
-      href: "/",
-      icon: <FaHome size={20} />,
-    },
-    {
-      name: "Book",
-      href: "/manage-booking",
-      icon: <IoIosSearch size={25} />,
-    },
-    {
-      name: "Log in",
-      href: "/login",
-      icon: <BsPersonFill size={20} />,
-    },
-    {
-      name: "Chat",
-      href: "/support",
-      icon: <IoChatbox size={20} />,
-    },
-  ];
+function SideBar() {
+  const sidebarOpen = useAppSelector((state) => state.general.sidebarOpen);
+  const dispatch = useAppDispatch();
+  const pathname = usePathname();
+
+  const handleCloseSidebar = () => {
+    dispatch(setOpenBg(false));
+    dispatch(setSidebarOpen(false));
+  };
 
   return (
-    <div className="z-90 border-top fixed bottom-0 border-cGray right-0 left-0 py-3 bg-white block sm:hidden">
-      <div className="max-w-[1400px] w-[90%] sm:w-[95%] mx-auto flex justify-between items-center gap-1">
-        {navItems.map((item) => {
-          const isActive = pathname === item.href; // Highlight if path matches
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="flex justify-center items-center flex-col cursor-pointer gap-1 leading-[8px]"
+    <div
+      className={`sidebar shadow-xl px-[20px] py-[25px] block xxl:hidden custom-trans ${
+        sidebarOpen && "sidebar-active"
+      }`}
+    >
+      <div>
+        {links.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            onClick={handleCloseSidebar}
+          >
+            <p
+              className={`py-[15px] cursor-pointer border-b border-cGrayLight font-[400] text-[16px] transition-colors
+                ${
+                  pathname === link.href
+                    ? "text-cSecondary font-semibold"
+                    : "hover:text-cSecondary"
+                }`}
             >
-              {/* Icon */}
-              <span className={`${isActive ? "text-cSecondary" : "text-cGray"}`}>
-                {item.icon}
-              </span>
+              {link.label}
+            </p>
+          </Link>
+        ))}
+      </div>
 
-              {/* Label */}
-              <p className={`${isActive ? "text-cSecondary" : "text-cGray"} font-semibold text-[13px]`}>
-                {item.name}
-              </p>
-            </Link>
-          );
-        })}
+      <div className="mt-7">
+        <Link href="/login" onClick={handleCloseSidebar}>
+          <button className="border-none cursor-pointer outline-none bg-cPrimary rounded-lg w-full py-[13px] font-bold text-white flex justify-center items-center gap-1.5 text-[16px]">
+            <span>Login</span>
+          </button>
+        </Link>
+        <Link href="/signup" onClick={handleCloseSidebar}>
+          <button className="border-none cursor-pointer mt-3 outline-none bg-cPrimary rounded-lg w-full py-[13px] font-bold text-white flex justify-center items-center gap-1.5 text-[16px]">
+            <span>Signup</span>
+          </button>
+        </Link>
       </div>
     </div>
   );
 }
 
-export default BottomBar;
+export default SideBar;
