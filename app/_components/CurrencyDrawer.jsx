@@ -104,7 +104,7 @@ function CurrencyDrawer() {
           </div>
 
           <div className="flex-1 h-[300px] overflow-y-auto">
-            {filterCurrencies?.length >= 0 && (
+            {filterCurrencies?.filter((crf) => currencies.includes(crf?.code))?.length > 0 && (
               <div className="bg-[#F0F0F0] px-[10px] py-[8px] font-semibold">
                 Recommended
               </div>
@@ -143,7 +143,7 @@ function CurrencyDrawer() {
                   ))}
               </RadioGroup>
             </div>
-            {filterCurrencies?.length >= 0 && (
+            {filterCurrencies?.length > 0 && (
               <div className="bg-[#F0F0F0] px-[10px] py-[8px] font-semibold">
                 Other
               </div>
