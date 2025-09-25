@@ -4,7 +4,7 @@ import React from "react";
 const Banner = ({
   imageSrc = "/banner/banner.webp",
   altText = "Banner",
-  height = "h-80 md:h-[500px] lg:h-[270px]",
+  height = "h-84 md:h-[500px] lg:h-[270px]",
 }) => {
   return (
     <div className={`relative w-full ${height} overflow-hidden`}>
@@ -26,6 +26,16 @@ const Banner = ({
           background: "linear-gradient(to top, #f0f0f0 0%, transparent 40%)",
         }}
       />
+
+      <div className="relative max-w-[1400px] mx-auto mt-6 w-[90%] sm:w-[95%] h-full flex items-start pb-8">
+        <h1 className="text-3xl font-bold text-black">
+          Earn an extra{" "}
+          <span className="sm:hidden">
+            <br />
+          </span>
+          income
+        </h1>
+      </div>
     </div>
   );
 };

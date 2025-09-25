@@ -1,9 +1,11 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 
 export const CausewayEarningsChart = () => {
+  const [hoveredPoint, setHoveredPoint] = React.useState(null);
   // Data points for the curve
   const dataPoints = [
-    { x: 2, y: 2800, cars: 2 },
+    { x: 2, y: 2000, cars: 1 },
 
     { x: 4, y: 3800, cars: 4 },
 
@@ -72,19 +74,13 @@ export const CausewayEarningsChart = () => {
   };
 
   return (
-    <div className="w-full max-w-7xl px-4 pt-2 pb-12">
-      {/* Title */}
-      {/* <h1 className="text-2xl font-bold text-gray-900 mb-8">
-        How Much Can You Earn
-        <br />
-        With Causeway?
-      </h1> */}
+    <div className="max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[30px]">
       <h2 className="text-2xl font-bold text-black mb-8">
         How much can you earn with Causeway?
       </h2>
 
       {/* Chart Container */}
-      <div className="max-w-[540px] bg-white p-3 rounded-lg flex flex-col items-center">
+      <div className="relative max-w-[540px] bg-white p-3 rounded-lg flex flex-col items-center">
         <div className="flex items-center">
           {/* Y-axis label */}
           <div className="w-[20px] mr-6 flex items-center justify-center h-[340px]">
@@ -168,6 +164,8 @@ export const CausewayEarningsChart = () => {
                     r="4"
                     fill="#10b981"
                     className="drop-shadow-sm"
+                    onMouseEnter={() => setHoveredPoint(index)}
+                    onMouseLeave={() => setHoveredPoint(null)}
                   />
                 )
             )}
@@ -181,42 +179,37 @@ export const CausewayEarningsChart = () => {
           </span>
         </div>
 
-        {/* Callout boxes */}
-        {/* First callout - RM 2,000/month, 1 car */}
-        {/* <div
-          className="absolute"
-          style={{
-            left: `${xScale(1) + padding - 20}px`,
-            top: `${yScale(2000) + 40}px`,
-          }}
-        >
-          <div className="bg-black text-white px-3 py-2 rounded-lg text-sm font-medium relative">
-            <div>RM 2,000/month</div>
-            <div className="text-xs opacity-80">1 car</div>
-        
-            <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-              <div className="w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-black"></div>
+        {/* First callout - appears when hovering first point */}
+        {hoveredPoint === 0 && (
+          <div
+            className="absolute"
+            style={{
+              left: `${xScale(dataPoints[0].x) + 5}px`,
+              top: `${yScale(dataPoints[0].y) - 60}px`,
+            }}
+          >
+            <div className="bg-black text-white px-3 py-2 rounded-lg text-sm font-medium relative">
+              <div>RM 2,000/month</div>
+              <div className="text-xs text-center opacity-80">1 car</div>
             </div>
           </div>
-        </div> */}
+        )}
 
-        {/* Second callout - RM 20,000/month, 10 cars */}
-        {/* <div
-          className="absolute"
-          style={{
-            left: `${xScale(10) + padding - 40}px`,
-            top: `${yScale(20000) - 60}px`,
-          }}
-        >
-          <div className="bg-black text-white px-3 py-2 rounded-lg text-sm font-medium relative">
-            <div>RM 20,000/month</div>
-            <div className="text-xs opacity-80">10 cars</div>
-            
-            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
-              <div className="w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black"></div>
+        {/* Second callout - appears when hovering last point */}
+        {hoveredPoint === dataPoints.length - 1 && (
+          <div
+            className="absolute"
+            style={{
+              left: `${xScale(dataPoints[dataPoints.length - 1].x)}px`,
+              top: `${yScale(dataPoints[dataPoints.length - 1].y) - 60}px`,
+            }}
+          >
+            <div className="bg-black text-white px-3 py-2 rounded-lg text-sm font-medium relative">
+              <div>RM 20,000/month</div>
+              <div className="text-xs text-center opacity-80">10 cars</div>
             </div>
           </div>
-        </div> */}
+        )}
       </div>
     </div>
   );

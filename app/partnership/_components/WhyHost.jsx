@@ -30,7 +30,7 @@ const WhyHost = () => {
   ];
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 py-12">
+    <div className="max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[30px]">
       {/* Heading */}
       <h2 className="text-2xl font-bold text-black mb-8">
         Why host with Causeway
