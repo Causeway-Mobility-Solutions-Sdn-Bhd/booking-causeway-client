@@ -32,8 +32,8 @@ function page() {
               onClick={() => window.open('https://wa.me/YOUR_WHATSAPP_NUMBER', '_blank')}
             >
               <div className="flex items-center space-x-3">
-                <img src="/path/to/whatsapp-icon.png" alt="WhatsApp" className="w-6 h-6" />
-                <span className="text-gray-800 font-medium">WhatsApp</span>
+                <img src="/path/to/whatsapp-icon.png" alt="WhatsApp" className="w-6 h-6" style={{width: '24px', height: '24px'}} />
+                <span className="text-[14px] font-normal leading-[20px] text-black" style={{fontFamily: 'Poppins'}}>WhatsApp</span>
               </div>
               <ChevronRight className="w-5 h-5 text-teal-500" />
             </div>
@@ -47,8 +47,8 @@ function page() {
               }}
             >
               <div className="flex items-center space-x-3">
-                <img src="/path/to/wechat-icon.png" alt="WeChat" className="w-6 h-6" />
-                <span className="text-gray-800 font-medium">WeChat</span>
+                <img src="/path/to/wechat-icon.png" alt="WeChat" className="w-6 h-6" style={{width: '24px', height: '24px'}} />
+                <span className="text-[14px] font-normal leading-[20px] text-black" style={{fontFamily: 'Poppins'}}>WeChat</span>
               </div>
               <ChevronRight className="w-5 h-5 text-teal-500" />
             </div>
@@ -59,8 +59,8 @@ function page() {
               onClick={() => window.open('https://t.me/YOUR_TELEGRAM_USERNAME', '_blank')}
             >
               <div className="flex items-center space-x-3">
-                <img src="/path/to/telegram-icon.png" alt="Telegram" className="w-6 h-6" />
-                <span className="text-gray-800 font-medium">Telegram</span>
+                <img src="/path/to/telegram-icon.png" alt="Telegram" className="w-6 h-6" style={{width: '24px', height: '24px'}} />
+                <span className="text-[14px] font-normal leading-[20px] text-black" style={{fontFamily: 'Poppins'}}>Telegram</span>
               </div>
               <ChevronRight className="w-5 h-5 text-teal-500" />
             </div>
@@ -71,8 +71,8 @@ function page() {
               onClick={() => window.open('mailto:your-email@example.com', '_blank')}
             >
               <div className="flex items-center space-x-3">
-                <img src="/path/to/email-icon.png" alt="Email" className="w-6 h-6" />
-                <span className="text-gray-800 font-medium">Email</span>
+                <img src="/path/to/email-icon.png" alt="Email" className="w-6 h-6" style={{width: '24px', height: '24px'}} />
+                <span className="text-[14px] font-normal leading-[20px] text-black" style={{fontFamily: 'Poppins'}}>Email</span>
               </div>
               <ChevronRight className="w-5 h-5 text-teal-500" />
             </div>
@@ -89,7 +89,7 @@ function page() {
             >
               <div className="flex items-center space-x-3">
                 <img src="/path/to/call-icon.png" alt="Call" className="w-6 h-6" />
-                <span className="text-gray-800 font-medium">Call</span>
+                <span className="text-[14px] font-normal leading-[20px] text-black" style={{fontFamily: 'Poppins'}}>Call</span>
               </div>
               <ChevronRight className="w-5 h-5 text-teal-500" />
             </div>
@@ -106,7 +106,7 @@ function page() {
             >
               <div className="flex items-center space-x-3">
                 <img src="/path/to/email-icon.png" alt="Email" className="w-6 h-6" />
-                <span className="text-gray-800 font-medium">Email</span>
+                <span className="text-[14px] font-normal leading-[20px] text-black" style={{fontFamily: 'Poppins'}}>Email</span>
               </div>
               <ChevronRight className="w-5 h-5 text-teal-500" />
             </div>
@@ -115,13 +115,13 @@ function page() {
 
         {/* What You Can Expect Section */}
         <div className="mb-8">
-          <h3 className="text-xl font-bold text-gray-800 mb-6">What You Can Expect</h3>
+          <h3 className="text-[21px] font-normal leading-[100%] text-black mb-6" style={{fontFamily: 'Poppins', color: '#080206'}}>What You Can Expect</h3>
           <div className="bg-white rounded-lg shadow-sm p-4">
             
             {/* High Speed Customer Support */}
             <div className="mb-6">
               <div className="flex items-start space-x-4">
-                <img src="/path/to/high-speed-support.png" alt="High Speed Customer Support" className="w-12 h-12 flex-shrink-0" />
+                <img src="/path/to/high-speed-support.png" alt="High Speed Customer Support" className="w-12 h-12 flex-shrink-0" style={{width: '48px', height: '48px'}} />
                 <div className="flex-1">
                   <h4 className="text-lg font-semibold text-gray-800 mb-2">High Speed Customer Support</h4>
                   <p className="text-gray-600 text-sm">
@@ -134,7 +134,7 @@ function page() {
             {/* 24/7 Road Side Assistance */}
             <div className="mb-6">
               <div className="flex items-start space-x-4">
-                <img src="/path/to/24-7-roadside.png" alt="24/7 Road Side Assistance" className="w-12 h-12 flex-shrink-0" />
+                <img src="/path/to/24-7-roadside.png" alt="24/7 Road Side Assistance" className="w-12 h-12 flex-shrink-0" style={{width: '48px', height: '48px'}} />
                 <div className="flex-1">
                   <h4 className="text-lg font-semibold text-gray-800 mb-2">24/7 Road Side Assistance</h4>
                   <p className="text-gray-600 text-sm">
@@ -147,7 +147,7 @@ function page() {
             {/* Dedicated Rental Agent */}
             <div className="mb-2">
               <div className="flex items-start space-x-4">
-                <img src="/path/to/dedicated-agent.png" alt="Dedicated Rental Agent" className="w-12 h-12 flex-shrink-0" />
+                <img src="/path/to/dedicated-agent.png" alt="Dedicated Rental Agent" className="w-12 h-12 flex-shrink-0" style={{width: '48px', height: '48px'}} />
                 <div className="flex-1">
                   <h4 className="text-lg font-semibold text-gray-800 mb-2">Dedicated Rental Agent</h4>
                   <p className="text-gray-600 text-sm">
