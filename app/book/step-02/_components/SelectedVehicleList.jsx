@@ -56,7 +56,7 @@ function SelectedVehicleList() {
            dispatch(setVehicleLoader(false))
         }
       } catch (error) {
-        console.error("Failed to parse JSON from localStorage:", error);
+        console.log("Failed to parse JSON from localStorage:", error);
       }
     };
     fetchData();

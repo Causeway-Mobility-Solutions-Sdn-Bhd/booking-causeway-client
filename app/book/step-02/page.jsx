@@ -34,7 +34,7 @@ function page() {
         const resVehcileType = await hqApi.get("/fleets/vehicle-types");
         setVehicleType(resVehcileType?.data);
       } catch (error) {
-        console.error("Failed to fetch vehicle types:", error);
+        console.log("Failed to fetch vehicle types:", error);
       }
     };
 

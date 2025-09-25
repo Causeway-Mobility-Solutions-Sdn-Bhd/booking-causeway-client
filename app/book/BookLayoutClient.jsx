@@ -47,7 +47,7 @@ export default function BookLayoutClient({ children }) {
 
         setSessionState("valid");
       } catch (error) {
-        console.error("Error fetching reservation:", error);
+        console.log("Error fetching reservation:", error);
         router.replace("/");
         setSessionState("invalid");
       }

@@ -22,7 +22,7 @@ export const formatDate = (dateString) => {
     const date = new Date(dateString);
     return format(date, "EEE d MMM");
   } catch (error) {
-    console.error("Date formatting error:", error);
+    console.log("Date formatting error:", error);
     return dateString;
   }
 };
@@ -34,7 +34,7 @@ export const formatTime = (timeString) => {
     const time = parse(timeString, "HH:mm", new Date());
     return format(time, "haaa");
   } catch (error) {
-    console.error("Time formatting error:", error);
+    console.log("Time formatting error:", error);
     return timeString;
   }
 };

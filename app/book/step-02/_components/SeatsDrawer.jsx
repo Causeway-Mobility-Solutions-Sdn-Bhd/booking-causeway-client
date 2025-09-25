@@ -172,7 +172,7 @@ function SeatsDrawer({
         dispatch(setVehicleLoader(false))
       }
     } catch (error) {
-      console.error("Error fetching vehicle classes:", error);
+      console.log("Error fetching vehicle classes:", error);
       setLoader(false);
       dispatch(setVehicleLoader(false))
     }

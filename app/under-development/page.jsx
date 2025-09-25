@@ -10,28 +10,23 @@ function Page() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 max-w-md w-full text-center">
-        {/* Icon */}
         <div className="w-16 h-16 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
           <Wrench className="w-8 h-8 text-gray-600" />
         </div>
 
-        {/* Status Badge */}
         <div className="inline-block px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-full mb-4">
           Under Development
         </div>
 
-        {/* Title */}
         <h1 className="text-2xl font-semibold text-gray-900 mb-3">
           Something New is Coming
         </h1>
 
-        {/* Description */}
         <p className="text-gray-600 mb-6 leading-relaxed text-sm">
           We’re working hard behind the scenes to bring you a smoother, smarter
           and more exciting experience very soon.
         </p>
 
-        {/* Progress Indicator */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-gray-500">Development Progress</span>
@@ -48,7 +43,6 @@ function Page() {
           </div>
         </div>
 
-        {/* Action Button */}
         <button
           onClick={handleTalkWithAgent}
           className="px-6 py-3 bg-cSecondary text-white rounded-lg font-medium transition-all duration-200 flex items-center justify-center mx-auto gap-2"
@@ -57,7 +51,6 @@ function Page() {
           Talk with Our Agent
         </button>
 
-        {/* Extra Note */}
         <p className="text-sm text-gray-500 mt-4">
           We can’t wait to share this with you soon!
         </p>

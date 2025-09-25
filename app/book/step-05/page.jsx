@@ -113,7 +113,7 @@ function Page() {
 
       console.log("Reservation confirmed:", response?.data?.data);
     } catch (error) {
-      console.error("Error confirming reservation:", error);
+      console.log("Error confirming reservation:", error);
     }
   };
 

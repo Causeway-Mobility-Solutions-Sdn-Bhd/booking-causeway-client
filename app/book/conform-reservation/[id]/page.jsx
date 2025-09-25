@@ -39,7 +39,7 @@ export default function Page() {
 
           setCustomerInfo(customerData);
         } catch (error) {
-          console.error("Error fetching reservation:", error);
+          console.log("Error fetching reservation:", error);
         } finally {
           setLoading(false);
         }

@@ -49,7 +49,7 @@ function PickupReturnLocationDrawer({
         setLocations(groupedBrands);
         setFilteredLocations(groupedBrands);
       } catch (error) {
-        console.error("API error:", error);
+        console.log("API error:", error);
       }
     };
 

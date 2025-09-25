@@ -101,7 +101,7 @@ function SortDrawer({
       dispatch(setVehicleLoader(false))
     } catch (error) {
       dispatch(setVehicleLoader(false))
-      console.error("Error fetching vehicle classes:", error);
+      console.log("Error fetching vehicle classes:", error);
     }
   };
 

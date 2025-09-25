@@ -44,7 +44,7 @@ function CarList() {
         setVehicleClasses(resVehicles?.data);
         setVehicleType(resVehcileType?.data);
       } catch (error) {
-        console.error(
+        console.log(
           "HQ API error:",
           error.response.data
         );

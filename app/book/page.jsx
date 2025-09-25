@@ -28,7 +28,7 @@ export default function Page() {
 
         router.replace(`/book/step-0${reservation.step}?ssid=${reservation._id}`);
       } catch (error) {
-        console.error("Error fetching reservation:", error);
+        console.log("Error fetching reservation:", error);
         router.replace("/");
       }
     };

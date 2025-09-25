@@ -18,7 +18,7 @@ function RefreshTokenLoader() {
         console.log("Token refreshed" , res);
         setLoading(false);
       } catch (error) {
-        console.error("Refresh token failed", error);
+        console.log("Refresh token failed", error);
         setLoading(false);
       }
     };

@@ -110,7 +110,7 @@ const CustomerDetailsForm = ({
       showSuccessToast("Customer created successfully!");
       router.push(`/book/step-05?ssid=${currentUUID}`);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.log("Error submitting form:", error);
       showErrorToast("Failed to create customer. Please try again.");
     } finally {
       setSubmitLoader(false);
@@ -136,7 +136,7 @@ const CustomerDetailsForm = ({
       console.log(`File uploaded successfully:`, response.data);
       return response.data;
     } catch (error) {
-      console.error("Error uploading file:", error);
+      console.log("Error uploading file:", error);
       throw error;
     }
   };
