@@ -7,7 +7,7 @@ export default function AuthLayout({ children }) {
     <div>
       <Nav isPrimary={false} />
       <div>{children}</div>
-      <BottomBar page="Log in" />
+      <BottomBar />
       <SideBar />
     </div>
   );

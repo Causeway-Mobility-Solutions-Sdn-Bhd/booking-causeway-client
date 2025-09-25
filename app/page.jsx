@@ -18,7 +18,7 @@ export default function Home() {
       <Banner />
       <Feauters />
       <SpecialOffer />
-      <BottomBar page="Home" />
+      <BottomBar />
       <SideBar />
       <CarList />
       <TopRanked />

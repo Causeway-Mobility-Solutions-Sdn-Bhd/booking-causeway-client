@@ -9,7 +9,7 @@ function page() {
       <Nav isMain={false} value="Support" />
       <SideBar />
       {/* Support Should Come here */}
-      <BottomBar page="Chat" />
+      <BottomBar />
     </div>
   )
 }
