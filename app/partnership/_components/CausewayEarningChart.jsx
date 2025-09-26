@@ -16,11 +16,22 @@ export const CausewayEarningsChart = () => {
     { x: 10, y: 20000, cars: 10 },
   ];
 
-  // Chart dimensions
-  const chartWidth = 400;
-  const chartHeight = 350;
-  const padding = 20;
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 1200
+  );
 
+  React.useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Update chart dimensions based on window width
+  const chartWidth =
+    windowWidth < 600 ? Math.max(100, 450 - (600 - windowWidth) * 1) : 450;
+  const chartHeight = windowWidth < 600 ? 350 - (600 - windowWidth) * 0.3 : 350;
+  const padding = 20;
+  console.log(windowWidth, chartWidth);
   // Scale functions
   const xScale = (value) => (value / 12) * chartWidth + padding;
   const yScale = (value) =>
@@ -80,18 +91,18 @@ export const CausewayEarningsChart = () => {
       </h2>
 
       {/* Chart Container */}
-      <div className="relative max-w-[540px] bg-white p-3 rounded-lg flex flex-col items-center">
+      <div className="relative max-w-[590px] bg-white px-1 py-3 rounded-lg flex flex-col items-center">
         <div className="flex items-center">
           {/* Y-axis label */}
-          <div className="w-[20px] mr-6 flex items-center justify-center h-[340px]">
-            <span className="text-sm text-gray-600 font-medium -rotate-90 whitespace-nowrap">
-              Monthly earnings (RM)
+          <div className="pl-5 sm:pl-0 max-w-[20px] mr-8 sm:mr-6 flex items-center justify-center h-[340px]">
+            <span className="text-xs text-black font-medium -rotate-90 whitespace-nowrap">
+              Earning per month (RM)
             </span>
           </div>
           <svg
             width={chartWidth + padding * 2}
             height={chartHeight + padding * 2}
-            className="overflow-visible max-w-500px"
+            className="overflow-visible flex-1"
           >
             {/* Grid lines - vertical */}
             {[0, 2, 4, 6, 8, 10, 12].map((i) => (
@@ -128,7 +139,7 @@ export const CausewayEarningsChart = () => {
                 textAnchor="end"
                 className="text-xs fill-gray-600"
               >
-                {value === 0 ? "0" : `${value / 1000}K`}
+                {value === 0 ? "" : `${value / 1000}K`}
               </text>
             ))}
 
@@ -174,7 +185,7 @@ export const CausewayEarningsChart = () => {
 
         {/* X-axis label */}
         <div className="text-center mt-1">
-          <span className="text-sm text-gray-600 font-medium">
+          <span className="text-sm text-black font-medium">
             No. of vehicles
           </span>
         </div>
