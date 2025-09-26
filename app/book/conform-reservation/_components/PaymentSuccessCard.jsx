@@ -2,15 +2,17 @@
 import React from "react";
 import { Copy } from "lucide-react";
 import { FaCheckCircle } from "react-icons/fa";
+import { showSuccessToast } from "@/app/_lib/toast";
 
 const PaymentSuccessBar = ({ reservationNumber = "#JB04636" }) => {
   const handleCopyReservationNumber = () => {
     navigator.clipboard.writeText(reservationNumber);
+    showSuccessToast("Reservation Number Copied!");
     // You can add a toast notification here if needed
   };
 
   return (
-    <div className=" bg-cSecondary rounded-b-2xl py-11 px-20 xs:px-52 md:px-24 lg:px-52">
+    <div className=" bg-cSecondary rounded-b-2xl pb-11 pt-6 px-20 xs:px-52 md:px-24 lg:px-52">
       <div className="max-w-[1400px] mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex flex-col md:flex-row items-center gap-4 flex-1 justify-center md:justify-start">
