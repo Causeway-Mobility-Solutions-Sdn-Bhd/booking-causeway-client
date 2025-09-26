@@ -57,7 +57,20 @@ const DropdownInput = ({
     }
     return text;
   };
+  const getPlaceholderText = () => {
+    const placeholderText = `Select ${label}`;
+    if (windowWidth < 400 && placeholderText.length >= 19) {
+      return placeholderText.substring(0, 11) + "...";
+    }
+    if (windowWidth < 450 && placeholderText.length >= 19) {
+      return placeholderText.substring(0, 13) + "...";
+    }
+    if (windowWidth < 500 && placeholderText.length >= 19) {
+      return placeholderText.substring(0, 16) + "...";
+    }
 
+    return placeholderText;
+  };
   return (
     <div>
       <Select
@@ -73,7 +86,9 @@ const DropdownInput = ({
           <div className="flex flex-col h-full items-start justify-center w-full">
             <span className="text-gray-500 text-xs leading-tight">{label}</span>
             <span className="text-sm leading-tight text-left">
-              {selectedValue ? getDisplayLabel() : `Select ${label}`}
+              <span className="text-sm leading-tight text-left">
+                {selectedValue ? getDisplayLabel() : getPlaceholderText()}
+              </span>
             </span>
           </div>
         </SelectTrigger>

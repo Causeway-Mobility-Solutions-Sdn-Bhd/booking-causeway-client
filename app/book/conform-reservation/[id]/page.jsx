@@ -13,12 +13,14 @@ import Nav from "@/components/custom/Nav";
 
 export default function Page() {
   const [conformeReservation, setConformReservation] = useState(null);
+  const [rentalAgreement, setRentalAgreement] = useState("");
   const [loading, setLoading] = useState(true);
   const [customerInfo, setCustomerInfo] = useState(null);
   const reservation = useAppSelector((state) => state.reservation.reservation);
   const router = useRouter();
 
   const params = useParams();
+  console.log(params);
 
   useEffect(() => {
     if (!reservation?.reservation_id) {
@@ -30,17 +32,21 @@ export default function Page() {
             "car-rental/reservations/get-reservation"
           );
 
-          console.log(response?.data?.data);
+          console.log(response?.data);
+          const responseData = response?.data?.data;
+          if (responseData?.reservation?.uuid !== params.id) {
+            router.replace("/");
 
-          setConformReservation(response?.data?.data);
-          const customerData = transformCustomerData(
-            response?.data?.data?.customer
-          );
+            return;
+          }
+          setConformReservation(responseData);
+          setRentalAgreement(response?.data?.rental_agreement?.data?.agreement);
+          const customerData = transformCustomerData(responseData?.customer);
 
           setCustomerInfo(customerData);
         } catch (error) {
           console.log("Error fetching reservation:", error);
-        } finally {
+          router.replace("/");
           setLoading(false);
         }
       };
@@ -58,7 +64,7 @@ export default function Page() {
     <div>
       <Nav />
       <PaymentSuccessBar
-        reservationNumber={conformeReservation?.reservation?.id}
+        reservationNumber={conformeReservation?.reservation?.prefixed_id}
       />
       <div className="pb-16 py-[20px]  sm:py-[30px] max-w-[1400px] mx-auto w-[95%]">
         <div className="mt-[10px] flex justify-start items-start gap-5 flex-col lg:flex-row">
@@ -66,6 +72,7 @@ export default function Page() {
             <VehicleBookingDetails
               customerData={customerInfo}
               reservationData={conformeReservation}
+              rentalAgreement={rentalAgreement}
             />
           </div>
           <Step7Sidebar />

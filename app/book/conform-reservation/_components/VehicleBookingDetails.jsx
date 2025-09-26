@@ -9,14 +9,51 @@ import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import VehicleDetail from "./VehicleDetail";
 import CustomerDetails from "./CustomerDetails";
+import { showErrorToast } from "@/app/_lib/toast";
 
-function VehicleBookingDetails({ reservationData, customerData }) {
-  const reservation = useAppSelector((state) => state.reservation.reservation);
+function VehicleBookingDetails({
+  reservationData,
+  customerData,
+  rentalAgreement,
+}) {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const [isAddOnOpen, setIsAddOnOpen] = useState(false);
 
-  console.log(reservationData.reservation);
+  const handleDownload = async () => {
+    try {
+      // fetch file (good if protected routes / auth needed)
+      const response = await fetch(rentalAgreement, {
+        method: "GET",
+        headers: {
+          // add auth headers here if needed
+        },
+      });
 
+      if (!response.ok) throw new Error("File download failed");
+
+      // convert to blob
+      const blob = await response.blob();
+
+      // create object url
+      const url = window.URL.createObjectURL(blob);
+
+      // create <a> element to trigger save-as
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "Rental_Agreement.pdf"; // filename
+      document.body.appendChild(link);
+      link.click();
+
+      // cleanup
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      console.log("Downloaded:", rentalAgreement);
+    } catch (err) {
+      showErrorToast("Error Downloading Agreement.");
+      console.error("Download error:", err);
+    }
+  };
   return (
     <div className="mt-[-65px] sm:mt-0">
       <VehicleDetail
@@ -32,7 +69,7 @@ function VehicleBookingDetails({ reservationData, customerData }) {
         <div className="flex border rounded-lg border-gray-200 flex-col md:flex-row">
           {/* Pickup Section */}
           <div className="flex-1 p-4">
-            <div className="flex items-start gap-3">
+            <div className="flex items-start gap-1">
               <div>
                 <RiMapPin2Line className="text-lg mt-[3px]" />
               </div>
@@ -56,7 +93,7 @@ function VehicleBookingDetails({ reservationData, customerData }) {
 
           {/* Divider */}
           <div className="hidden md:block border-l border-gray-200 mx-1 my-4"></div>
-          <div className="block md:hidden border-t border-gray-200 mx-4 my-2"></div>
+          <div className="block md:hidden border-t border-gray-200 mx-4 my-[-5px]"></div>
 
           {/* Return Section */}
           <div className="flex-1 p-4">
@@ -135,8 +172,9 @@ function VehicleBookingDetails({ reservationData, customerData }) {
         </div>
 
         <Button
+          onClick={handleDownload}
           variant="outline"
-          className="w-full md:w-auto md:text-center font-bold py-5 justify-center border-cSecondary text-cSecondary hover:bg-cSecondary hover:text-white mt-4"
+          className="cursor-pointer w-full md:w-auto md:text-center font-bold py-5 justify-center border-cSecondary text-cSecondary hover:bg-cSecondary hover:text-white mt-4"
         >
           Download Agreement
           <Download className="w-4 h-4" />
