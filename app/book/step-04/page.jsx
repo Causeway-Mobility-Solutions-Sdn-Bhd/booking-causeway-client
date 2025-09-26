@@ -130,11 +130,11 @@ function Page() {
       <div className="!pb-32 py-[20px] mt-[70px] sm:mt-[90px] sm:py-[30px] max-w-[1400px] mx-auto w-[92%]">
         <div className="mt-[10px] flex justify-start items-start gap-5 flex-col lg:flex-row">
           <div className="flex-1 w-full">
-            <GuestLoginToggler
+            {/* <GuestLoginToggler
               setIsDrawerOpen={setIsLoginDrawer}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
-            />
+            /> */}
 
             {/* Customer Form */}
             <CustomerDetailsForm
