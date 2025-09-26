@@ -8,11 +8,13 @@ import { ChevronRight } from 'lucide-react'
 
 function page() {
   return (
-    <div className="relative min-h-screen bg-gray-50" style={{backgroundColor: '#F0F0F0'}}>
+    <div className="relative min-h-screen bg-gray-50" style={{backgroundColor: '#f9fafb'}}>
       <Nav isMain={false} value="Support" />
       <SideBar />
-
+      
+      
       <div className="pt-5 pb-10 px-4">
+      
         <div className="mt-1 mb-6">
           <h2 className="text-[21px] font-normal leading-[100%] tracking-[0%] text-black" style={{fontFamily: 'Poppins'}}>
             Support
@@ -27,7 +29,7 @@ function page() {
             {/* WhatsApp */}
             <div 
               className="px-4 py-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 border-b border-gray-100"
-              onClick={() => window.open('https:', '_blank')}
+              onClick={() => window.open('https://wa.me/60166201542?text=Hello%20!%20Causeway%20Malaysia%20(Whatsapp)', '_blank')}
             >
               <div className="flex items-center space-x-3">
                 <img src="/Support/whatsapp.png" alt="WhatsApp" className="w-6 h-6" style={{width: '24px', height: '24px'}} />
@@ -40,8 +42,8 @@ function page() {
             <div 
               className="px-4 py-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 border-b border-gray-100"
               onClick={() => {
-
-                alert('WeChat support is currently unavailable. Please use WhatsApp or Telegram for assistance.');
+                
+                alert('Wechat support is currently unavailable. Please use WhatsApp for assistance.')
               }}
             >
               <div className="flex items-center space-x-3">
@@ -54,7 +56,7 @@ function page() {
             {/* Telegram */}
             <div 
               className="px-4 py-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 border-b border-gray-100"
-              onClick={() => window.open('https:', '_blank')}
+              onClick={() => alert('Telegram support is currently unavailable. Please use WhatsApp for assistance.')}
             >
               <div className="flex items-center space-x-3">
                 <img src="/Support/Telegram.png" alt="Telegram" className="w-6 h-6" style={{width: '24px', height: '24px'}} />
@@ -66,7 +68,7 @@ function page() {
             {/* Email */}
             <div 
               className="px-4 py-3 flex items-center justify-between cursor-pointer hover:bg-gray-50"
-              onClick={() => window.open('mailto:', '_blank')}
+              onClick={() => window.open('mailto:bookings@causeway.my', '_blank')}
             >
               <div className="flex items-center space-x-3">
                 <img src="/Support/Email.png" alt="Email" className="w-6 h-6" style={{width: '24px', height: '24px'}} />
@@ -83,7 +85,7 @@ function page() {
           <div className="bg-white rounded-lg shadow-sm">
             <div 
               className="px-4 py-3 flex items-center justify-between cursor-pointer hover:bg-gray-50"
-              onClick={() => window.open('tel:+YOUR_PHONE_NUMBER', '_self')}
+              onClick={() => window.open('tel:+6075354071', '_self')}
             >
               <div className="flex items-center space-x-3">
                 <img src="/Support/Call.png" alt="Call" className="w-6 h-6" />
@@ -100,7 +102,7 @@ function page() {
           <div className="bg-white rounded-lg shadow-sm">
             <div 
               className="px-4 py-3 flex items-center justify-between cursor-pointer hover:bg-gray-50"
-              onClick={() => window.open('mailto:', '_blank')}
+              onClick={() => window.open('mailto:Support@causeway.my', '_blank')}
             >
               <div className="flex items-center space-x-3">
                 <img src="/Support/Email.png" alt="Email" className="w-6 h-6" />
