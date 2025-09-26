@@ -35,9 +35,6 @@ export default function Page() {
           console.log(response?.data);
           const responseData = response?.data?.data;
           if (responseData?.reservation?.uuid !== params.id) {
-            console.log(responseData?.reservation?.uuid);
-            console.log(params.id);
-            console.log("NOT EQUAL");
             router.replace("/");
 
             return;
