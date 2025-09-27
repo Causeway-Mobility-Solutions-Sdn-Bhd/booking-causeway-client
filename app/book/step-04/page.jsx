@@ -17,7 +17,7 @@ import {
   setSelectedVehicle,
 } from "@/store/slices/reservationSlice";
 import LoginDrawer from "./_components/LoginDrawer";
-import { transformCustomerData } from "@/lib/transformCustomerData";
+import { transformCustomerData } from "@/app/_lib/transformCustomerData";
 
 function Page() {
   const [submitLoader, setSubmitLoader] = useState(false);

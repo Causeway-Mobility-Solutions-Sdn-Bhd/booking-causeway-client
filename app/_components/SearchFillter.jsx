@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import hqApi from "@/lib/hqApi";
 import Spinner from "@/components/custom/Spinner";
 import { format } from "date-fns";
-import { nanoid } from "nanoid";
 import AnimatedTransparentGuarantee from "@/components/custom/AnimatedTransparentGuarantee";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
@@ -60,9 +59,6 @@ function SearchFillter({
   const dispatch = useAppDispatch();
   const isDifferentReturnLocation = useAppSelector(
     (state) => state.reservation.isDifferentReturnLocation
-  );
-  const selectedVehicle = useAppSelector(
-    (state) => state.reservation.selectedVehicle
   );
 
   const [loader, setLoader] = useState(false);

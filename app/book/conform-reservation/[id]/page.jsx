@@ -7,7 +7,7 @@ import { useAppSelector } from "@/store/hooks";
 import PaymentSuccessBar from "../_components/PaymentSuccessCard";
 import VehicleBookingDetails from "../_components/VehicleBookingDetails";
 import Step7Sidebar from "../_components/Step7Sidebar";
-import { transformCustomerData } from "@/lib/transformCustomerData";
+import { transformCustomerData } from "@/app/_lib/transformCustomerData";
 import Spinner from "@/components/custom/Spinner";
 import Nav from "@/components/custom/Nav";
 import SideBar from "@/app/_components/SideBar";

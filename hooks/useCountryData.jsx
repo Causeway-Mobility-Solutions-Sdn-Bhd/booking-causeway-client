@@ -12,7 +12,7 @@ export const useCountryData = () => {
     const loadData = async () => {
       try {
         const { countryCodes, countryStates } = await import(
-          "@/lib/countryData"
+          "@/app/_lib/countryData"
         );
         setData({
           countryCodes,

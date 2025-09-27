@@ -6,7 +6,7 @@ import DriverInformation from "./DriverInformation";
 import DriversContactInfo from "./DriversContactInfo";
 import EmergencyContactInfo from "./EmergencyContactInfo";
 import OtherInformation from "./OtherInformation";
-import { transformCustomerFormData } from "@/lib/transformCustomerData";
+import { transformCustomerFormData } from "@/app/_lib/transformCustomerData";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import axios from "axios";
 import hqApi from "@/lib/hqApi";
