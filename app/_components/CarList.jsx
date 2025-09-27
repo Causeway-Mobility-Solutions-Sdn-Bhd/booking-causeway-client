@@ -46,7 +46,7 @@ function CarList() {
       } catch (error) {
         console.log(
           "HQ API error:",
-          error.response.data
+          error
         );
       } finally {
         console.log("vehicle classes fetched");
