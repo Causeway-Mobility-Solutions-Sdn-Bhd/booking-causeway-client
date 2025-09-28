@@ -57,7 +57,7 @@ function PriceSummaryDrawer({ selectedVehicle, currency }) {
             <RxCross2 className="text-cSecondary text-[25px]" />
           </Button>
         </DrawerHeader>
-        <div className="bg-cWhite h-[500px] overflow-y-auto">
+        <div className="bg-cWhite h-[550px] overflow-y-auto">
           <div className="py-[15px] w-[95%] mx-auto">
             <VehicleDetail />
             <PriceSummary />
