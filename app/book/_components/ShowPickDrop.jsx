@@ -44,7 +44,7 @@ function ShowPickDrop() {
             reservation={reservation}
             isDrawerOpen={editLocDateOpen}
             setIsDrawerOpen={setEditLocDateOpen}
-            isMid={true}
+            isMid={true} 
           />
         </div>
 
