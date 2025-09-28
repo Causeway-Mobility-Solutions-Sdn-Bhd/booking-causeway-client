@@ -9,7 +9,7 @@ function VehicleDetail() {
   );
 
   return (
-    <div className="mt-3">
+    <div className="mt-0">
       <div className="flex justify-between items-center mb-3">
         <h1 className="text-[18px] font-bold">Vehicle details</h1>
       </div>

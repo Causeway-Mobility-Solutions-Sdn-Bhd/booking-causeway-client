@@ -30,7 +30,7 @@ function Car({ car }) {
         : [...prev, carId]
     );
   };
-  console.log(format(addDays(new Date(), 2), "yyyy-MM-dd"))
+  console.log(format(addDays(new Date(), 2), "yyyy-MM-dd"));
 
   const fetchData = async (car) => {
     setLoader(true);
@@ -68,11 +68,21 @@ function Car({ car }) {
           );
 
           if (response?.status === 200) {
-            dispatch(setReservation(responseAdditionCharges?.data?.reservation));
-            dispatch(setAdditionalCharges(responseAdditionCharges?.data?.additional_charges));
-            dispatch(setSelectedVehicle(responseAdditionCharges?.data?.selected_vehicle));
+            dispatch(
+              setReservation(responseAdditionCharges?.data?.reservation)
+            );
+            dispatch(
+              setAdditionalCharges(
+                responseAdditionCharges?.data?.additional_charges
+              )
+            );
+            dispatch(
+              setSelectedVehicle(
+                responseAdditionCharges?.data?.selected_vehicle
+              )
+            );
             setLoader(false);
-            console.log("routed")
+            console.log("routed");
             router.push(`/book/step-03?ssid=${sessionIDNew}`);
           } else {
             setLoader(false);
@@ -126,10 +136,14 @@ function Car({ car }) {
           {/* Car Info */}
           <div className="text-left mb-4">
             <h3 className="font-semibold text-lg text-foreground">
-              {car?.vehicle_brand?.name}
+              {car?.vehicle_brand?.name.length > 7
+                ? car.vehicle_brand?.name.slice(0, 7) + "..."
+                : car?.vehicle_brand?.name}
             </h3>
             <p className="text-xs sm:text-sm text-left text-muted-foreground">
-              {car?.vehicle_class?.name}
+              {car?.vehicle_class?.name?.length > 10
+                ? car.vehicle_class.name.slice(0, 10) + "..."
+                : car?.vehicle_class?.name}
             </p>
           </div>
 
