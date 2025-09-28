@@ -59,9 +59,9 @@ function PriceSummaryDrawer({ selectedVehicle, currency }) {
         </DrawerHeader>
         <div className="bg-cWhite h-[500px] overflow-y-auto">
           <div className="py-[15px] w-[95%] mx-auto">
-            <ShowPickDrop />
             <VehicleDetail />
             <PriceSummary />
+            <ShowPickDrop />
           </div>
         </div>
       </DrawerContent>

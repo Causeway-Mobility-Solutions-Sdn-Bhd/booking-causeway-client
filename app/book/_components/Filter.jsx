@@ -433,7 +433,7 @@ function Filter({
             </div>
           )}
           <div className="mt-[10px]">
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-[17px]">
               {ft?.options?.map((ftp) => {
                 return (
                   <div
@@ -485,7 +485,7 @@ function Filter({
           {features?.map((ft) => (
             <div
               key={ft.id}
-              className={`pt-[10px] pb-[17px] ${
+              className={`pt-[10px] ${
                 ft?.id !== 4 && "border-b border-[#E6E6E6]"
               }`}
             >
