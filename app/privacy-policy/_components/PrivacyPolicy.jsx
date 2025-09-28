@@ -10,88 +10,82 @@ import {
 const PrivacyPolicy = () => {
   const termsData = [
     {
-      id: "charges",
-      title: "Rental charges",
-      content: `The charges are calculated based on the 24-hour period from commencement of the 
-      Rental Period for Daily and Weekly rentals, a month or monthly rentals are calculated 
-      based on the 30-day period. Daily rental rates will be applied for rental below 7 days. 
-      Weekly rental rates will be applied for rental 7 days and above. If the rentals more than 
-      14 days, a month rate will be calculated whichever lower. In relation to the monthly 
-      rental, any extension of the rental period will be prorated based on calendar month.`
+      id: "scope",
+      title: "Scope & Controllers",
+      content: `This Privacy Policy applies to all personal data collected and 
+      processed by our car rental service through our website, mobile application, 
+      and physical locations. We act as the data controller for all personal information 
+      collected during the rental process. This policy covers data collection from customers, 
+      potential customers, website visitors, and business partners. Our privacy practices comply with 
+      applicable data protection laws including GDPR and local privacy regulations. We are committed to 
+      protecting your privacy and handling your personal data responsibly throughout our business relationship.`
     },
     {
-      id: "protection",
-      title: "Protection & Coverage",
-      content: `Our comprehensive protection plans provide financial security and peace of mind 
-      during your rental period. Coverage options include collision damage waiver, theft protection, 
-      and liability coverage. Different protection tiers are available to suit your needs and budget, 
-      with varying deductibles and coverage limits. All protection plans must be selected at the time
-      of booking and cannot be modified once the rental commences.`
+      id: "dataCollection",
+      title: "Data Collection (What & How)",
+      content: `We collect personal information necessary for vehicle rental services including full name, date 
+      of birth, contact details, address, driver's license information, and payment details. Additional data may 
+      include rental preferences, vehicle usage patterns, GPS location data during rentals, and customer service 
+      interactions. Information is collected directly from customers during booking, through our website and app usage, 
+      from third-party verification services, and through vehicle monitoring systems. We also collect technical data 
+      such as IP addresses, browser information, and device identifiers to improve our digital services and security.`
     },
     {
-      id: "roadside",
-      title: "Roadside Assistance (RA)",
-      content: `24/7 roadside assistance is available throughout your rental period to ensure uninterrupted 
-      travel. Services include emergency towing, battery jump-start, flat tire assistance, lockout service, 
-      and emergency fuel delivery. Response times vary by location and weather conditions. Some services may 
-      incur additional charges depending on the nature of assistance required and your protection plan coverage.`
+      id: "purposes",
+      title: "Purposes For Processing",
+      content: `Your personal data is processed to fulfill rental agreements, verify driver eligibility, process payments, 
+      and provide customer support. We use your information for vehicle tracking and recovery, insurance claims processing, 
+      traffic violation management, and service improvement. Marketing communications and promotional offers are sent based 
+      on your preferences and consent. Data analysis helps us enhance our services, develop new offerings, and ensure operational 
+      efficiency. We also process data to comply with legal obligations, protect against fraud, and maintain the security of our 
+      systems and customers.`
     },
     {
-      id: "maintenance",
-      title: "Full Maintenance",
-      content: `All rental vehicles undergo comprehensive maintenance programs including regular oil changes, 
-      tire rotations, brake inspections, and scheduled manufacturer servicing. Emergency repairs and breakdowns 
-      due to normal wear and tear are covered under our maintenance program. Customers are responsible for checking 
-      fluid levels, tire pressure, and reporting any mechanical issues immediately. Neglect or misuse resulting in 
-      mechanical failure may result in additional charges.`
+      id: "disclosures",
+      title: "Disclosures To Affiliates & Third Parties",
+      content: `We may share your personal data with affiliated companies within our corporate group for business operations and s
+      ervice delivery. Third-party sharing occurs with payment processors, insurance providers, vehicle recovery services, and credit 
+      verification agencies as necessary for rental services. Law enforcement agencies may receive information when legally required or 
+      for legitimate security purposes. Marketing partners may receive anonymized data for promotional activities with your consent. 
+      Service providers including IT support, customer service platforms, and data storage companies have access to personal data under 
+      strict confidentiality agreements and data protection requirements.`
     },
     {
-      id: "notIncluded",
-      title: "Items Not Included in Rental Rates",
-      content: `Rental rates exclude fuel, toll charges, parking fees, traffic fines, additional driver fees, and
-      optional equipment such as GPS units, child safety seats, or ski racks. Insurance deductibles, damage repairs 
-      beyond normal wear and tear, and cleaning fees for excessive soiling are also excluded. International travel 
-      permits, border crossing documentation, and associated fees are customer responsibilities.`
+      id: "cookies",
+      title: "Cookies & Online Advertising Choices",
+      content: `Our website and mobile applications use cookies and similar technologies to enhance user experience, analyze website performance, 
+      and deliver personalized content. Essential cookies are necessary for basic site functionality, while analytical cookies help us understand 
+      user behavior and improve our services. Marketing cookies enable targeted advertising and promotional content based on your interests and browsing 
+      history. You can manage cookie preferences through your browser settings or our cookie consent tool. Third-party advertising networks may use cookies 
+      to display relevant ads across different websites. We respect Do Not Track signals and provide opt-out options for marketing communications and behavioral advertising.`
     },
     {
-      id: "delivery",
-      title: "Delivery and Collection Services",
-      content: `Vehicle delivery and collection services are available within designated service areas for an additional 
-      fee. Delivery fees are calculated based on distance from our location to your specified address. Same-day delivery 
-      requests may incur premium charges and are subject to availability. Collection services must be scheduled in advance, 
-      and late collection fees may apply if vehicles are not ready at the agreed time.`
+      id: "security",
+      title: "Security",
+      content: `We implement comprehensive security measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction. 
+      Technical safeguards include encryption, secure servers, firewalls, and regular security assessments. Physical security controls protect our facilities 
+      and data storage systems. Access to personal data is restricted to authorized personnel who need the information to perform their duties. Regular security 
+      training ensures our staff understand data protection responsibilities. We maintain incident response procedures to address any potential data breaches promptly 
+      and transparently. While we strive to protect your information, no system is completely secure, and we encourage customers to take appropriate precautions when 
+      sharing personal data online.`
     },
     {
-      id: "oneWay",
-      title: "One Way & Intercity Charges",
-      content: `One-way rentals between different locations incur additional drop-off charges that vary by distance and 
-      destination popularity. Intercity travel may require special authorization and documentation. Drop-off charges are 
-      non-refundable and must be paid in advance. Some vehicle categories may not be available for one-way rentals, and 
-      advance booking is strongly recommended for intercity travel.`
+      id: "retention",
+      title: "Data Retention & Integrity",
+      content: `Personal data is retained only as long as necessary for the purposes for which it was collected, typically for the duration of our business relationship 
+      plus applicable legal retention periods. Rental agreement data is kept for up to seven years for legal and accounting purposes. Marketing data is retained based on 
+      your consent and can be deleted upon request. We regularly review and update stored information to ensure accuracy and relevance. Automated deletion processes remove 
+      outdated data according to our retention schedule. Data integrity is maintained through regular backups, error checking, and validation procedures. Upon account closure 
+      or data deletion requests, we securely destroy personal information while preserving legally required records.`
     },
     {
-      id: "extension",
-      title: "Extension of Rental / Excess Hours",
-      content: `Rental extensions must be approved and confirmed before the original return time to avoid unauthorized use 
-      charges. Extensions are charged at the applicable daily, weekly, or monthly rate depending on the extension period. 
-      Excess hours beyond the agreed return time incur hourly penalty charges. Unauthorized extensions may result in 
-      additional fees and affect future rental eligibility.`
-    },
-    {
-      id: "earlyReturn",
-      title: "Early Return Policy",
-      content: `Early returns do not automatically qualify for refunds of unused rental days. Refund eligibility depends 
-      on the rental duration, rate type, and advance notice provided. Weekly and monthly rentals returned early may 
-      receive partial refunds based on our refund schedule. Daily rentals typically do not qualify for early return refunds. 
-      Processing fees may apply to approved refunds.`
-    },
-    {
-      id: "fuel",
-      title: "Fuel Policy",
-      content: `All vehicles are provided with a full tank of fuel and must be returned with a full tank to avoid refueling 
-      charges. If returned with less fuel, refueling fees will be charged at premium rates plus a service fee. Fuel receipts 
-      from stations within 10 miles of the return location and dated within 24 hours of return may be accepted for fuel credit. 
-      Alternative fuel vehicles follow specific charging or refueling protocols as outlined in the rental agreement.`
+      id: "access",
+      title: "Access, Correction & Portability",
+      content: `You have the right to access your personal data, request corrections to inaccurate information, and obtain copies of your data in a portable format. Data access 
+      requests are processed within 30 days, and we provide clear information about what data we hold and how it's used. You can update your account information through our website or 
+      mobile app, or by contacting customer service. Data portability requests allow you to transfer your information to other service providers in commonly used formats. We provide mechanisms 
+      to correct errors, update preferences, and delete unnecessary information. Account holders can download their data history, rental records, and profile information through secure online portals or 
+      by submitting formal requests to our privacy team.`
     }
   ];
 
