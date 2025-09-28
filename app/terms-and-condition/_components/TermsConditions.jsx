@@ -321,20 +321,20 @@ const TermsConditions = () => {
 
   return (
     <div className="w-[95%] max-w-[1400px] mx-auto mt-[30px] pb-[80px] space-y-4">
-      {termsData.map((term) => (
-        <div key={term.id} className="bg-white rounded-2xl shadow-sm overflow-hidden">
-          <Accordion type="single" collapsible className="w-full">
+      <Accordion type="single" collapsible className="w-full space-y-4">
+        {termsData.map((term) => (
+          <div key={term.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
             <AccordionItem value={term.id} className="border-0">
-              <AccordionTrigger className="px-4 py-4 text-left">
+              <AccordionTrigger className="px-4 py-4 text-left [&>svg]:text-teal-500">
                 <h3 className="text-[14px] font-bold text-gray-900">{term.title}</h3>
               </AccordionTrigger>
               <AccordionContent className="px-4 py-4 bg-gray-50">
                 {renderContent(term)}
               </AccordionContent>
             </AccordionItem>
-          </Accordion>
-        </div>
-      ))}
+          </div>
+        ))}
+      </Accordion>
     </div>
   );
 };
