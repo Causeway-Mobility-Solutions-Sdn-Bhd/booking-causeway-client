@@ -37,7 +37,7 @@ const DriversContactInfo = ({
     ? Object.entries(countryCodes).map(([isoCode, data]) => ({
         value: isoCode,
         label: data.n,
-        flag: isoCode,
+        flag: isoCode.toLowerCase(),
       }))
     : [];
 

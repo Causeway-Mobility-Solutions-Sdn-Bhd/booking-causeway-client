@@ -53,11 +53,11 @@ const CustomerDetailsForm = ({
       country: "MY",
 
       // Emergency Contact Information
-      emergencyName: "",
+      // emergencyName: "",
       emergencyRelationship: "",
       emergencyPhone: "",
       emergencyPhoneCountryCode: "+60", // Default for emergency phone
-      emergencyEmail: "",
+      // emergencyEmail: "",
 
       otherInfo: "",
 
@@ -162,10 +162,10 @@ const CustomerDetailsForm = ({
       "city",
       "state",
       "country",
-      "emergencyName",
+      // "emergencyName",
       "emergencyRelationship",
       "emergencyPhone",
-      "emergencyEmail",
+      // "emergencyEmail",
       "agreeTerms",
     ];
 
@@ -194,11 +194,11 @@ const CustomerDetailsForm = ({
       city: "Kuala Lumpur",
 
       // Emergency Contact Information
-      emergencyName: "Jane Smith",
+      // emergencyName: "Jane Smith",
       emergencyRelationship: "Spouse",
       emergencyPhone: "987654321",
       emergencyPhoneCountryCode: "+60",
-      emergencyEmail: "jane.smith@example.com",
+      // emergencyEmail: "jane.smith@example.com",
 
       // Other Information
       otherInfo: "Sample customer data for testing purposes",
@@ -208,7 +208,7 @@ const CustomerDetailsForm = ({
     };
 
     // Set all form values
-    Object.entries(sampleData).forEach(([fieldName, value]) => {
+    Object.entries(data).forEach(([fieldName, value]) => {
       setValue(fieldName, value);
     });
   };
@@ -231,7 +231,7 @@ const CustomerDetailsForm = ({
       className="space-y-6"
     >
       {/* Driver's License Information Component */}
-      <button onClick={fillFormData}>Test</button>
+      {/* <button onClick={fillFormData}>Test</button> */}
       <DriverLicenseInfo
         register={register}
         setValue={setValue}

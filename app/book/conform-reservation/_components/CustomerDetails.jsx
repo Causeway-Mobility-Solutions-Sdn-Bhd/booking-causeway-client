@@ -24,8 +24,6 @@ const CustomerDetails = ({ data }) => {
     licenseExpiry: data.licenseExpiry,
   };
 
-  console.log(data);
-
   return (
     <div className="p-4">
       {/* Accordion content goes here */}

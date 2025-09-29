@@ -32,12 +32,12 @@ const PhoneInput = ({
   const hasPhoneError = !!errors[name];
   const hasCountryCodeError = !!errors[`${name}CountryCode`];
 
-  // Only process country codes when data is loaded
+  // Process country codes from the structure: { AD: {c: '+376', n: 'Andorra'}, ... }
   const countryPhoneCodes = countryCodes
     ? Object.entries(countryCodes).map(([iso2, data]) => ({
         code: data.c,
         country: data.n,
-        iso2: iso2,
+        iso2: iso2.toLowerCase(),
       }))
     : [];
 
@@ -48,14 +48,13 @@ const PhoneInput = ({
         shouldValidate: false,
       });
     }
-  }, [dataLoading]);
+  }, [dataLoading, countryCodeValue, name, selectedCountryCode, setValue]);
 
   const handleCountryCodeChange = (value) => {
     // Extract the country code and ISO from the combined value
     const [code, iso] = value.split("|");
     setSelectedCountryCode(code);
     setSelectedCountryIso(iso);
-    console.log("Selected code:", code);
 
     setValue(`${name}CountryCode`, code, { shouldValidate: true });
   };
@@ -66,7 +65,7 @@ const PhoneInput = ({
   };
 
   return (
-    <div className={``}>
+    <div>
       <div
         className={`!h-11 flex items-center w-full border rounded-md hover:border-teal-500 transition-colors focus-within:ring-2 focus-within:ring-teal-500 focus-within:border-transparent overflow-hidden ${
           hasPhoneError || hasCountryCodeError
@@ -89,27 +88,25 @@ const PhoneInput = ({
           </SelectTrigger>
 
           <SelectContent className="w-[250px]">
-            {countryPhoneCodes?.map((country) => {
-              return (
-                <SelectItem
-                  key={`${country.iso2}-${country.code}-${country.country}`}
-                  value={`${country.code}|${country.iso2}`}
-                >
-                  <div className="flex items-center gap-2">
-                    <Image
-                      src={`/flagicons/${country.iso2}.svg`}
-                      alt={`${country.country} flag`}
-                      width={20}
-                      height={20}
-                    />
-                    <span>{country.code}</span>
-                    <span className="text-gray-500 text-sm">
-                      {country.country}
-                    </span>
-                  </div>
-                </SelectItem>
-              );
-            })}
+            {countryPhoneCodes.map((country) => (
+              <SelectItem
+                key={`${country.iso2}-${country.code}`}
+                value={`${country.code}|${country.iso2}`}
+              >
+                <div className="flex items-center gap-2">
+                  <Image
+                    src={`/flagicons/${country.iso2}.svg`}
+                    alt={`${country.country} flag`}
+                    width={20}
+                    height={20}
+                  />
+                  <span>{country.code}</span>
+                  <span className="text-gray-500 text-sm">
+                    {country.country}
+                  </span>
+                </div>
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
 
@@ -125,13 +122,14 @@ const PhoneInput = ({
           type="tel"
           value={phoneValue || ""}
           onChange={handlePhoneChange}
-          placeholder={"Mobile Number"}
+          placeholder="Mobile Number"
           className={`flex-1 h-10 border-0 px-3 placeholder-gray-500 placeholder:font-light placeholder:text-sm focus:outline-none focus:ring-0 bg-transparent ${
             dataLoading ? "opacity-50" : ""
           }`}
           disabled={dataLoading || !!error}
         />
       </div>
+
       {(hasPhoneError || hasCountryCodeError) && firstErrorField === name && (
         <ErrorMessage
           message={
@@ -141,6 +139,7 @@ const PhoneInput = ({
           }
         />
       )}
+
       <input
         type="hidden"
         {...register(`${name}CountryCode`, {

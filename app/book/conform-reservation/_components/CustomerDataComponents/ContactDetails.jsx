@@ -4,8 +4,6 @@ import { useCountryData } from "@/hooks/useCountryData";
 const ContactDetails = ({ contactDetailsData }) => {
   const { countryCodes, loading: dataLoading } = useCountryData();
 
-  console.log(countryCodes);
-
   const country = dataLoading
     ? "..."
     : countryCodes[contactDetailsData?.country].n;

@@ -71,6 +71,7 @@ const DropdownInput = ({
 
     return placeholderText;
   };
+
   return (
     <div>
       <Select
