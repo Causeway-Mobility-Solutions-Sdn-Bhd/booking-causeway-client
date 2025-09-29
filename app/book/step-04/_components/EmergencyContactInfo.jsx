@@ -19,9 +19,9 @@ const EmergencyContactInfo = ({
   firstErrorField,
 }) => {
   // Check if fields have errors
-  const hasEmergencyNameError = !!errors.emergencyName;
+  // const hasEmergencyNameError = !!errors.emergencyName;
   const hasEmergencyRelationshipError = !!errors.emergencyRelationship;
-  const hasEmergencyEmailError = !!errors.emergencyEmail;
+  // const hasEmergencyEmailError = !!errors.emergencyEmail;
 
   return (
     <div className="space-y-6">
@@ -32,7 +32,7 @@ const EmergencyContactInfo = ({
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Full Name */}
-          <div>
+          {/* <div>
             <Input
               {...register("emergencyName", {
                 required: "Emergency contact name is required",
@@ -53,7 +53,7 @@ const EmergencyContactInfo = ({
             {hasEmergencyNameError && firstErrorField === "emergencyName" && (
               <ErrorMessage message={errors.emergencyName.message} />
             )}
-          </div>
+          </div> */}
 
           {/* Relationship Dropdown */}
           <DropdownInput
@@ -79,7 +79,7 @@ const EmergencyContactInfo = ({
           />
 
           {/* Email Address */}
-          <div>
+          {/* <div>
             <Input
               {...register("emergencyEmail", {
                 required: "Emergency contact email is required",
@@ -97,7 +97,7 @@ const EmergencyContactInfo = ({
             {hasEmergencyEmailError && firstErrorField === "emergencyEmail" && (
               <ErrorMessage message={errors.emergencyEmail.message} />
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
