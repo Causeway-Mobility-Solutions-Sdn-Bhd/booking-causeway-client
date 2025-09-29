@@ -1,9 +1,12 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import VehicleInfo from "./VehicleInfo";
+import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
+import hqApi from "@/lib/hqApi";
 
 const SubmitVehicleInfoForm = () => {
+  const [submitLoader, setSubmitLoader] = useState(false);
   const {
     register,
     handleSubmit,
@@ -11,6 +14,7 @@ const SubmitVehicleInfoForm = () => {
     setValue,
     clearErrors,
     formState: { errors },
+    reset,
   } = useForm({
     defaultValues: {
       name: "",
@@ -45,6 +49,44 @@ const SubmitVehicleInfoForm = () => {
   };
   const onSubmit = async (data) => {
     console.log("Form submitted:", data);
+    setSubmitLoader(true);
+
+    try {
+      // Prepare the partner email data
+      const partnerEmailData = {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        phoneCountryCode: data.phoneCountryCode,
+        vehicleMake: data.vehicleMake,
+        vehicleModel: data.vehicleModel,
+        vehicleYear: data.vehicleYear,
+        vehicleMilage: data.vehicleMilage,
+      };
+
+      // Send partner notification email
+      const emailResponse = await hqApi.post(
+        "email/partner-email",
+        partnerEmailData
+      );
+
+      console.log("Partner email sent:", emailResponse.data);
+      showSuccessToast("Form submitted! We'll contact you within 1 day.");
+      reset();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+
+      // More specific error handling
+      if (error.response?.status === 400) {
+        showErrorToast("Invalid form data. Please check all fields.");
+      } else if (error.response?.status === 500) {
+        showErrorToast("Server error. Please try again later.");
+      } else {
+        showErrorToast("Failed to submit form. Please try again.");
+      }
+    } finally {
+      setSubmitLoader(false);
+    }
   };
   return (
     <div className="pb-12 sm:pb-0 max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[30px]">
@@ -64,6 +106,7 @@ const SubmitVehicleInfoForm = () => {
         {/* Driver's License Information Component */}
 
         <VehicleInfo
+          submitLoader={submitLoader}
           onSubmit={handleSubmit(onSubmit)}
           register={register}
           errors={errors}
