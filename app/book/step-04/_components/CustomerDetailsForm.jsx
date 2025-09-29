@@ -173,39 +173,39 @@ const CustomerDetailsForm = ({
   };
   const fillFormData = (data) => {
     // Sample data for form fields
-    // const sampleData = {
-    //   // Driver License Info
-    //   driverLicense: "D12345678",
-    //   licenseExpiry: "31/12/25",
+    const sampleData = {
+      // Driver License Info
+      driverLicense: "D12345678",
+      licenseExpiry: "31/12/25",
 
-    //   // Driver Information
-    //   firstName: "JohnTest",
-    //   lastName: "Test",
-    //   passportNumber: "A12345678",
-    //   birthDate: "31/12/86",
+      // Driver Information
+      firstName: "JohnTest",
+      lastName: "Test",
+      passportNumber: "A12345678",
+      birthDate: "31/12/86",
 
-    //   // Contact Information
-    //   phone: "123456789",
-    //   phoneCountryCode: "+60",
-    //   email: "john.smith@example.com",
-    //   address: "123 Main Street",
-    //   address2: "Apt 4B",
-    //   zipCode: "50000",
-    //   city: "Kuala Lumpur",
+      // Contact Information
+      phone: "123456789",
+      phoneCountryCode: "+60",
+      email: "john.smith@example.com",
+      address: "123 Main Street",
+      address2: "Apt 4B",
+      zipCode: "50000",
+      city: "Kuala Lumpur",
 
-    //   // Emergency Contact Information
-    //   emergencyName: "Jane Smith",
-    //   emergencyRelationship: "Spouse",
-    //   emergencyPhone: "987654321",
-    //   emergencyPhoneCountryCode: "+60",
-    //   emergencyEmail: "jane.smith@example.com",
+      // Emergency Contact Information
+      // emergencyName: "Jane Smith",
+      emergencyRelationship: "Spouse",
+      emergencyPhone: "987654321",
+      emergencyPhoneCountryCode: "+60",
+      // emergencyEmail: "jane.smith@example.com",
 
-    //   // Other Information
-    //   otherInfo: "Sample customer data for testing purposes",
+      // Other Information
+      otherInfo: "Sample customer data for testing purposes",
 
-    //   // Terms Agreement
-    //   agreeTerms: true,
-    // };
+      // Terms Agreement
+      agreeTerms: true,
+    };
 
     // Set all form values
     Object.entries(data).forEach(([fieldName, value]) => {
@@ -231,7 +231,7 @@ const CustomerDetailsForm = ({
       className="space-y-6"
     >
       {/* Driver's License Information Component */}
-      <button onClick={fillFormData}>Test</button>
+      {/* <button onClick={fillFormData}>Test</button> */}
       <DriverLicenseInfo
         register={register}
         setValue={setValue}
