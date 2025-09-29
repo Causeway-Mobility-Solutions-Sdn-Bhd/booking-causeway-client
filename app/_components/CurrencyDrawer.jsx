@@ -103,7 +103,7 @@ function CurrencyDrawer() {
             </div>
           </div>
 
-          <div className="flex-1 h-[300px] overflow-y-auto">
+          <div className="flex-1 h-[480px] overflow-y-auto">
             {filterCurrencies?.filter((crf) => currencies.includes(crf?.code))?.length > 0 && (
               <div className="bg-[#F0F0F0] px-[10px] py-[8px] font-semibold">
                 Recommended

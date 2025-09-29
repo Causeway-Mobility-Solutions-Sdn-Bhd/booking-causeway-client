@@ -7,9 +7,10 @@ import { useAppSelector } from "@/store/hooks";
 import PaymentSuccessBar from "../_components/PaymentSuccessCard";
 import VehicleBookingDetails from "../_components/VehicleBookingDetails";
 import Step7Sidebar from "../_components/Step7Sidebar";
-import { transformCustomerData } from "@/lib/transformCustomerData";
+import { transformCustomerData } from "@/app/_lib/transformCustomerData";
 import Spinner from "@/components/custom/Spinner";
 import Nav from "@/components/custom/Nav";
+import SideBar from "@/app/_components/SideBar";
 
 export default function Page() {
   const [conformeReservation, setConformReservation] = useState(null);
@@ -44,6 +45,7 @@ export default function Page() {
           const customerData = transformCustomerData(responseData?.customer);
 
           setCustomerInfo(customerData);
+          setLoading(false)
         } catch (error) {
           console.log("Error fetching reservation:", error);
           router.replace("/");
@@ -63,6 +65,7 @@ export default function Page() {
   return (
     <div>
       <Nav />
+      <SideBar />
       <PaymentSuccessBar
         reservationNumber={conformeReservation?.reservation?.prefixed_id}
       />

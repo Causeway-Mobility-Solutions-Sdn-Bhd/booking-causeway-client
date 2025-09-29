@@ -6,8 +6,7 @@ import PickupReturnLocationDrawer from "./PickupReturnLocationDrawer";
 import { Button } from "@/components/ui/button";
 import hqApi from "@/lib/hqApi";
 import Spinner from "@/components/custom/Spinner";
-import { format } from "date-fns";
-import { nanoid } from "nanoid";
+import { addDays, format } from "date-fns";
 import AnimatedTransparentGuarantee from "@/components/custom/AnimatedTransparentGuarantee";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
@@ -29,40 +28,37 @@ function SearchFillter({
   const [bookingDates, setBookingDates] = useState({
     pickupDate: reservation?.pick_up_date
       ? new Date(reservation?.pick_up_date)
-      : null,
+      : addDays(new Date(), 1),
     returnDate: reservation?.return_date
       ? new Date(reservation?.return_date)
-      : null,
+      : addDays(new Date(), 2),
     returnTime: reservation?.return_time
       ? reservation?.return_time
-      : format(new Date(0, 0, 0, 8, 0), "HH:mm"),
+      : format(new Date(0, 0, 0, 10, 0), "HH:mm"),
     pickupTime: reservation?.pick_up_time
       ? reservation?.pick_up_time
-      : format(new Date(0, 0, 0, 8, 0), "HH:mm"),
+      : format(new Date(0, 0, 0, 10, 0), "HH:mm"),
   });
 
   const [bookingLocation, setBookingLocation] = useState({
     pickupLocation: reservation?.pick_up_location
       ? reservation?.pick_up_location?.id
-      : null,
+      : 1,
     returnLocation: reservation?.return_location
       ? reservation?.return_location?.id
-      : null,
+      : 1,
     pickupLocationName: reservation?.pick_up_location
       ? reservation?.pick_up_location?.name
-      : null,
+      : "Causeway Hub - Johor Bahru",
     returnLocationName: reservation?.return_location
       ? reservation?.return_location?.name
-      : null,
-    brandId: reservation?.brand_id ? reservation?.brand_id : null,
+      : "Causeway Hub - Johor Bahru",
+    brandId: reservation?.brand_id ? reservation?.brand_id : 1,
   });
 
   const dispatch = useAppDispatch();
   const isDifferentReturnLocation = useAppSelector(
     (state) => state.reservation.isDifferentReturnLocation
-  );
-  const selectedVehicle = useAppSelector(
-    (state) => state.reservation.selectedVehicle
   );
 
   const [loader, setLoader] = useState(false);

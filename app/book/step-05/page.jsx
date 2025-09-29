@@ -132,7 +132,7 @@ function Page() {
           item_id: reservationId,
           label: `Reservation ${reservationId}`,
           description: `Payment From API - Reservation ${reservationId}`,
-          external_redirect: `${domain}/book/conform-reservation/${reservationUid}`,
+          external_redirect: `${domain}/book/confirm-reservation/${reservationUid}`,
         },
       })
       .then((res) => {

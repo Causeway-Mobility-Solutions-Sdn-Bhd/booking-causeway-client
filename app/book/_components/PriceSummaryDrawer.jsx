@@ -31,7 +31,7 @@ function PriceSummaryDrawer({ selectedVehicle, currency }) {
           <div className="flex items-center justify-start gap-2">
             <ShoppingCart className="w-6 h-6 text-gray-700" />
             <div className="flex flex-col">
-              <span className="text-sm text-gray-600">Total ({currency})</span>
+              <span className="text-sm text-gray-600">Total</span>
               <span className="text-[16px] leading-[18px] font-bold text-gray-900">
                 {formatPrice(
                   selectedVehicle?.total_price_with_mandatory_charges_and_taxes
@@ -57,11 +57,11 @@ function PriceSummaryDrawer({ selectedVehicle, currency }) {
             <RxCross2 className="text-cSecondary text-[25px]" />
           </Button>
         </DrawerHeader>
-        <div className="bg-cWhite h-[500px] overflow-y-auto">
+        <div className="bg-cWhite h-[620px] overflow-y-auto">
           <div className="py-[15px] w-[95%] mx-auto">
-            <ShowPickDrop />
             <VehicleDetail />
             <PriceSummary />
+            <ShowPickDrop />
           </div>
         </div>
       </DrawerContent>

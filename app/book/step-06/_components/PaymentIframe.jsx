@@ -137,7 +137,7 @@ function PaymentIframe() {
   }
 
   return (
-    <div className="w-full h-screen relative flex items-center justify-center">
+    <div className="w-full h-[115vh] relative flex items-center justify-center">
       {showIframe && (
         <iframe
           src={finalPaymentLink}

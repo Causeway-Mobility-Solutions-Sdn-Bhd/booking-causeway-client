@@ -55,6 +55,7 @@ export default function BookLayoutClient({ children }) {
 
     fetchReservation();
   }, [searchParams]);
+  console.log(sessionState)
 
   if (sessionState === "checking") {
     console.log("checking session");
