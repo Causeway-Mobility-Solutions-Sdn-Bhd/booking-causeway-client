@@ -98,7 +98,7 @@ function SearchFillter({
           const sessionIDNew = reservation?._id;
 
           if (!isMid) {
-            localStorage.setItem("ssid", sessionIDNew);
+            // localStorage.setItem("ssid", sessionIDNew);
             dispatch(setSelectedVehicleClasses(response?.data?.VehicleClasses));
             router.push(`/book/step-02?ssid=${sessionIDNew}`);
             handleReset();
