@@ -4,6 +4,7 @@ import DropdownInput from "@/components/custom/DropdownInput";
 import PhoneInput from "@/components/custom/PhoneInput";
 import ErrorMessage from "@/components/custom/ErrorMessage";
 import { Button } from "@/components/ui/button";
+import Spinner from "@/components/custom/Spinner";
 
 const VehicleInfo = ({
   register,
@@ -12,6 +13,7 @@ const VehicleInfo = ({
   watch,
   firstErrorField,
   onSubmit,
+  submitLoader,
 }) => {
   // Check if fields have errors
   const hasNameError = !!errors.name;
@@ -190,10 +192,16 @@ const VehicleInfo = ({
 
       <div className="mt-5">
         <Button
+          disabled={submitLoader}
           onClick={onSubmit}
-          className={`w-full md:w-[20%] flex justify-center gap-1 items-center bg-cPrimary py-6 text-white `}
+          className={`w-full md:w-[20%] flex justify-center gap-1 items-center bg-cPrimary py-6 text-white 
+    ${submitLoader ? "opacity-50 cursor-not-allowed" : ""}`}
         >
-          Submit
+          {submitLoader ? (
+            <Spinner size={20} color="#fff" thickness={3} />
+          ) : (
+            "Next"
+          )}
         </Button>
       </div>
     </div>
