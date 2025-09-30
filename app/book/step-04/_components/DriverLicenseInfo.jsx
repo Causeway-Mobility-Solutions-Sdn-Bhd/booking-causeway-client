@@ -4,6 +4,8 @@ import { format, parse } from "date-fns";
 import { ImageUpload } from "@/components/custom/UploadDocumentInput";
 import CustomDatePicker from "@/components/custom/CustomDatePicker";
 import ErrorMessage from "../../../../components/custom/ErrorMessage";
+import hqApi from "@/lib/hqApi";
+import { showErrorToast } from "@/app/_lib/toast";
 
 const DriverLicenseInfo = ({
   register,
@@ -35,11 +37,12 @@ const DriverLicenseInfo = ({
   const hasLicenseExpiryError = !!errors.licenseExpiry;
   const licenseFiles = watch("licenseFiles") || [];
 
-  const shouldShowErrorGap = () => {
-    const fieldNames = ["driverLicense", "licenseExpiry"];
-    return fieldNames.some(
-      (field) => errors[field] && firstErrorField === field
-    );
+  const handleDeleteFile = async (fileId) => {
+    try {
+      const response = await hqApi.delete(`file/${fileId}`);
+    } catch (error) {
+      showErrorToast("Error Deleting File.");
+    }
   };
 
   return (
@@ -98,6 +101,7 @@ const DriverLicenseInfo = ({
           {/* File Upload */}
           <div className="col-span-2 sm:col-span-1">
             <ImageUpload
+              onDeleteExisting={handleDeleteFile}
               label={"Driver License image"}
               files={licenseFiles}
               setFiles={(files) => {

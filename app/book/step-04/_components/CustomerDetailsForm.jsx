@@ -66,52 +66,82 @@ const CustomerDetailsForm = ({
   });
   // Watch form values if needed
   const formData = watch();
-
+  console.log(dataAvailable);
   const onSubmit = async (data) => {
-    console.log("Form submitted:", data);
     setSubmitLoader(true);
+
     try {
       const transformedData = transformCustomerFormData(data);
-      console.log("Transformed data:", transformedData);
 
-      // First, create the customer (commented for now)
-      const response = await hqApi.post("customers/create-customers", null, {
-        params: transformedData,
-      });
-      console.log("API response:", response.data);
+      let customerId;
+      let response;
 
-      const customerId = response.data?.customer?.contact.id;
+      if (dataAvailable) {
+        // UPDATE MODE - PUT request
+        response = await hqApi.put(
+          `customers/update-customer/${dataAvailable.id}`,
+          transformedData
+        );
 
-      // Upload files for driver license and ID/Passport
+        console.log("API response (update):", response.data);
+        customerId = dataAvailable.id;
+      } else {
+        // CREATE MODE - POST request
+        response = await hqApi.post("customers/create-customers", null, {
+          params: transformedData,
+        });
+        console.log("API response (create):", response.data);
+        customerId = response.data?.customer?.contact.id;
+      }
+
+      // Upload NEW license files (only File objects, not existing ones with id/public_link)
       if (data.licenseFiles && data.licenseFiles.length > 0) {
-        for (const file of data.licenseFiles) {
+        const newLicenseFiles = data.licenseFiles.filter(
+          (file) => file instanceof File
+        );
+
+        for (const file of newLicenseFiles) {
           await uploadFileToHQ({
             file,
             item_id: customerId,
             item_type: "contacts.3",
-            // filename: `driver_license_${Date.now()}`,
             field_id: 252,
           });
         }
       }
 
+      // Upload NEW ID/Passport files (only File objects, not existing ones with id/public_link)
       if (data.idCardOrPass && data.idCardOrPass.length > 0) {
-        for (const file of data.idCardOrPass) {
+        const newIdCardFiles = data.idCardOrPass.filter(
+          (file) => file instanceof File
+        );
+
+        for (const file of newIdCardFiles) {
           await uploadFileToHQ({
             file,
             item_id: customerId,
             item_type: "contacts.3",
-            // filename: `id_passport_${Date.now()}`,
-            field_id: 274, // field_273 for passport/ID
+            field_id: 274,
           });
         }
       }
-      dispatch(setReservation(response.data?.reservation));
-      showSuccessToast("Customer created successfully!");
+
+      if (!dataAvailable) {
+        dispatch(setReservation(response.data?.reservation));
+      }
+      showSuccessToast(
+        dataAvailable
+          ? "Customer updated successfully!"
+          : "Customer created successfully!"
+      );
       router.push(`/book/step-05?ssid=${currentUUID}`);
     } catch (error) {
       console.log("Error submitting form:", error);
-      showErrorToast("Failed to create customer. Please try again.");
+      showErrorToast(
+        dataAvailable
+          ? "Failed to update customer. Please try again."
+          : "Failed to create customer. Please try again."
+      );
     } finally {
       setSubmitLoader(false);
     }
@@ -231,7 +261,7 @@ const CustomerDetailsForm = ({
       className="space-y-6"
     >
       {/* Driver's License Information Component */}
-      {/* <button onClick={fillFormData}>Test</button> */}
+      <button onClick={fillFormData}>Test</button>
       <DriverLicenseInfo
         register={register}
         setValue={setValue}

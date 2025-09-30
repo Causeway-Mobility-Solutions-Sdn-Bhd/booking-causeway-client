@@ -84,6 +84,7 @@ export const transformCustomerData = (data) => {
   const emergencyPhoneNumber = emergencyPhoneParts.join("-");
 
   return {
+    id: data.id,
     // Personal information
     firstName: data.first_name || "",
     lastName: data.last_name || "",
@@ -116,22 +117,24 @@ export const transformCustomerData = (data) => {
     // emergencyEmail: data.f278 || "",
 
     // File arrays (extract from API response)
-    // licenseFiles: data.f252
-    //   ? data.f252.map((file) => ({
-    //       label: file.label,
-    //       public_link: file.public_link,
-    //     }))
-    //   : [],
+    licenseFiles: data.f252
+      ? data.f252.map((file) => ({
+          id: file.id,
+          label: file.label,
+          public_link: file.public_link,
+        }))
+      : [],
 
-    // idCardOrPass: data.f274
-    //   ? data.f274.map((file) => ({
-    //       label: file.label,
-    //       public_link: file.public_link,
-    //     }))
-    //   : [],
-    licenseFiles: [],
+    idCardOrPass: data.f274
+      ? data.f274.map((file) => ({
+          id: file.id,
+          label: file.label,
+          public_link: file.public_link,
+        }))
+      : [],
+    // licenseFiles: [],
 
-    idCardOrPass: [],
+    // idCardOrPass: [],
     // Other fields
     otherInfo: data.f279 || "",
     agreeTerms: true, // Default to true since we're loading existing data
