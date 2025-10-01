@@ -83,6 +83,7 @@ function PaymentIframe() {
         const paymentDue = data?.paymentType === "full" ? parseFloat(outstandingBalance).toFixed(2) : parseFloat(outstandingBalance / 2).toFixed(2);
         const reservationUid = reservationData?.uuid;
         const domain = window.location.origin;
+        console.log(reservedReservationDetail)
         console.log({
           amount: paymentDue,
           reservationId,
