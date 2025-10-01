@@ -345,3 +345,29 @@ body {
 .animate-shimmer {
   animation: shimmer 2s infinite linear;
 }
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.scroll-animation {
+  animation: scroll 10s linear infinite;
+}
+
+.scroll-animation:hover {
+  animation-play-state: paused;
+}
+
+/* Hide scrollbar but allow scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
