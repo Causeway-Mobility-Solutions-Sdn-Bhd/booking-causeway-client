@@ -9,6 +9,7 @@ import {
 import { PaymentLoader } from "@/components/custom/Skeleton";
 import { useDispatch } from "react-redux";
 import { setFinalPayment } from "@/store/slices/reservationSlice";
+import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 
 function PaymentIframe() {
   const finalPayment = useAppSelector(
@@ -100,6 +101,11 @@ function PaymentIframe() {
           paymentRes?.payment_gateways_transaction?.external_url;
 
         if (paymentLink) {
+          if(reservedReservationDetail?.applicable_discounts?.length === 0){
+            showErrorToast("Invalid Coupan Code")
+          }else{
+            showSuccessToast("Coupan Code Added Successfully")
+          }
           dispatch(setFinalPayment({link:paymentLink , price:outstandingBalance}));
         }
       }
