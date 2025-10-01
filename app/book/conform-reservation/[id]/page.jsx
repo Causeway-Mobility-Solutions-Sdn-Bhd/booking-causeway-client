@@ -21,7 +21,8 @@ export default function Page() {
   const router = useRouter();
 
   const params = useParams();
-  console.log(params);
+
+  console.log("RESERVATION", reservation);
 
   useEffect(() => {
     if (!reservation?.reservation_id) {
@@ -33,7 +34,6 @@ export default function Page() {
             "car-rental/reservations/get-reservation"
           );
 
-          console.log(response?.data);
           const responseData = response?.data?.data;
           if (responseData?.reservation?.uuid !== params.id) {
             router.replace("/");
@@ -45,7 +45,7 @@ export default function Page() {
           const customerData = transformCustomerData(responseData?.customer);
 
           setCustomerInfo(customerData);
-          setLoading(false)
+          setLoading(false);
         } catch (error) {
           console.log("Error fetching reservation:", error);
           router.replace("/");
