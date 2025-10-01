@@ -23,6 +23,7 @@ export default function BookLayoutClient({ children }) {
         const res = await hqApi.get(
           "car-rental/reservations/reservation-attempts"
         );
+
         const reservation = res?.data;
 
         if (!reservation) {
@@ -38,8 +39,8 @@ export default function BookLayoutClient({ children }) {
           const params = new URLSearchParams(searchParams.toString());
           const parts = pathname.split("/");
           const segment = parts[2];
-          
-          if(segment !== "conform-reservation"){
+
+          if (segment !== "conform-reservation") {
             params.set("ssid", reservation._id);
             router.replace(`${pathname}?${params.toString()}`);
           }
@@ -55,7 +56,7 @@ export default function BookLayoutClient({ children }) {
 
     fetchReservation();
   }, [searchParams]);
-  console.log(sessionState)
+  console.log(sessionState);
 
   if (sessionState === "checking") {
     console.log("checking session");

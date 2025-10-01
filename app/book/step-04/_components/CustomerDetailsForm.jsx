@@ -261,7 +261,7 @@ const CustomerDetailsForm = ({
       className="space-y-6"
     >
       {/* Driver's License Information Component */}
-      <button onClick={fillFormData}>Test</button>
+      {/* <button onClick={fillFormData}>Test</button> */}
       <DriverLicenseInfo
         register={register}
         setValue={setValue}

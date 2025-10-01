@@ -4,12 +4,18 @@ import { FaLocationDot } from "react-icons/fa6";
 import { formatDate, formatTime } from "@/app/_lib/formattingDateTime";
 import { useAppSelector } from "@/store/hooks";
 import { RiMapPin2Line } from "react-icons/ri";
-import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
 import VehicleDetail from "./VehicleDetail";
 import CustomerDetails from "./CustomerDetails";
+import { ChevronDown, Download, FileText, Loader2 } from "lucide-react";
 import { showErrorToast } from "@/app/_lib/toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 function VehicleBookingDetails({
   reservationData,
@@ -18,9 +24,10 @@ function VehicleBookingDetails({
 }) {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const [isAddOnOpen, setIsAddOnOpen] = useState(false);
-
+  const [isDownloading, setIsDownloading] = useState(true);
   const handleDownload = async () => {
     try {
+      setIsDownloading(true);
       // fetch file (good if protected routes / auth needed)
       const response = await fetch(rentalAgreement, {
         method: "GET",
@@ -52,6 +59,8 @@ function VehicleBookingDetails({
     } catch (err) {
       showErrorToast("Error Downloading Agreement.");
       console.error("Download error:", err);
+    } finally {
+      setIsDownloading(false);
     }
   };
   return (
@@ -180,6 +189,46 @@ function VehicleBookingDetails({
           <Download className="w-4 h-4" />
         </Button>
       </div>
+      {/* Download Modal */}
+      <Dialog open={isDownloading} onOpenChange={setIsDownloading}>
+        <DialogContent className="sm:max-w-md border-0 shadow-2xl">
+          <div className="flex flex-col items-center justify-center py-8 px-4">
+            {/* Animated Icon Container */}
+            <div className="relative mb-6">
+              {/* Outer rotating ring */}
+              <div className="absolute inset-0 w-24 h-24 border-4 border-cSecondary/20 rounded-full animate-spin"></div>
+
+              {/* Inner pulsing circle */}
+              <div className="w-24 h-24 bg-gradient-to-br from-cSecondary/20 to-cSecondary/5 rounded-full flex items-center justify-center animate-pulse">
+                {/* Icon container with subtle animation */}
+                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
+                  <FileText className="w-8 h-8 text-cSecondary animate-bounce" />
+                </div>
+              </div>
+
+              {/* Orbiting dots */}
+              <div className="absolute top-0 left-1/2 w-3 h-3 bg-cSecondary rounded-full -ml-1.5 animate-ping"></div>
+            </div>
+
+            {/* Text Content */}
+            <div className="text-center space-y-2">
+              <h3 className="text-xl font-bold text-gray-900">
+                Preparing Your Document
+              </h3>
+              <p className="text-sm text-gray-600">
+                We're fetching your rental agreement
+              </p>
+
+              {/* Animated dots */}
+              <div className="flex items-center justify-center gap-1 pt-2">
+                <span className="w-2 h-2 bg-cSecondary rounded-full animate-bounce"></span>
+                <span className="w-2 h-2 bg-cSecondary rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                <span className="w-2 h-2 bg-cSecondary rounded-full animate-bounce [animation-delay:0.4s]"></span>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
