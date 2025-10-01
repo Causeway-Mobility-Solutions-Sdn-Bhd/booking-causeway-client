@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { set } from "date-fns";
 
 const initialState = {
   isDifferentReturnLocation: false,
@@ -12,7 +11,7 @@ const initialState = {
   selectedVehicle: {},
   additionalCharges: [],
   selectedAdditionalCharges: [],
-  finalPaymentLink : "",
+  finalPayment : {},
 };
 
 const reservationSlice = createSlice({
@@ -47,8 +46,8 @@ const reservationSlice = createSlice({
     setSelectedAdditionalCharges(state, action) {
       state.selectedAdditionalCharges = action.payload;
     },
-    setFinalPaymentLink(state, action) {
-      state.finalPaymentLink = action.payload;
+    setFinalPayment(state, action) {
+      state.finalPayment = action.payload;
     },
     setAllCurrencies(state, action) {
       state.allCurrencies = action.payload;
@@ -66,7 +65,7 @@ export const {
   setSelectedVehicle,
   setAdditionalCharges,
   setSelectedAdditionalCharges,
-  setFinalPaymentLink,
+  setFinalPayment,
   setAllCurrencies,
 } = reservationSlice.actions;
 

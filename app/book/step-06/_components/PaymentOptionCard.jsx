@@ -5,18 +5,17 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useAppSelector } from "@/store/hooks";
 
-const PaymentOptionCard = ({handleConfirmReservation}) => {
+const PaymentOptionCard = ({ handleConfirmReservation }) => {
   const [voucherCode, setVoucherCode] = useState("");
   const [selectedPayment, setSelectedPayment] = useState("full");
 
-  const selectedVehicle = useAppSelector(
-    (state) => state.reservation.selectedVehicle
+  const finalPayment = useAppSelector(
+    (state) => state.reservation.finalPayment
   );
-
   const handleApply = () => {
     handleConfirmReservation({
       couponCode: voucherCode || "",
-      paymentType: selectedPayment || "full", 
+      paymentType: selectedPayment || "full",
     });
   };
 
@@ -24,7 +23,7 @@ const PaymentOptionCard = ({handleConfirmReservation}) => {
     setSelectedPayment(value);
     handleConfirmReservation({
       couponCode: voucherCode || "",
-      paymentType: value || "full", 
+      paymentType: value || "full",
     });
   };
 
@@ -42,7 +41,10 @@ const PaymentOptionCard = ({handleConfirmReservation}) => {
           onChange={(e) => setVoucherCode(e.target.value)}
           className="flex-1 h-12 px-4 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2dbdb6] focus:border-transparent"
         />
-        <Button onClick={handleApply} className="h-12 px-8 bg-[#2dbdb6] hover:bg-[#26a8a1] text-white font-medium rounded-lg transition-colors">
+        <Button
+          onClick={handleApply}
+          className="h-12 px-8 bg-[#2dbdb6] hover:bg-[#26a8a1] text-white font-medium rounded-lg transition-colors"
+        >
           Apply
         </Button>
       </div>
@@ -80,11 +82,9 @@ const PaymentOptionCard = ({handleConfirmReservation}) => {
             />
             <Label htmlFor="partial" className="flex-1 cursor-pointer">
               <h3 className="text-sm font-semibold text-gray-900 mb-0.5">
-                Pay{" "}
-                {selectedVehicle?.total_price_with_mandatory_charges_and_taxes
-                  ?.amount / 2}{" "}
-                RM now
+                Pay {(finalPayment?.price / 2).toFixed(2)} RM now
               </h3>
+
               <p className="text-xs text-gray-500 font-normal">
                 Pay the rest at pickup
               </p>

@@ -8,11 +8,11 @@ import {
 } from "@/store/api/reservationApiSlice";
 import { PaymentLoader } from "@/components/custom/Skeleton";
 import { useDispatch } from "react-redux";
-import { setFinalPaymentLink } from "@/store/slices/reservationSlice";
+import { setFinalPayment } from "@/store/slices/reservationSlice";
 
 function PaymentIframe() {
-  const finalPaymentLink = useAppSelector(
-    (state) => state.reservation.finalPaymentLink
+  const finalPayment = useAppSelector(
+    (state) => state.reservation.finalPayment
   );
 
   const [loadingState, setLoadingState] = useState("loading");
@@ -24,14 +24,14 @@ function PaymentIframe() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!finalPaymentLink) {
+    if (!finalPayment?.link) {
       setLoadingState("error");
       return;
     }
 
     const testFrame = document.createElement("iframe");
     testFrame.style.display = "none";
-    testFrame.src = finalPaymentLink;
+    testFrame.src = finalPayment?.link;
 
     const handleLoad = () => {
       setLoadingState("success");
@@ -63,7 +63,7 @@ function PaymentIframe() {
         document.body.removeChild(testFrame);
       }
     };
-  }, [finalPaymentLink]);
+  }, [finalPayment]);
 
   const handleConfirmReservation = async (data) => {
     try {
@@ -100,7 +100,7 @@ function PaymentIframe() {
           paymentRes?.payment_gateways_transaction?.external_url;
 
         if (paymentLink) {
-          dispatch(setFinalPaymentLink(paymentLink));
+          dispatch(setFinalPayment({link:paymentLink , price:outstandingBalance}));
         }
       }
     } catch (error) {
@@ -118,7 +118,7 @@ function PaymentIframe() {
         showIframe && (
           <div className="w-full h-[110vh] relative flex items-center justify-center mt-3">
             <iframe
-              src={finalPaymentLink}
+              src={finalPayment?.link}
               className="w-full h-full border-0"
               allow="payment"
               allowFullScreen

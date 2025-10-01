@@ -9,7 +9,7 @@ import PolicyLeftContent from "./_components/PolicyLeftContent";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/store/hooks";
 import {
-  setFinalPaymentLink,
+  setFinalPayment,
   setReservation,
   setSelectedAdditionalCharges,
   setSelectedVehicle,
@@ -125,7 +125,7 @@ function Page() {
           paymentRes?.payment_gateways_transaction?.external_url;
 
         if (paymentLink) {
-          dispatch(setFinalPaymentLink(paymentLink));
+          dispatch(setFinalPayment({link:paymentLink , price:outstandingBalance}));
           router.push(`/book/step-06?ssid=${currentUUID}`);
         }
       }
