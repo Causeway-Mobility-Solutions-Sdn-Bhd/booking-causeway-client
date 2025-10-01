@@ -40,9 +40,9 @@ function WhyCauseway() {
                 <Image
                   src={feature.img}
                   alt={`${feature.title} icon`}
-                  width={80}
-                  height={80}
-                  className="object-contain w-[50px] lg:w-[80px]"
+                  width={110}
+                  height={110}
+                  className="object-contain w-[80px] lg:w-[110px]"
                 />
               </div>
               <CardTitle className="text-md sm:text-lg font-bold leading-[20px]">
