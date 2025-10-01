@@ -3,10 +3,8 @@ import React, { useEffect, useState } from "react";
 import BookNavBar from "../_components/BookNavBar";
 import SideBar from "../_components/SideBar";
 import { format } from "date-fns";
-import hqApi from "@/lib/hqApi";
 import { useRouter } from "next/navigation";
 import PriceBottomBar from "../_components/PriceBottomBar";
-
 import PolicyLeftContent from "./_components/PolicyLeftContent";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/store/hooks";
@@ -17,15 +15,23 @@ import {
   setSelectedVehicle,
 } from "@/store/slices/reservationSlice";
 
+import {
+  useConfirmReservationMutation,
+  useProcessPaymentMutation,
+} from "@/store/api/reservationApiSlice";
+import hqApi from "@/lib/hqApi";
+
 function Page() {
   const reservation = useAppSelector((state) => state.reservation.reservation);
   const currentUUID = useAppSelector((state) => state.reservation.currentUUID);
   const dispatch = useDispatch();
 
   const [loader, setLoader] = useState(false);
-  const [submitLoader, setSubmitLoader] = useState(false);
-
   const router = useRouter();
+
+  const [confirmReservation, { isLoading: isConfirming }] =
+    useConfirmReservationMutation();
+  const [processPayment, { isLoading: isPaying }] = useProcessPaymentMutation();
 
   useEffect(() => {
     if (!reservation?.customer_id) {
@@ -53,7 +59,6 @@ function Page() {
         };
 
         const params = new URLSearchParams();
-
         for (const key in requestData) {
           if (requestData[key] !== null && requestData[key] !== undefined) {
             params.append(key, requestData[key]);
@@ -69,25 +74,23 @@ function Page() {
         }
 
         const response = await hqApi.post(
-          `car-rental/reservations/additional-charges?${params.toString()}`,
+          `/car-rental/reservations/additional-charges?${params.toString()}`,
           {}
         );
+        console.log(response)
 
-        if (response?.status === 200) {
-          dispatch(setReservation(response?.data?.reservation));
-          dispatch(setSelectedVehicle(response?.data?.selected_vehicle));
+        const data = response?.data;
+        if (response.status === 200) {
+          dispatch(setReservation(data?.reservation));
+          dispatch(setSelectedVehicle(data?.selected_vehicle));
           dispatch(
-            setSelectedAdditionalCharges(
-              response?.data?.selected_additional_charges
-            )
+            setSelectedAdditionalCharges(data?.selected_additional_charges)
           );
-          setLoader(false);
-        } else {
-          setLoader(false);
         }
       }
     } catch (error) {
       console.log(error);
+    } finally {
       setLoader(false);
     }
   };
@@ -96,60 +99,39 @@ function Page() {
     fetchData();
   }, []);
 
-  const conformReservation = async () => {
-    setSubmitLoader(true);
-
+  const handleConfirmReservation = async () => {
     try {
-      const response = await hqApi.post(
-        "car-rental/reservations/conform-reservation"
-      );
+      const response = await confirmReservation().unwrap();
 
-      if(response?.data?.status_code === 200){
-        console.log(response?.data?.data)
-        payNowReservation(response?.data?.data);
-      }else{
-        setSubmitLoader(false);
-      }
+      if (response?.status_code === 200) {
+        const reservedReservationDetail = response.data;
+        const reservationData = reservedReservationDetail?.reservation || {};
+        const outstandingBalance =
+          reservedReservationDetail?.total?.outstanding_balance?.amount ||
+          "0.00";
+        const reservationId = reservationData?.id || "N/A";
+        const paymentDue = parseFloat(outstandingBalance).toFixed(2);
+        const reservationUid = reservationData?.uuid;
+        const domain = window.location.origin;
 
-      console.log("Reservation confirmed:", response?.data?.data);
-    } catch (error) {
-      console.log("Error confirming reservation:", error);
-    }
-  };
-
-  const payNowReservation = async (reservedReservationDetail) => {
-    const reservation = reservedReservationDetail?.reservation || {};
-    const outstandingBalance =reservedReservationDetail?.total?.outstanding_balance?.amount || "0.00";
-    const reservationId = reservation?.id || "N/A";
-    const paymentDue = (parseFloat(outstandingBalance) * 0.1).toFixed(2);
-    const reservationUid = reservation?.uuid;
-    const domain = window.location.origin;
-
-    await hqApi
-      .post("car-rental/reservations/process-payment", null, {
-        params: {
+        const paymentRes = await processPayment({
           amount: paymentDue,
-          item_id: reservationId,
-          label: `Reservation ${reservationId}`,
-          description: `Payment From API - Reservation ${reservationId}`,
-          external_redirect: `${domain}/book/confirm-reservation/${reservationUid}`,
-        },
-      })
-      .then((res) => {
-        if (res?.status == 200) {
-          console.log(res?.data)
-          const paymentLink = res?.data?.payment_gateways_transaction?.external_url
-          console.log(res?.data?.payment_gateways_transaction?.external_url)
-          
-          dispatch(setFinalPaymentLink(paymentLink))
-        router.push(`/book/step-06?ssid=${currentUUID}`);
+          reservationId,
+          reservationUid,
+          domain,
+        }).unwrap();
+
+        const paymentLink =
+          paymentRes?.payment_gateways_transaction?.external_url;
+
+        if (paymentLink) {
+          dispatch(setFinalPaymentLink(paymentLink));
+          router.push(`/book/step-06?ssid=${currentUUID}`);
         }
-      })
-      .catch((err) => {
-        setSubmitLoader(false);
-      }).finally(() => {
-        setSubmitLoader(false);
-      });
+      }
+    } catch (error) {
+      console.error("Error confirming reservation:", error);
+    }
   };
 
   return (
@@ -171,8 +153,8 @@ function Page() {
       <PriceBottomBar
         step={5}
         fetchLoader={loader}
-        submitLoader={submitLoader}
-        onSubmit={conformReservation}
+        submitLoader={isConfirming || isPaying}
+        onSubmit={handleConfirmReservation}
       />
     </div>
   );

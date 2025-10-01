@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Loader2 } from "lucide-react";
 
 export const CategoryBadgeLoader = ({ count = 4 }) => {
   return (
@@ -10,7 +11,6 @@ export const CategoryBadgeLoader = ({ count = 4 }) => {
     </div>
   );
 };
-
 
 export const BookCarCardSkeleton = () => {
   return (
@@ -54,8 +54,6 @@ export const BookCarCardSkeleton = () => {
     </Card>
   );
 };
-
-
 
 export const CarCardSkeleton = () => {
   return (
@@ -104,5 +102,62 @@ export const CarCardSkeleton = () => {
         <Skeleton className="w-full h-10 sm:h-12 rounded-md" />
       </CardContent>
     </Card>
+  );
+};
+
+export const PaymentLoader = () => {
+  return (
+    <div className="w-full max-w-md mx-auto bg-white rounded-lg border border-gray-200 p-6 shadow-sm mt-3">
+      {/* Header */}
+      <div className="flex items-center gap-2 mb-3">
+        <div className="w-4 h-4 bg-gray-200 rounded animate-pulse" />
+        <div className="h-4 bg-gray-200 rounded animate-pulse w-48" />
+      </div>
+
+      {/* Card Number Field */}
+      <div className="space-y-2 mb-3">
+        <div className="h-4 bg-gray-200 rounded animate-pulse w-20" />
+        <div className="relative">
+          <div className="w-full h-12 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-md border animate-shimmer bg-[length:200%_100%]" />
+        </div>
+      </div>
+
+      {/* Expiry and Security Code Row */}
+      <div className="grid grid-cols-2 gap-4 mb-3">
+        <div className="space-y-2">
+          <div className="h-4 bg-gray-200 rounded animate-pulse w-24" />
+          <div className="w-full h-12 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-md border animate-shimmer bg-[length:200%_100%]" />
+        </div>
+        <div className="space-y-2">
+          <div className="h-4 bg-gray-200 rounded animate-pulse w-20" />
+          <div className="w-full h-12 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-md border animate-shimmer bg-[length:200%_100%]" />
+        </div>
+      </div>
+
+      {/* Country Field */}
+      <div className="space-y-2 mb-4">
+        <div className="h-4 bg-gray-200 rounded animate-pulse w-16" />
+        <div className="w-full h-12 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-md border animate-shimmer bg-[length:200%_100%]" />
+      </div>
+
+      {/* Terms Text Skeleton */}
+      <div className="space-y-2 mb-4">
+        <div className="h-3 bg-gray-200 rounded animate-pulse w-full" />
+        <div className="h-3 bg-gray-200 rounded animate-pulse w-4/5" />
+        <div className="h-3 bg-gray-200 rounded animate-pulse w-3/5" />
+      </div>
+
+      <div className="space-y-1">
+        <div className="w-full h-12 bg-gradient-to-r from-teal-200 via-teal-100 to-teal-200 rounded-md animate-shimmer bg-[length:200%_100%]" />
+        <div className="w-full h-12 bg-gradient-to-r from-pink-200 via-pink-100 to-pink-200 rounded-md animate-shimmer bg-[length:200%_100%]" />
+      </div>
+
+      <div className="flex items-center justify-center mt-6 gap-2">
+        <Loader2 className="w-5 h-5 animate-spin text-teal-500" />
+        <span className="text-sm text-gray-600 font-medium">
+          Preparing secure payment...
+        </span>
+      </div>
+    </div>
   );
 };
