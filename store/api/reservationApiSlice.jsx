@@ -1,23 +1,19 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { axiosBaseQuery } from "../axiosBaseQuery";
+import { apiSlice } from "../apiSlice";
 
-export const reservationApi = createApi({
-  reducerPath: "reservationApi",
-  baseQuery: axiosBaseQuery({ baseUrl: "/car-rental/reservations/" }),
+export const reservationApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     confirmReservation: builder.mutation({
       query: ({ couponCode = "" } = {}) => ({
-        url: "conform-reservation",
+        url: "/car-rental/reservations/conform-reservation",
         method: "POST",
-        data: {
-          couponCode, 
-        },
+        data: { couponCode },
       }),
+      invalidatesTags: ["Reservation"],
     }),
 
     processPayment: builder.mutation({
       query: ({ amount, reservationId, reservationUid, domain }) => ({
-        url: "process-payment",
+        url: "/car-rental/reservations/process-payment",
         method: "POST",
         params: {
           amount,
@@ -27,9 +23,13 @@ export const reservationApi = createApi({
           external_redirect: `${domain}/book/confirm-reservation/${reservationUid}`,
         },
       }),
+      invalidatesTags: ["Reservation"],
     }),
   }),
+  overrideExisting: false,
 });
 
-export const { useConfirmReservationMutation, useProcessPaymentMutation } =
-  reservationApi;
+export const {
+  useConfirmReservationMutation,
+  useProcessPaymentMutation,
+} = reservationApi;

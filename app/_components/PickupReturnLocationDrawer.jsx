@@ -19,6 +19,10 @@ import Spinner from "@/components/custom/Spinner";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setIsDifferentReturnLocation } from "@/store/slices/reservationSlice";
 import { showErrorToast } from "../_lib/toast";
+import {
+  useGetLocationBrandsQuery,
+  useGetLocationsQuery,
+} from "@/store/api/fleetApiSlice";
 
 function PickupReturnLocationDrawer({
   name,
@@ -26,7 +30,6 @@ function PickupReturnLocationDrawer({
   setBookingLocation,
 }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [locationBrands, setLocationBrands] = useState([]);
   const [locations, setLocations] = useState([]);
   const [filteredLocations, setFilteredLocations] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -36,29 +39,19 @@ function PickupReturnLocationDrawer({
   const isDifferentReturnLocation = useAppSelector(
     (state) => state.reservation.isDifferentReturnLocation
   );
+  const { data: locationBrands = [], isLoading: isBrandsLoading } =
+    useGetLocationBrandsQuery(undefined, { skip: !isDrawerOpen });
+
+  const { data: locationsRes = [], isLoading: isLocationsLoading } =
+    useGetLocationsQuery(undefined, { skip: !isDrawerOpen });
 
   useEffect(() => {
-    if (bookingLocation?.brandId) {
-      setSelectedBrandLocations(bookingLocation?.brandId);
+    if (locationsRes?.length) {
+      const grouped = transformLocationsByBrand(locationsRes);
+      setLocations(grouped);
+      setFilteredLocations(grouped);
     }
-    const fetchData = async () => {
-      try {
-        const [brandsRes, locationsRes] = await Promise.all([
-          hqApi.get("/fleets/locations-brands"),
-          hqApi.get("/fleets/locations"),
-        ]);
-
-        setLocationBrands(brandsRes?.data);
-        const groupedBrands = transformLocationsByBrand(locationsRes?.data);
-        setLocations(groupedBrands);
-        setFilteredLocations(groupedBrands);
-      } catch (error) {
-        console.log("API error:", error);
-      }
-    };
-
-    fetchData();
-  }, [isDrawerOpen]);
+  }, [locationsRes]);
 
   const transformLocationsByBrand = (locations) => {
     const brandMap = new Map();
@@ -226,7 +219,7 @@ function PickupReturnLocationDrawer({
           </Button>
         </DrawerHeader>
 
-        {locations?.length === 0 ? (
+        {isBrandsLoading || isLocationsLoading ? (
           <div className="w-full h-[200px] flex justify-center items-center">
             <Spinner size={30} color={"#2dbdb6"} thickness={4} />
           </div>
@@ -291,7 +284,7 @@ function PickupReturnLocationDrawer({
                         </div>
                       )
                     )}
-                    
+
                     {locationBrands
                       ?.filter((bf) =>
                         name === "Return Point" && bookingLocation?.brandId
