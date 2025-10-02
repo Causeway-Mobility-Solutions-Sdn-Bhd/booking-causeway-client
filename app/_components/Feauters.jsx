@@ -22,18 +22,16 @@ function Features() {
 
   const scrollRef = useRef(null);
 
-  // Auto scroll effect
   useEffect(() => {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
 
-    let scrollSpeed = 1; // px per frame
+    let scrollSpeed = 1; 
     let animationFrame;
 
     const scrollStep = () => {
       scrollContainer.scrollLeft += scrollSpeed;
 
-      // Reset when reaching end (loop effect)
       if (
         scrollContainer.scrollLeft >=
         scrollContainer.scrollWidth / 2
@@ -46,7 +44,6 @@ function Features() {
 
     animationFrame = requestAnimationFrame(scrollStep);
 
-    // Pause on hover
     const stop = () => cancelAnimationFrame(animationFrame);
     const start = () => {
       animationFrame = requestAnimationFrame(scrollStep);
@@ -77,7 +74,7 @@ function Features() {
             key={index}
             className="shrink-0 px-4 w-[30%] sm:w-[25%] md:w-[12.5%] lg:w-[10%] flex items-center justify-center"
           >
-            <div className="relative aspect-[8/5] sm:aspect-[7/3] w-full max-w-[270px]">
+            <div className="relative aspect-[8/6] sm:aspect-[7/3] w-full max-w-[270px]">
               <Image
                 src={logo}
                 alt={`Brand ${index + 1}`}
