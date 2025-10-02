@@ -1,4 +1,5 @@
 import { apiSlice } from "../apiSlice";
+import { setAllCurrencies } from "../slices/reservationSlice";
 
 export const fleetApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -24,8 +25,31 @@ export const fleetApi = apiSlice.injectEndpoints({
       }),
       providesTags: ["Fleet"],
     }),
+    getCurrencies: builder.query({
+      query: () => ({
+        url: "fleets/currencies",
+        method: "GET",
+      }),
+      providesTags: ["Fleet"],
+      transformResponse: (response) => response?.data ?? [],
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log(data)
+          dispatch(setAllCurrencies(data));
+        } catch (err) {
+          console.error("getCurrencies error: ", err);
+        }
+      },
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetLocationBrandsQuery, useGetLocationsQuery , useGetVehicleTypesQuery, useGetVehiclesByCategoryQuery } = fleetApi;
+export const {
+  useGetLocationBrandsQuery,
+  useGetLocationsQuery,
+  useGetVehicleTypesQuery,
+  useGetVehiclesByCategoryQuery,
+  useGetCurrenciesQuery,
+} = fleetApi;
