@@ -39,7 +39,7 @@ function SpecialOffer() {
   };
 
   return (
-    <div className="max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[20px] lg:mt-[50px]">
+    <div className="max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[13px] lg:mt-[50px]">
       <Carousel
         setApi={setApi}
         opts={{

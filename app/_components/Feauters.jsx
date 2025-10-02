@@ -74,7 +74,7 @@ function Features() {
             key={index}
             className="shrink-0 px-4 w-[30%] sm:w-[25%] md:w-[12.5%] lg:w-[10%] flex items-center justify-center"
           >
-            <div className="relative aspect-[8/6] sm:aspect-[7/3] w-full max-w-[270px]">
+            <div className="relative aspect-[3/2] sm:aspect-[7/3] w-full max-w-[270px]">
               <Image
                 src={logo}
                 alt={`Brand ${index + 1}`}

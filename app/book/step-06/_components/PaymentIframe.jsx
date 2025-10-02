@@ -68,9 +68,9 @@ function PaymentIframe() {
 
   const handleConfirmReservation = async (data) => {
     try {
-      console.log(data?.couponCode)
+      console.log(data?.couponCode);
       const response = await confirmReservation({
-        couponCode:data?.couponCode
+        couponCode: data?.couponCode,
       }).unwrap();
 
       if (response?.status_code === 200) {
@@ -80,16 +80,19 @@ function PaymentIframe() {
           reservedReservationDetail?.total?.outstanding_balance?.amount ||
           "0.00";
         const reservationId = reservationData?.id || "N/A";
-        const paymentDue = data?.paymentType === "full" ? parseFloat(outstandingBalance).toFixed(2) : parseFloat(outstandingBalance / 2).toFixed(2);
+        const paymentDue =
+          data?.paymentType === "full"
+            ? parseFloat(outstandingBalance).toFixed(2)
+            : parseFloat(outstandingBalance / 2).toFixed(2);
         const reservationUid = reservationData?.uuid;
         const domain = window.location.origin;
-        console.log(reservedReservationDetail)
+        console.log(reservedReservationDetail);
         console.log({
           amount: paymentDue,
           reservationId,
           reservationUid,
           domain,
-        })
+        });
 
         const paymentRes = await processPayment({
           amount: paymentDue,
@@ -102,12 +105,16 @@ function PaymentIframe() {
           paymentRes?.payment_gateways_transaction?.external_url;
 
         if (paymentLink) {
-          if(reservedReservationDetail?.applicable_discounts?.length === 0){
-            showErrorToast("Invalid Coupan Code")
-          }else{
-            showSuccessToast("Coupan Code Added Successfully")
+          if (data?.couponCode) {
+            if (reservedReservationDetail?.applicable_discounts?.length === 0) {
+              showErrorToast("Invalid Coupan Code");
+            } else {
+              showSuccessToast("Coupan Code Added Successfully");
+            }
           }
-          dispatch(setFinalPayment({link:paymentLink , price:outstandingBalance}));
+          dispatch(
+            setFinalPayment({ link: paymentLink, price: outstandingBalance })
+          );
         }
       }
     } catch (error) {
@@ -123,7 +130,7 @@ function PaymentIframe() {
         <PaymentLoader />
       ) : (
         showIframe && (
-          <div className="w-full h-[110vh] relative flex items-center justify-center mt-3">
+          <div className="w-full h-[105vh] relative flex items-center justify-center mt-3">
             <iframe
               src={finalPayment?.link}
               className="w-full h-full border-0"
@@ -132,7 +139,6 @@ function PaymentIframe() {
               sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
               title="Payment Gateway"
             >
-              Your browser does not support iframes.
             </iframe>
           </div>
         )
