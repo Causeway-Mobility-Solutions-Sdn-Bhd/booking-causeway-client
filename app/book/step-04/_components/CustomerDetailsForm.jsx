@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Checkbox } from "@/components/ui/checkbox";
 import DriverLicenseInfo from "./DriverLicenseInfo";
@@ -65,7 +65,7 @@ const CustomerDetailsForm = ({
     },
   });
   // Watch form values if needed
-  const formData = watch();
+  // const formData = watch();
   console.log(dataAvailable);
   const onSubmit = async (data) => {
     setSubmitLoader(true);
@@ -201,6 +201,8 @@ const CustomerDetailsForm = ({
 
     return fieldOrder.find((field) => errors[field]) || null;
   };
+
+  const firstErrorField = useMemo(() => getFirstErrorField(), [errors]);
   const fillFormData = (data) => {
     // Sample data for form fields
     const sampleData = {
@@ -268,7 +270,7 @@ const CustomerDetailsForm = ({
         errors={errors}
         watch={watch}
         clearErrors={clearErrors}
-        firstErrorField={getFirstErrorField()}
+        firstErrorField={firstErrorField}
       />
 
       <DriverInformation
@@ -277,7 +279,7 @@ const CustomerDetailsForm = ({
         setValue={setValue}
         watch={watch}
         clearErrors={clearErrors}
-        firstErrorField={getFirstErrorField()}
+        firstErrorField={firstErrorField}
       />
       {/* Driver's Contact Information */}
       <DriversContactInfo
@@ -285,7 +287,7 @@ const CustomerDetailsForm = ({
         errors={errors}
         setValue={setValue}
         watch={watch}
-        firstErrorField={getFirstErrorField()}
+        firstErrorField={firstErrorField}
       />
 
       <EmergencyContactInfo
@@ -293,7 +295,7 @@ const CustomerDetailsForm = ({
         errors={errors}
         setValue={setValue}
         watch={watch}
-        firstErrorField={getFirstErrorField()}
+        firstErrorField={firstErrorField}
       />
 
       <OtherInformation register={register} watch={watch} />
@@ -327,7 +329,7 @@ const CustomerDetailsForm = ({
             may potentially result in Causeway rejecting my booking.
           </label>
         </div>
-        {getFirstErrorField() === "agreeTerms" && errors.agreeTerms && (
+        {firstErrorField === "agreeTerms" && errors.agreeTerms && (
           <p className="text-red-500 text-sm mt-1 ml-7">
             {errors.agreeTerms.message}
           </p>

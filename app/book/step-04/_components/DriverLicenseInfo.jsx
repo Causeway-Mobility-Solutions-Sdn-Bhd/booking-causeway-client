@@ -44,6 +44,7 @@ const DriverLicenseInfo = ({
       showErrorToast("Error Deleting File.");
     }
   };
+  console.log("RERENDERED");
 
   return (
     <div className="space-y-6">
