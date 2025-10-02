@@ -30,8 +30,13 @@ const CustomerDetailsForm = ({
     watch,
     setValue,
     clearErrors,
+    getValues,
+
     formState: { errors },
+    control,
   } = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onChange",
     defaultValues: {
       driverLicense: "",
       licenseExpiry: "",
@@ -66,7 +71,6 @@ const CustomerDetailsForm = ({
   });
   // Watch form values if needed
   // const formData = watch();
-  console.log(dataAvailable);
   const onSubmit = async (data) => {
     setSubmitLoader(true);
 
@@ -172,6 +176,8 @@ const CustomerDetailsForm = ({
   };
 
   const getFirstErrorField = () => {
+    console.log("GETFIRSTFIELD CALLED");
+
     const errorFields = Object.keys(errors);
     if (errorFields.length === 0) return null;
 
@@ -201,7 +207,6 @@ const CustomerDetailsForm = ({
 
     return fieldOrder.find((field) => errors[field]) || null;
   };
-
   const firstErrorField = useMemo(() => getFirstErrorField(), [errors]);
   const fillFormData = (data) => {
     // Sample data for form fields
@@ -249,6 +254,14 @@ const CustomerDetailsForm = ({
       fillFormData(dataAvailable);
     }
   }, [dataAvailable]);
+
+  useEffect(() => {
+    console.log("ERRORS CHANGED");
+  }, [errors]);
+
+  useEffect(() => {
+    console.log("FUNCTION ERRORS CHANGED");
+  }, [getFirstErrorField]);
   return (
     <form
       ref={(el) => {
@@ -267,34 +280,35 @@ const CustomerDetailsForm = ({
       <DriverLicenseInfo
         register={register}
         setValue={setValue}
+        control={control}
         errors={errors}
         watch={watch}
-        clearErrors={clearErrors}
         firstErrorField={firstErrorField}
       />
 
       <DriverInformation
         register={register}
         errors={errors}
-        setValue={setValue}
         watch={watch}
-        clearErrors={clearErrors}
+        setValue={setValue}
+        // clearErrors={clearErrors}
         firstErrorField={firstErrorField}
       />
       {/* Driver's Contact Information */}
       <DriversContactInfo
+        getValues={getValues}
         register={register}
+        control={control}
         errors={errors}
         setValue={setValue}
-        watch={watch}
         firstErrorField={firstErrorField}
       />
 
       <EmergencyContactInfo
+        getValues={getValues}
         register={register}
         errors={errors}
         setValue={setValue}
-        watch={watch}
         firstErrorField={firstErrorField}
       />
 
@@ -329,7 +343,7 @@ const CustomerDetailsForm = ({
             may potentially result in Causeway rejecting my booking.
           </label>
         </div>
-        {firstErrorField === "agreeTerms" && errors.agreeTerms && (
+        {getFirstErrorField() === "agreeTerms" && errors.agreeTerms && (
           <p className="text-red-500 text-sm mt-1 ml-7">
             {errors.agreeTerms.message}
           </p>

@@ -1,4 +1,3 @@
-// components/custom/DropdownInput.jsx
 import React, { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import {
@@ -18,17 +17,20 @@ const DropdownInput = ({
   register,
   errors,
   setValue,
-  watch,
   hasError = false,
   firstErrorField,
   disabled = false,
+  getValues,
+  onCustomChange, // Optional custom change handler for country logic
 }) => {
-  const selectedValue = watch(name);
   const error = errors[name];
 
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
+
+  // Force re-render state
+  const [, forceUpdate] = useState({});
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -37,10 +39,21 @@ const DropdownInput = ({
   }, []);
 
   const handleChange = (value) => {
-    setValue(name, value, { shouldValidate: true });
+    // Use custom change handler if provided (for country dropdown)
+    if (!value || value === "") {
+      return;
+    }
+    if (onCustomChange) {
+      onCustomChange(value);
+    } else {
+      // Default behavior - no validation to avoid re-renders
+      setValue(name, value, { shouldValidate: false });
+      // Force re-render to update the UI
+      forceUpdate({});
+    }
   };
 
-  const getDisplayLabel = () => {
+  const getDisplayLabel = (selectedValue) => {
     const item = data.find((i) => i.value === selectedValue);
     if (!item) return `Select ${label}`;
 
@@ -57,6 +70,7 @@ const DropdownInput = ({
     }
     return text;
   };
+
   const getPlaceholderText = () => {
     const placeholderText = `Select ${label}`;
     if (windowWidth < 400 && placeholderText.length >= 19) {
@@ -72,10 +86,12 @@ const DropdownInput = ({
     return placeholderText;
   };
 
+  const currentValue = getValues(name) || "";
+
   return (
     <div>
       <Select
-        value={selectedValue || ""}
+        value={currentValue}
         onValueChange={handleChange}
         disabled={disabled}
       >
@@ -87,9 +103,9 @@ const DropdownInput = ({
           <div className="flex flex-col h-full items-start justify-center w-full">
             <span className="text-gray-500 text-xs leading-tight">{label}</span>
             <span className="text-sm leading-tight text-left">
-              <span className="text-sm leading-tight text-left">
-                {selectedValue ? getDisplayLabel() : getPlaceholderText()}
-              </span>
+              {currentValue
+                ? getDisplayLabel(currentValue)
+                : getPlaceholderText()}
             </span>
           </div>
         </SelectTrigger>
