@@ -1,3 +1,4 @@
+
 "use client";
 import React from 'react';
 import {
@@ -99,7 +100,7 @@ const PrivacyPolicy = () => {
                 <h3 className="text-sm font-semibold text-black leading-5">{term.title}</h3>
               </AccordionTrigger>
               <AccordionContent className="px-4 py-4 bg-white border-t border-gray-200">
-                <p className="text-gray-700 text-sm leading-5">
+                <p className="text-gray-700 text-sm leading-5 text-justify">
                   {term.content}
                 </p>
               </AccordionContent>
