@@ -1,4 +1,5 @@
 import { apiSlice } from "../apiSlice";
+import { setCurrentUUID, setReservation } from "../slices/reservationSlice";
 
 export const reservationApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -25,11 +26,32 @@ export const reservationApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Reservation"],
     }),
+
+    getReservationAttempt: builder.query({
+      query: () => ({
+        url: "/car-rental/reservations/reservation-attempts",
+        method: "GET",
+      }),
+      providesTags: ["Reservation"],
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log(data )
+          if (data) {
+            dispatch(setCurrentUUID(data._id));
+            dispatch(setReservation(data));
+          }
+        } catch (err) {
+          console.error("Failed to fetch reservation:", err);
+        }
+      },
+    }),
   }),
-  overrideExisting: false,
+  overrideExisting: true,
 });
 
 export const {
   useConfirmReservationMutation,
   useProcessPaymentMutation,
+  useGetReservationAttemptQuery,
 } = reservationApi;

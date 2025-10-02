@@ -2,64 +2,46 @@
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Spinner from "@/components/custom/Spinner";
-import { useDispatch } from "react-redux";
-import {
-  setCurrentUUID,
-  setReservation,
-} from "@/store/slices/reservationSlice";
-import hqApi from "@/lib/hqApi";
+import { useGetReservationAttemptQuery } from "@/store/api/reservationApiSlice";
 
 export default function BookLayoutClient({ children }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const ssidFromUrl = searchParams.get("ssid");
+
   const [sessionState, setSessionState] = useState("checking");
-  const dispatch = useDispatch();
+
+  const {
+    data: reservation,
+    isLoading,
+    isError,
+  } = useGetReservationAttemptQuery();
 
   useEffect(() => {
-    const fetchReservation = async () => {
-      try {
-        const res = await hqApi.get(
-          "car-rental/reservations/reservation-attempts"
-        );
+    if (isLoading) return;
 
-        const reservation = res?.data;
+    if (isError || !reservation) {
+      router.replace("/");
+      setSessionState("invalid");
+      return;
+    }
 
-        if (!reservation) {
-          console.log("redirect");
-          router.replace("/");
-          return;
-        }
+    if (ssidFromUrl !== reservation._id) {
+      const params = new URLSearchParams(searchParams.toString());
+      const parts = pathname.split("/");
+      const segment = parts[2];
 
-        dispatch(setCurrentUUID(reservation._id));
-        dispatch(setReservation(reservation));
-
-        if (ssidFromUrl !== reservation._id) {
-          const params = new URLSearchParams(searchParams.toString());
-          const parts = pathname.split("/");
-          const segment = parts[2];
-
-          if (segment !== "conform-reservation") {
-            params.set("ssid", reservation._id);
-            router.replace(`${pathname}?${params.toString()}`);
-          }
-        }
-
-        setSessionState("valid");
-      } catch (error) {
-        console.log("Error fetching reservation:", error);
-        router.replace("/");
-        setSessionState("invalid");
+      if (segment !== "conform-reservation") {
+        params.set("ssid", reservation._id);
+        router.replace(`${pathname}?${params.toString()}`);
       }
-    };
+    }
 
-    fetchReservation();
-  }, [searchParams]);
-  console.log(sessionState);
+    setSessionState("valid");
+  }, [isLoading , searchParams]);
 
-  if (sessionState === "checking") {
-    console.log("checking session");
+  if (sessionState === "checking" || isLoading) {
     return (
       <div className="h-[100vh] flex justify-center items-center">
         <Spinner size={30} color={"#2dbdb6"} thickness={4} />
@@ -67,7 +49,7 @@ export default function BookLayoutClient({ children }) {
     );
   }
 
-  if (sessionState === "invalid") {
+  if (sessionState === "invalid" || isError) {
     return (
       <div className="h-[100vh] flex justify-center items-center">
         <Spinner size={30} color={"#2dbdb6"} thickness={4} />
