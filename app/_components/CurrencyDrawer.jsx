@@ -27,12 +27,7 @@ function CurrencyDrawer() {
   const currency = useAppSelector((state) => state.reservation.currency);
   const dispatch = useAppDispatch();
 
-  const { data: allCurrencies = [], isLoading } = useGetCurrenciesQuery(
-    undefined,
-    {
-      skip: !isDrawerOpen,
-    }
-  );
+  const { data: allCurrencies = [], isLoading } = useGetCurrenciesQuery();
 
   useEffect(() => {
     if (allCurrencies?.length > 0) {

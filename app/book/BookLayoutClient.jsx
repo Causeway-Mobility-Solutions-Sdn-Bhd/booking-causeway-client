@@ -32,7 +32,7 @@ export default function BookLayoutClient({ children }) {
       const parts = pathname.split("/");
       const segment = parts[2];
 
-      if (segment !== "conform-reservation") {
+      if (segment !== "confirm-reservation") {
         params.set("ssid", reservation._id);
         router.replace(`${pathname}?${params.toString()}`);
       }
