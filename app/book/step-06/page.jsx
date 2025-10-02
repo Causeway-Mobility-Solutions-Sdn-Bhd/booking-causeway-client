@@ -43,8 +43,6 @@ function Page() {
           <SideBar step={7} />
         </div>
       </div>
-
-      {/* <PriceBottomBar step={7} fetchLoader={loader} /> */}
     </div>
   );
 }
