@@ -11,7 +11,7 @@ import { setLogedUser } from "@/store/slices/authSlie";
 function OtpVerify({ type, userData }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
-  const [resendTimer, setResendTimer] = useState(0);
+  const [resendTimer, setResendTimer] = useState(90);
   const [canResend, setCanResend] = useState(false);
 
   const inputRefs = useRef([]);
@@ -32,8 +32,10 @@ function OtpVerify({ type, userData }) {
     }
   };
 
+
   useEffect(() => {
-    if (userData) {
+    if(userData) {
+      console.log(resendTimer)
       if (resendTimer > 0) {
         const timer = setTimeout(() => {
           setResendTimer(resendTimer - 1);
@@ -42,6 +44,8 @@ function OtpVerify({ type, userData }) {
       } else {
         setCanResend(true);
       }
+    }else{
+      console.log(userData)
     }
   }, [resendTimer]);
 
