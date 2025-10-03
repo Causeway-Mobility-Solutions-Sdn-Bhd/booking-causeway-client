@@ -3,20 +3,22 @@ import React, { useState, useEffect, useRef } from "react";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
-import hqApi from "@/lib/hqApi";
-import { setLogedUser } from "@/store/slices/authSlie";
+import {
+  useResendOtpMutation,
+  useVerifyOtpMutation,
+} from "@/store/api/authApiSlice";
 
 function OtpVerify({ type, userData }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [isLoading, setIsLoading] = useState(false);
   const [resendTimer, setResendTimer] = useState(90);
   const [canResend, setCanResend] = useState(false);
 
   const inputRefs = useRef([]);
   const router = useRouter();
-  const dispatch = useDispatch();
+
+  const [verifyOtp, { isLoading }] = useVerifyOtpMutation();
+  const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
 
   useEffect(() => {
     setTimer(userData);
@@ -32,9 +34,8 @@ function OtpVerify({ type, userData }) {
     }
   };
 
-
   useEffect(() => {
-    if(userData) {
+    if (userData) {
       if (resendTimer > 0) {
         const timer = setTimeout(() => {
           setResendTimer(resendTimer - 1);
@@ -85,52 +86,39 @@ function OtpVerify({ type, userData }) {
 
   const handleVerify = async () => {
     const otpValue = otp.join("");
-
     if (otpValue.length !== 6) {
       showErrorToast("Please enter complete OTP");
       return;
     }
 
-    setIsLoading(true);
-
     try {
-      const res = await hqApi.post("auth/verify", { code: otpValue });
-      if (res?.status === 200) {
-        dispatch(setLogedUser(res?.data?.user));
-        showSuccessToast("Email verified successfully");
-        router.push("/");
-      }
+      const res = await verifyOtp({ code: otpValue }).unwrap();
+      showSuccessToast("Email verified successfully");
+      router.push("/");
     } catch (err) {
       showErrorToast(
-        err?.response?.data?.message || "Verification failed. Please try again."
+        err?.data?.message || "Verification failed. Please try again."
       );
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const handleResend = async () => {
     if (!canResend) return;
-
     setCanResend(false);
-    try {
-      const res = await hqApi.post("auth/resend-verify", {
-        email: userData?.email,
-      });
 
-      if (res?.status === 200) {
-        setTimer(res?.data?.data);
-        showSuccessToast("OTP resent successfully");
-      }
+    try {
+      const res = await resendOtp({ email: userData?.email }).unwrap();
+      setTimer(res?.data);
+      showSuccessToast("OTP resent successfully");
     } catch (err) {
       showErrorToast(
-        err?.response?.data?.message ||
-          "Failed to resend OTP. Please try again."
+        err?.data?.message || "Failed to resend OTP. Please try again."
       );
       setCanResend(true);
       setResendTimer(0);
     }
   };
+
 
   return (
     <div className="bg-white rounded-lg shadow-lg w-full max-w-sm p-5 md:p-6 relative">
@@ -193,10 +181,10 @@ function OtpVerify({ type, userData }) {
           )}
         </button>
 
-        <div className="text-center">
-          <span className="text-gray-600 text-sm">
+        <div className="text-center flex justify-center items-center gap-1">
+          <p className="text-gray-600 text-sm">
             Didn't receive the code?{" "}
-          </span>
+          </p>
           {canResend ? (
             <button
               onClick={handleResend}
@@ -205,9 +193,17 @@ function OtpVerify({ type, userData }) {
               Resend OTP
             </button>
           ) : (
-            <span className="text-gray-400 text-sm">
-              Resend in {resendTimer}s
-            </span>
+            <div>
+              {
+                <p className="text-gray-400 text-sm">
+                  {isResending ? (
+                    <span>Resending...</span>
+                  ) : (
+                    <span>Resend in {resendTimer}s</span>
+                  )}
+                </p>
+              }
+            </div>
           )}
         </div>
       </div>
