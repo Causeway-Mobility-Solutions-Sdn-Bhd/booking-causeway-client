@@ -32,10 +32,8 @@ const CardDetails = ({
     if (!dateString) return null;
 
     try {
-      // Parse the dd/MM/yy format back to Date object
       return parse(dateString, "dd/MM/yy", new Date());
     } catch (e) {
-      console.log("Error parsing license date:", e);
       return null;
     }
   };

@@ -77,7 +77,6 @@ function Page() {
           `/car-rental/reservations/additional-charges?${params.toString()}`,
           {}
         );
-        console.log(response)
 
         const data = response?.data;
         if (response.status === 200) {
