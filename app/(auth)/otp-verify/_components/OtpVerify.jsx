@@ -35,7 +35,6 @@ function OtpVerify({ type, userData }) {
 
   useEffect(() => {
     if(userData) {
-      console.log(resendTimer)
       if (resendTimer > 0) {
         const timer = setTimeout(() => {
           setResendTimer(resendTimer - 1);
@@ -44,8 +43,6 @@ function OtpVerify({ type, userData }) {
       } else {
         setCanResend(true);
       }
-    }else{
-      console.log(userData)
     }
   }, [resendTimer]);
 
