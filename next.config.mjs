@@ -30,6 +30,14 @@ const nextConfig = {
   experimental: {
     optimizeCss: true, // built-in CSS optimization
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
+      },
+    ];
+  },
 };
 
 export default withBundleAnalyzer(nextConfig);
