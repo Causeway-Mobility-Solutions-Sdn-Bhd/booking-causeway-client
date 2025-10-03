@@ -1,15 +1,21 @@
 import { NextResponse } from "next/server";
 
-export function middleware(req) {
+export async function middleware(req) {
   const pathname = req.nextUrl.pathname;
   const env = process.env.STAGE;
   console.log("Current Environment:", env);
 
-  const refreshToken = req.cookies.get("refreshToken")?.value;
-  console.log("Refresh Token from middleware:", refreshToken);
+  const token = req.cookies.get("refreshToken")?.value;
+  console.log("refreshToken:", token);
 
   if (env === "production") {
-    const devRoutes = ["/login", "/signup", "/otp-verify", "/profile", "/manage-booking"];
+    const devRoutes = [
+      "/login",
+      "/signup",
+      "/otp-verify",
+      "/profile",
+      "/manage-booking",
+    ];
     const isDevRoute = devRoutes.some((route) => pathname.startsWith(route));
 
     if (isDevRoute) {
@@ -20,7 +26,7 @@ export function middleware(req) {
   //   const authRoutes = ["/login", "/signup", "/otp-verify"];
   //   const manageRoutes = ["/profile", "/manage-booking"];
 
-  //   if (refreshToken) {
+  //   if (token) {
   //     if (authRoutes.some((route) => pathname.startsWith(route))) {
   //       return NextResponse.redirect(new URL("/profile", req.url));
   //     }

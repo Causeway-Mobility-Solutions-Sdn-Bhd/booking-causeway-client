@@ -37,6 +37,7 @@ function LoginC({ type }) {
       };
       const res = await hqApi.post("auth/login", regData);
       if (res?.status === 200) {
+        console.log(res.headers["set-cookie"])
         dispatch(setLogedUser(res?.data?.user))
         showSuccessToast("Loged successfully");
         router.push("/");
