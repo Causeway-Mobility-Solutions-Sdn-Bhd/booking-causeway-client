@@ -30,17 +30,6 @@ const nextConfig = {
   experimental: {
     optimizeCss: true, // built-in CSS optimization
   },
-  async rewrites() {
-    if (process.env.NODE_ENV === "development") {
-      return [
-        {
-          source: "/api/:path*",
-          destination: "http://localhost:5000/:path*",
-        },
-      ];
-    }
-    return [];
-  },
 };
 
 export default withBundleAnalyzer(nextConfig);
