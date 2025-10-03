@@ -7,7 +7,6 @@ function Page() {
     const logedUser = useAppSelector(
       (state) => state.auth.logedUser 
     );
-    console.log(logedUser)
 
   useEffect(() => {
     const cookies = document.cookie

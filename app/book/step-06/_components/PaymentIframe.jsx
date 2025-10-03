@@ -18,6 +18,8 @@ function PaymentIframe() {
 
   const [loadingState, setLoadingState] = useState("loading");
   const [showIframe, setShowIframe] = useState(false);
+  const [discount , setDiscount] = useState(false)
+  const [voucherCode, setVoucherCode] = useState("");
 
   const [confirmReservation, { isLoading: isConfirming }] =
     useConfirmReservationMutation();
@@ -68,9 +70,9 @@ function PaymentIframe() {
 
   const handleConfirmReservation = async (data) => {
     try {
-      console.log(data?.couponCode);
       const response = await confirmReservation({
         couponCode: data?.couponCode,
+        isRemove : data?.isRemove 
       }).unwrap();
 
       if (response?.status_code === 200) {
@@ -86,13 +88,13 @@ function PaymentIframe() {
             : parseFloat(outstandingBalance / 2).toFixed(2);
         const reservationUid = reservationData?.uuid;
         const domain = window.location.origin;
-        console.log(reservedReservationDetail);
-        console.log({
-          amount: paymentDue,
-          reservationId,
-          reservationUid,
-          domain,
-        });
+        
+        if(reservedReservationDetail?.applicable_discounts?.length > 0){
+          setDiscount(true)
+        }else{
+          setDiscount(false)
+          setVoucherCode("")
+        }
 
         const paymentRes = await processPayment({
           amount: paymentDue,
@@ -107,7 +109,11 @@ function PaymentIframe() {
         if (paymentLink) {
           if (data?.couponCode) {
             if (reservedReservationDetail?.applicable_discounts?.length === 0) {
-              showErrorToast("Invalid Coupan Code");
+              if(data?.isRemove){
+                showErrorToast("Coupan Code Removed");
+              }else{
+                showErrorToast("Invalid Coupan Code");
+              }
             } else {
               showSuccessToast("Coupan Code Added Successfully");
             }
@@ -124,7 +130,7 @@ function PaymentIframe() {
 
   return (
     <div>
-      <PaymentOptionCard handleConfirmReservation={handleConfirmReservation} />
+      <PaymentOptionCard voucherCode={voucherCode} setVoucherCode={setVoucherCode} discount={discount} handleConfirmReservation={handleConfirmReservation} />
 
       {loadingState === "loading" || isPaying || isConfirming ? (
         <PaymentLoader />

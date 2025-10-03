@@ -17,7 +17,6 @@ export default function OtpVerifyPage() {
     const verifyToken = async () => {
       try {
         const res = await hqApi.post(`/auth/verify-client/${clientToken}`)
-        console.log(res)
         setUserData(res.data?.data);
         if(res?.data?.data?.isVerified){
            router.push('/')

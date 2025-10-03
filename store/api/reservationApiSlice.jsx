@@ -4,10 +4,10 @@ import { setCurrentUUID, setReservation } from "../slices/reservationSlice";
 export const reservationApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     confirmReservation: builder.mutation({
-      query: ({ couponCode = "" } = {}) => ({
+      query: ({ couponCode = "" , isRemove  =false } = {}) => ({
         url: "/car-rental/reservations/conform-reservation",
         method: "POST",
-        data: { couponCode },
+        data: { couponCode ,  isRemove  },
       }),
       invalidatesTags: ["Reservation"],
     }),
@@ -36,7 +36,6 @@ export const reservationApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log(data )
           if (data) {
             dispatch(setCurrentUUID(data._id));
             dispatch(setReservation(data));

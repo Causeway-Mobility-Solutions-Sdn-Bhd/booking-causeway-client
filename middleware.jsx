@@ -6,7 +6,6 @@ export async function middleware(req) {
   console.log("Current Environment:", env);
 
   const token = req.cookies.get("refreshToken")?.value;
-  console.log("refreshToken:", token);
 
   if (env === "production") {
     const devRoutes = [

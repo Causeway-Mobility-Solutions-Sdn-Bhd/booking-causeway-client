@@ -4,27 +4,50 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useAppSelector } from "@/store/hooks";
+import { showErrorToast } from "@/app/_lib/toast";
 
-const PaymentOptionCard = ({ handleConfirmReservation }) => {
-  const [voucherCode, setVoucherCode] = useState("");
+const PaymentOptionCard = ({
+  voucherCode = "",
+  setVoucherCode = () => {},
+  discount = false,
+  handleConfirmReservation = () => {},
+}) => {
   const [selectedPayment, setSelectedPayment] = useState("full");
 
   const finalPayment = useAppSelector(
     (state) => state.reservation.finalPayment
   );
   const handleApply = () => {
-    handleConfirmReservation({
-      couponCode: voucherCode || "",
-      paymentType: selectedPayment || "full",
-    });
+    if (voucherCode) {
+      handleConfirmReservation({
+        couponCode: voucherCode || "",
+        paymentType: selectedPayment,
+        isRemove: false,
+      });
+    } else {
+      showErrorToast("Please Added Coupan Code");
+    }
   };
 
-  const handlePaymentChange = (value) => {
+  const handlePaymentChange = (value = "") => {
     setSelectedPayment(value);
     handleConfirmReservation({
       couponCode: voucherCode || "",
       paymentType: value || "full",
+      isRemove: false,
     });
+  };
+
+  const handleRemove = () => {
+    if (voucherCode) {
+      handleConfirmReservation({
+        couponCode: voucherCode || "",
+        paymentType: selectedPayment,
+        isRemove: true,
+      });
+    } else {
+      showErrorToast("Please Added Coupan Code");
+    }
   };
 
   return (
@@ -39,14 +62,24 @@ const PaymentOptionCard = ({ handleConfirmReservation }) => {
           placeholder="Discount/Voucher code"
           value={voucherCode}
           onChange={(e) => setVoucherCode(e.target.value)}
+          disabled={discount}
           className="flex-1 h-12 px-4 text-[13PX] border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2dbdb6] focus:border-transparent"
         />
-        <Button
-          onClick={handleApply}
-          className="h-12 px-8 bg-[#2dbdb6] hover:bg-[#26a8a1] text-white font-medium rounded-lg transition-colors"
-        >
-          Apply
-        </Button>
+        {!discount ? (
+          <Button
+            onClick={handleApply}
+            className="h-12 px-8 bg-[#2dbdb6] hover:bg-[#26a8a1] text-white font-medium rounded-lg transition-colors"
+          >
+            Apply
+          </Button>
+        ) : (
+          <Button
+            onClick={handleRemove}
+            className="h-12 px-8 bg-[#2dbdb6] hover:bg-[#26a8a1] text-white font-medium rounded-lg transition-colors"
+          >
+            Remove
+          </Button>
+        )}
       </div>
 
       {/* Payment Options */}

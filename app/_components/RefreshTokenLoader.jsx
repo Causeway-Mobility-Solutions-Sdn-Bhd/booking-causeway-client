@@ -15,7 +15,6 @@ function RefreshTokenLoader() {
       try {
         const res = await hqApi.post("auth/refresh/token");
         dispatch(setLogedUser(res?.data?.user))
-        console.log("Token refreshed" , res);
         setLoading(false);
       } catch (error) {
         console.log("Refresh token failed", error);
