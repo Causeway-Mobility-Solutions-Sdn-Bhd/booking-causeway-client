@@ -7,7 +7,7 @@ import hqApi from "@/lib/hqApi";
 import { showErrorToast, showSuccessToast } from "../_lib/toast";
 import Spinner from "@/components/custom/Spinner";
 import { useRouter } from "next/navigation";
-import { setLogedUserUser } from "@/store/slices/authSlie";
+import { setLogedUser } from "@/store/slices/authSlie";
 import { useDispatch } from "react-redux";
 
 function LoginC({ type }) {
@@ -37,7 +37,7 @@ function LoginC({ type }) {
       };
       const res = await hqApi.post("auth/login", regData);
       if (res?.status === 200) {
-        dispatch(setLogedUserUser(res?.data?.user))
+        dispatch(setLogedUser(res?.data?.user))
         showSuccessToast("Loged successfully");
         router.push("/");
       }

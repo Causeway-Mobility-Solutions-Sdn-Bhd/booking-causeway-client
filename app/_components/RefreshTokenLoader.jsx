@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import hqApi from "@/lib/hqApi";
 import Spinner from "@/components/custom/Spinner";
 import { useDispatch } from "react-redux";
-import { setLogedUserUser } from "@/store/slices/authSlie";
+import { setLogedUser} from "@/store/slices/authSlie";
 
 function RefreshTokenLoader() {
   const [loading, setLoading] = useState(true);
@@ -14,7 +14,7 @@ function RefreshTokenLoader() {
     const refreshToken = async () => {
       try {
         const res = await hqApi.post("auth/refresh/token");
-        dispatch(setLogedUserUser(res?.data?.user))
+        dispatch(setLogedUser(res?.data?.user))
         console.log("Token refreshed" , res);
         setLoading(false);
       } catch (error) {

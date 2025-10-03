@@ -8,9 +8,9 @@ const generalSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setLogedUserUser(state, action) { state.unVerifideUser = action.payload; },
+    setLogedUser(state, action) { state.logedUser = action.payload; },
   },
 });
 
-export const { setLogedUserUser } = generalSlice.actions;
+export const { setLogedUser } = generalSlice.actions;
 export default generalSlice.reducer;

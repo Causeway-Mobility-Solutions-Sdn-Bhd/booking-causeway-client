@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 import hqApi from "@/lib/hqApi";
-import { setLogedUserUser } from "@/store/slices/authSlie";
+import { setLogedUser } from "@/store/slices/authSlie";
 
 function OtpVerify({ type, userData }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -94,7 +94,7 @@ function OtpVerify({ type, userData }) {
     try {
       const res = await hqApi.post("auth/verify", { code: otpValue });
       if (res?.status === 200) {
-        dispatch(setLogedUserUser(res?.data?.user));
+        dispatch(setLogedUser(res?.data?.user));
         showSuccessToast("Email verified successfully");
         router.push("/");
       }

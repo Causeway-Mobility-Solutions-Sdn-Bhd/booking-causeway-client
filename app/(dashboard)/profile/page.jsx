@@ -1,8 +1,13 @@
 "use client";
+import { useAppSelector } from "@/store/hooks";
 import React, { useEffect, useState } from "react";
 
 function Page() {
   const [refreshToken, setRefreshToken] = useState("");
+    const logedUser = useAppSelector(
+      (state) => state.auth.logedUser 
+    );
+    console.log(logedUser)
 
   useEffect(() => {
     const cookies = document.cookie
@@ -12,7 +17,10 @@ function Page() {
     setRefreshToken(token);
   }, []);
 
-  return <div>Refresh Token: {refreshToken}</div>;
+  return <div>
+    <p>Refresh Token: {refreshToken}</p>
+    <p>Name : {logedUser?.fullName}</p>
+  </div>;
 }
 
 export default Page;
