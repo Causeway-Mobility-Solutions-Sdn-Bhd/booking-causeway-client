@@ -20,11 +20,10 @@ function OtpVerify({ type, userData }) {
 
   useEffect(() => {
     setTimer(userData);
-    
   }, [userData]);
 
   const setTimer = (data) => {
-    if (data?.verficationTokenExpiresAt) {      
+    if (data?.verficationTokenExpiresAt) {
       const expiryTime = new Date(data.verficationTokenExpiresAt).getTime();
       const now = Date.now();
       const diff = Math.max(Math.floor((expiryTime - now) / 1000), 0);
@@ -34,13 +33,15 @@ function OtpVerify({ type, userData }) {
   };
 
   useEffect(() => {
-    if (resendTimer > 0) {
-      const timer = setTimeout(() => {
-        setResendTimer(resendTimer - 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    } else {
-      setCanResend(true);
+    if (userData) {
+      if (resendTimer > 0) {
+        const timer = setTimeout(() => {
+          setResendTimer(resendTimer - 1);
+        }, 1000);
+        return () => clearTimeout(timer);
+      } else {
+        setCanResend(true);
+      }
     }
   }, [resendTimer]);
 

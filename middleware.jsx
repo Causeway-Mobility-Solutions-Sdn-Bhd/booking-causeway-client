@@ -4,6 +4,9 @@ export function middleware(req) {
   const pathname = req.nextUrl.pathname;
   const env = process.env.STAGE;
   console.log("Current Environment:", env);
+  
+  const refreshToken = req.cookies.get("refreshToken")?.value;
+  console.log("Refresh Token from middleware:", refreshToken);
 
   if (env === "production") {
     const devRoutes = ["/login", "/signup", "/otp-verify", "/profile", "/manage-booking"];
