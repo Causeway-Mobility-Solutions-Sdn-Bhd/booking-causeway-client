@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${poppins.variable} antialiased`}>
         <Providers>
-          <RefreshTokenLoader />
+          {/* <RefreshTokenLoader /> */}
           {children}
           <BlackBg />
           <Toaster
