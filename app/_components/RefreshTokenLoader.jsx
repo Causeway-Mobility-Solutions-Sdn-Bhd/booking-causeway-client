@@ -27,7 +27,7 @@ function RefreshTokenLoader() {
 
   if (loading) {
     return (
-      <div className="h-[100vh] flex justify-center items-center fixed top-0 left-0 w-full bg-cWhite z-[1000]">
+      <div className="flex justify-center items-center fixed top-0 left-0 bottom-0 right-0 w-full bg-cWhite z-[1000]">
         <Spinner size={30} color={"#2dbdb6"} thickness={4} />
       </div>
     );
