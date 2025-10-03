@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import OtpVerify from "../_components/OtpVerify";
-import { showErrorToast } from "@/app/_lib/toast";
+import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 import hqApi from "@/lib/hqApi";
 
 export default function OtpVerifyPage() {
@@ -14,12 +14,15 @@ export default function OtpVerifyPage() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!clientToken) return;
-
     const verifyToken = async () => {
       try {
         const res = await hqApi.post(`/auth/verify-client/${clientToken}`)
+        console.log(res)
         setUserData(res.data?.data);
+        if(res?.data?.data?.isVerified){
+           router.push('/')
+           showSuccessToast("User Already Verified Successfully")
+        }
         setLoading(false);
       } catch (err) {
         setError(true)
@@ -42,7 +45,7 @@ export default function OtpVerifyPage() {
 
   return (
     <div className="w-[95%] mx-auto flex justify-center items-center absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]">
-      <OtpVerify type="primary" email={userData?.email} />
+      <OtpVerify type="primary" userData={userData} />
     </div>
   );
 }

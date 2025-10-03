@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import hqApi from "@/lib/hqApi";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/custom/Spinner";
-import { showErrorToast, showSuccessToast } from "../_lib/toast";
+import { showErrorToast, showSuccessToast } from "../../../_lib/toast";
 
 function SignupC() {
   const [showPassword, setShowPassword] = useState(false);
@@ -20,7 +20,7 @@ function SignupC() {
     watch,
     formState: { errors },
   } = useForm({
-    mode: "onSubmit", // Validate only on submit
+    mode: "onSubmit", 
   });
 
   const togglePasswordVisibility = () => {
@@ -47,7 +47,6 @@ function SignupC() {
         );
         route.push(`otp-verify/${res?.data?.user?.clientToken}`);
       }
-      console.log(res);
       setLoader(false);
     } catch (err) {
       setLoader(false);

@@ -1,25 +1,36 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 import hqApi from "@/lib/hqApi";
-import { useDispatch } from "react-redux";
 import { setLogedUserUser } from "@/store/slices/authSlie";
 
-function OtpVerify({ type , email }) {
+function OtpVerify({ type, userData }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
-  const [resendTimer, setResendTimer] = useState(60);
+  const [resendTimer, setResendTimer] = useState(0);
   const [canResend, setCanResend] = useState(false);
 
   const inputRefs = useRef([]);
   const router = useRouter();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const onBack = () => {
-    router.push("/signup");
+  useEffect(() => {
+    setTimer(userData);
+    
+  }, [userData]);
+
+  const setTimer = (data) => {
+    if (data?.verficationTokenExpiresAt) {      
+      const expiryTime = new Date(data.verficationTokenExpiresAt).getTime();
+      const now = Date.now();
+      const diff = Math.max(Math.floor((expiryTime - now) / 1000), 0);
+      setResendTimer(diff);
+      setCanResend(diff <= 0);
+    }
   };
 
   useEffect(() => {
@@ -33,10 +44,10 @@ function OtpVerify({ type , email }) {
     }
   }, [resendTimer]);
 
-  const handleOTPChange = (index, value) => {
-    if (value.length > 1) return;
+  const onBack = () => router.push("/signup");
 
-    if (value && !/^\d$/.test(value)) return;
+  const handleOTPChange = (index, value) => {
+    if (value.length > 1 || (value && !/^\d$/.test(value))) return;
 
     const newOtp = [...otp];
     newOtp[index] = value;
@@ -49,16 +60,14 @@ function OtpVerify({ type , email }) {
 
   const handleKeyDown = (index, e) => {
     if (e.key === "Backspace") {
+      const newOtp = [...otp];
       if (!otp[index] && index > 0) {
         inputRefs.current[index - 1]?.focus();
-        const newOtp = [...otp];
         newOtp[index - 1] = "";
-        setOtp(newOtp);
       } else {
-        const newOtp = [...otp];
         newOtp[index] = "";
-        setOtp(newOtp);
       }
+      setOtp(newOtp);
     }
   };
 
@@ -83,12 +92,9 @@ function OtpVerify({ type , email }) {
     setIsLoading(true);
 
     try {
-      const res = await hqApi.post("auth/verify", {
-        code: otpValue,
-      });
-
+      const res = await hqApi.post("auth/verify", { code: otpValue });
       if (res?.status === 200) {
-        dispatch(setLogedUserUser(res?.data?.user))
+        dispatch(setLogedUserUser(res?.data?.user));
         showSuccessToast("Email verified successfully");
         router.push("/");
       }
@@ -107,14 +113,18 @@ function OtpVerify({ type , email }) {
     setCanResend(false);
     try {
       const res = await hqApi.post("auth/resend-verify", {
-        email: email,
+        email: userData?.email,
       });
-       if (res?.status === 200) {
-        setResendTimer(30);
-        showSuccessToast("OTP resent successfully")
+
+      if (res?.status === 200) {
+        setTimer(res?.data?.data);
+        showSuccessToast("OTP resent successfully");
       }
     } catch (err) {
-      showErrorToast(err?.response?.data?.message || "Failed to resend OTP. Please try again.");
+      showErrorToast(
+        err?.response?.data?.message ||
+          "Failed to resend OTP. Please try again."
+      );
       setCanResend(true);
       setResendTimer(0);
     }
@@ -124,29 +134,25 @@ function OtpVerify({ type , email }) {
     <div className="bg-white rounded-lg shadow-lg w-full max-w-sm p-5 md:p-6 relative">
       {type === "primary" && (
         <>
-          {/* Back Button */}
           <button
             onClick={onBack}
             className="absolute top-5 left-5 text-gray-400 hover:text-gray-600 transition-colors"
           >
             <ArrowLeft size={20} />
           </button>
-
-          {/* Title */}
           <div className="text-center mb-6 mt-2">
             <h2 className="text-2xl font-bold mb-2">Verify OTP</h2>
             <p className="text-gray-600 text-sm">
               We've sent a 6-digit code to
             </p>
             <p className="text-cPrimary font-medium text-sm">
-              {email}
+              {userData?.email}
             </p>
           </div>
         </>
       )}
 
       <div>
-        {/* OTP Input Fields */}
         <div className="mb-6">
           <div className="flex justify-center space-x-3 mb-4">
             {otp.map((digit, index) => (
@@ -160,13 +166,12 @@ function OtpVerify({ type , email }) {
                 onChange={(e) => handleOTPChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
                 onPaste={index === 0 ? handlePaste : undefined}
-                className={`w-12 h-12 text-center text-lg font-semibold border-2 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all $`}
+                className="w-12 h-12 text-center text-lg font-semibold border-2 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all"
               />
             ))}
           </div>
         </div>
 
-        {/* Verify Button */}
         <button
           onClick={handleVerify}
           disabled={isLoading || otp.join("").length !== 6}
@@ -186,7 +191,6 @@ function OtpVerify({ type , email }) {
           )}
         </button>
 
-        {/* Resend Section */}
         <div className="text-center">
           <span className="text-gray-600 text-sm">
             Didn't receive the code?{" "}
@@ -206,7 +210,6 @@ function OtpVerify({ type , email }) {
         </div>
       </div>
 
-      {/* Back to Login Link */}
       {type === "primary" && (
         <div className="text-center mt-4">
           <Link
