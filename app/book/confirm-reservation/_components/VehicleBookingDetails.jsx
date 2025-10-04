@@ -9,13 +9,7 @@ import VehicleDetail from "./VehicleDetail";
 import CustomerDetails from "./CustomerDetails";
 import { ChevronDown, Download, FileText, Loader2 } from "lucide-react";
 import { showErrorToast } from "@/app/_lib/toast";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 function VehicleBookingDetails({
   reservationData,
@@ -24,38 +18,30 @@ function VehicleBookingDetails({
 }) {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const [isAddOnOpen, setIsAddOnOpen] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(true);
+  const [isDownloading, setIsDownloading] = useState(false);
   const handleDownload = async () => {
     try {
       setIsDownloading(true);
-      // fetch file (good if protected routes / auth needed)
+
       const response = await fetch(rentalAgreement, {
         method: "GET",
-        headers: {
-          // add auth headers here if needed
-        },
+        headers: {},
       });
 
       if (!response.ok) throw new Error("File download failed");
 
-      // convert to blob
       const blob = await response.blob();
 
-      // create object url
       const url = window.URL.createObjectURL(blob);
 
-      // create <a> element to trigger save-as
       const link = document.createElement("a");
       link.href = url;
-      link.download = "Rental_Agreement.pdf"; // filename
+      link.download = "Rental_Agreement.pdf";
       document.body.appendChild(link);
       link.click();
 
-      // cleanup
       link.remove();
       window.URL.revokeObjectURL(url);
-
-      console.log("Downloaded:", rentalAgreement);
     } catch (err) {
       showErrorToast("Error Downloading Agreement.");
       console.error("Download error:", err);
@@ -72,11 +58,8 @@ function VehicleBookingDetails({
         <h1 className="text-[18px] font-bold">Booking Details</h1>
       </div>
 
-      {/* Main container */}
       <div className="bg-white shadow-sm rounded-lg overflow-hidden p-4">
-        {/* Pickup and Return */}
         <div className="flex border rounded-lg border-gray-200 flex-col md:flex-row">
-          {/* Pickup Section */}
           <div className="flex-1 p-4">
             <div className="flex items-start gap-1">
               <div>
@@ -100,11 +83,9 @@ function VehicleBookingDetails({
             </div>
           </div>
 
-          {/* Divider */}
           <div className="hidden md:block border-l border-gray-200 mx-1 my-4"></div>
           <div className="block md:hidden border-t border-gray-200 mx-4 my-[-5px]"></div>
 
-          {/* Return Section */}
           <div className="flex-1 p-4">
             <div className="flex items-start gap-3">
               <div>
@@ -128,7 +109,7 @@ function VehicleBookingDetails({
             </div>
           </div>
         </div>
-        {/* Add-On Services */}
+
         <div className="border mt-4 border-gray-200 rounded-lg overflow-hidden">
           <button
             className="flex justify-between items-center w-full px-4 py-2 text-left"
@@ -163,7 +144,7 @@ function VehicleBookingDetails({
             </div>
           )}
         </div>
-        {/* Customer Details */}
+
         <div className="border mt-4 border-gray-200 rounded-lg overflow-hidden">
           <button
             className="flex justify-between items-center w-full px-4 py-2 text-left"
@@ -190,8 +171,18 @@ function VehicleBookingDetails({
         </Button>
       </div>
       {/* Download Modal */}
-      <Dialog open={isDownloading} onOpenChange={setIsDownloading}>
-        <DialogContent className="sm:max-w-md border-0 shadow-2xl">
+      <Dialog
+        open={isDownloading}
+        onOpenChange={(open) => {
+          if (!open) return;
+          setIsDownloading(open);
+        }}
+      >
+        <DialogTitle className="sr-only">Downloading Document</DialogTitle>
+        <DialogContent
+          className="sm:max-w-md border-0 shadow-2xl"
+          showCloseButton={false}
+        >
           <div className="flex flex-col items-center justify-center py-8 px-4">
             {/* Animated Icon Container */}
             <div className="relative mb-6">
