@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useCallback } from "react";
 import { useFormState } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import DropdownInput from "@/components/custom/DropdownInput";
@@ -32,71 +32,82 @@ const DriversContactInfo = ({
 
   // Force re-render state for dropdowns
   const [, forceUpdate] = React.useState({});
-  // Format countries for dropdown
-  const formattedCountries = countryCodes
-    ? Object.entries(countryCodes).map(([isoCode, data]) => ({
-        value: isoCode,
-        label: data.n,
-        flag: isoCode.toLowerCase(),
-      }))
-    : [];
 
-  // Get states for a country
-  const getStatesForCountry = (countryCode) => {
-    if (!countryCode || !countryStates) return [];
+  // Memoize formatted countries
+  const formattedCountries = useMemo(() => {
+    if (!countryCodes) return [];
+    return Object.entries(countryCodes).map(([isoCode, data]) => ({
+      value: isoCode,
+      label: data.n,
+      flag: isoCode.toLowerCase(),
+    }));
+  }, [countryCodes]);
 
-    const states = countryStates[countryCode] || [];
+  // Memoize getStatesForCountry function
+  const getStatesForCountry = useCallback(
+    (countryCode) => {
+      if (!countryCode || !countryStates) return [];
 
-    if (Array.isArray(states) && states.length > 0) {
-      if (
-        typeof states[0] === "string" &&
-        states[0].toLowerCase().includes("no states")
-      ) {
-        return [
-          {
-            value: "No states",
-            label: "No States",
-          },
-        ];
+      const states = countryStates[countryCode] || [];
+
+      if (Array.isArray(states) && states.length > 0) {
+        if (
+          typeof states[0] === "string" &&
+          states[0].toLowerCase().includes("no states")
+        ) {
+          return [
+            {
+              value: "No states",
+              label: "No States",
+            },
+          ];
+        }
+
+        if (
+          typeof states[0] === "object" &&
+          states[0] !== null &&
+          "name" in states[0]
+        ) {
+          return states.map((state) => ({
+            value: state.name,
+            label: state.name,
+          }));
+        }
       }
 
-      if (
-        typeof states[0] === "object" &&
-        states[0] !== null &&
-        "name" in states[0]
-      ) {
-        return states.map((state) => ({
-          value: state.name,
-          label: state.name,
-        }));
+      return [];
+    },
+    [countryStates]
+  );
+
+  // Memoize current country states
+  const currentCountryStates = useMemo(() => {
+    return getStatesForCountry(getValues("country"));
+  }, [getValues("country"), getStatesForCountry]);
+
+  // Memoize handler for country change
+  const handleCountryChange = useCallback(
+    (value) => {
+      // Get states for the newly selected country FIRST
+      const states = getStatesForCountry(value);
+
+      // Set state value BEFORE setting country to prevent Shadcn from clearing it
+      if (states.length > 0) {
+        // Always set to first state when country changes
+        setValue("state", states[0].value, { shouldValidate: false });
+      } else {
+        // Clear state if no states available for this country
+        setValue("state", "", { shouldValidate: false });
       }
-    }
 
-    return [];
-  };
+      // Now set the country value
+      setValue("country", value, { shouldValidate: false });
 
-  // Handler for country change - to be passed to DropdownInput
-  const handleCountryChange = (value) => {
-    // Get states for the newly selected country FIRST
-    const states = getStatesForCountry(value);
-
-    // Set state value BEFORE setting country to prevent Shadcn from clearing it
-    if (states.length > 0) {
-      // Always set to first state when country changes
-      setValue("state", states[0].value, { shouldValidate: false });
-    } else {
-      // Clear state if no states available for this country
-      setValue("state", "", { shouldValidate: false });
-    }
-
-    // Now set the country value
-    setValue("country", value, { shouldValidate: false });
-
-    // Force re-render to update the UI
-    forceUpdate({});
-  };
-
-  console.log("3rd Changed");
+      // Force re-render to update the UI
+      forceUpdate({});
+    },
+    [getStatesForCountry, setValue]
+  );
 
   return (
     <div className="space-y-6">
@@ -203,7 +214,7 @@ const DriversContactInfo = ({
 
           {/* State Dropdown */}
           <DropdownInput
-            data={getStatesForCountry(getValues("country"))}
+            data={currentCountryStates}
             label="State"
             name="state"
             register={register}
@@ -215,7 +226,7 @@ const DriversContactInfo = ({
               dataLoading ||
               !!error ||
               !getValues("country") ||
-              getStatesForCountry(getValues("country")).length === 0
+              currentCountryStates.length === 0
             }
             firstErrorField={firstErrorField}
           />
@@ -244,21 +255,15 @@ const DriversContactInfo = ({
 const arePropsEqual = (prevProps, nextProps) => {
   // Only re-render if errors for THIS component's fields change
   const relevantErrorFields = [
+    "phone",
+    "phoneCountryCode",
     "email",
     "address",
     "zipCode",
     "city",
     "state",
     "country",
-    "phone",
   ];
-
-  const prevErrors = relevantErrorFields.some(
-    (field) => prevProps.errors[field]
-  );
-  const nextErrors = relevantErrorFields.some(
-    (field) => nextProps.errors[field]
-  );
 
   // Check if any relevant error changed
   const errorsChanged = relevantErrorFields.some(

@@ -23,7 +23,7 @@ const EmergencyContactInfo = ({
   // const hasEmergencyNameError = !!errors.emergencyName;
   const hasEmergencyRelationshipError = !!errors.emergencyRelationship;
   // const hasEmergencyEmailError = !!errors.emergencyEmail;
-  console.log("4th Changed");
+  // console.log("4th Changed");
   return (
     <div className="space-y-6">
       <h2 className="text-lg font-bold mb-4 text-gray-800">

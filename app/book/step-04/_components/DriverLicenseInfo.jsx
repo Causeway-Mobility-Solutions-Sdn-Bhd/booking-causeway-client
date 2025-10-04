@@ -24,7 +24,7 @@ const DriverLicenseInfo = ({
 
   const handleLicenseDateChange = (date) => {
     setValue("licenseExpiry", date ? format(date, "dd/MM/yy") : "", {
-      shouldValidate: false,
+      shouldValidate: true,
     });
   };
 
@@ -49,8 +49,6 @@ const DriverLicenseInfo = ({
       showErrorToast("Error Deleting File.");
     }
   };
-
-  console.log("1 Changed");
 
   return (
     <div className="space-y-6">
@@ -112,7 +110,7 @@ const DriverLicenseInfo = ({
               label={"Driver License image"}
               files={licenseFiles}
               setFiles={(files) => {
-                setValue("licenseFiles", files, { shouldValidate: false });
+                setValue("licenseFiles", files, { shouldValidate: true });
                 if (files && files.length > 0) {
                   clearErrors("licenseFiles");
                 }

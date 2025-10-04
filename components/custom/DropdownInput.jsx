@@ -47,7 +47,7 @@ const DropdownInput = ({
       onCustomChange(value);
     } else {
       // Default behavior - no validation to avoid re-renders
-      setValue(name, value, { shouldValidate: false });
+      setValue(name, value, { shouldValidate: true });
       // Force re-render to update the UI
       forceUpdate({});
     }

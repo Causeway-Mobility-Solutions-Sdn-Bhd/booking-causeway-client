@@ -35,8 +35,8 @@ const CustomerDetailsForm = ({
     formState: { errors },
     control,
   } = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onChange",
+    // mode: "onSubmit",
+    // reValidateMode: "onChange",
     defaultValues: {
       driverLicense: "",
       licenseExpiry: "",
@@ -87,14 +87,13 @@ const CustomerDetailsForm = ({
           transformedData
         );
 
-        console.log("API response (update):", response.data);
         customerId = dataAvailable.id;
       } else {
         // CREATE MODE - POST request
         response = await hqApi.post("customers/create-customers", null, {
           params: transformedData,
         });
-        console.log("API response (create):", response.data);
+
         customerId = response.data?.customer?.contact.id;
       }
 
@@ -167,7 +166,6 @@ const CustomerDetailsForm = ({
         },
       });
 
-      console.log(`File uploaded successfully:`, response.data);
       return response.data;
     } catch (error) {
       console.log("Error uploading file:", error);
@@ -175,10 +173,9 @@ const CustomerDetailsForm = ({
     }
   };
 
-  const getFirstErrorField = () => {
-    console.log("GETFIRSTFIELD CALLED");
-
+  const firstErrorField = useMemo(() => {
     const errorFields = Object.keys(errors);
+
     if (errorFields.length === 0) return null;
 
     // Order of fields
@@ -198,16 +195,34 @@ const CustomerDetailsForm = ({
       "city",
       "state",
       "country",
-      // "emergencyName",
       "emergencyRelationship",
       "emergencyPhone",
-      // "emergencyEmail",
       "agreeTerms",
     ];
 
-    return fieldOrder.find((field) => errors[field]) || null;
-  };
-  const firstErrorField = useMemo(() => getFirstErrorField(), [errors]);
+    const firstError = fieldOrder.find((field) => errors[field]) || null;
+
+    return firstError;
+  }, [
+    errors.driverLicense,
+    errors.licenseExpiry,
+    errors.licenseFiles,
+    errors.firstName,
+    errors.lastName,
+    errors.passportNumber,
+    errors.birthDate,
+    errors.idCardOrPass,
+    errors.phone,
+    errors.email,
+    errors.address,
+    errors.zipCode,
+    errors.city,
+    errors.state,
+    errors.country,
+    errors.emergencyRelationship,
+    errors.emergencyPhone,
+    errors.agreeTerms,
+  ]);
   const fillFormData = (data) => {
     // Sample data for form fields
     const sampleData = {
@@ -255,13 +270,81 @@ const CustomerDetailsForm = ({
     }
   }, [dataAvailable]);
 
-  useEffect(() => {
-    console.log("ERRORS CHANGED");
-  }, [errors]);
+  // Errors for Driver License Info
+  const driverLicenseErrors = useMemo(
+    () => ({
+      driverLicense: errors.driverLicense,
+      licenseExpiry: errors.licenseExpiry,
+      licenseFiles: errors.licenseFiles,
+    }),
+    [errors.driverLicense, errors.licenseExpiry, errors.licenseFiles]
+  );
 
-  useEffect(() => {
-    console.log("FUNCTION ERRORS CHANGED");
-  }, [getFirstErrorField]);
+  // Errors for Driver Information
+  const driverInfoErrors = useMemo(
+    () => ({
+      firstName: errors.firstName,
+      lastName: errors.lastName,
+      passportNumber: errors.passportNumber,
+      birthDate: errors.birthDate,
+      idCardOrPass: errors.idCardOrPass,
+    }),
+    [
+      errors.firstName,
+      errors.lastName,
+      errors.passportNumber,
+      errors.birthDate,
+      errors.idCardOrPass,
+    ]
+  );
+
+  // Errors for Driver’s Contact Info
+  const driversContactErrors = useMemo(
+    () => ({
+      phone: errors.phone,
+      phoneCountryCode: errors.phoneCountryCode,
+      email: errors.email,
+      address: errors.address,
+
+      zipCode: errors.zipCode,
+      city: errors.city,
+      state: errors.state,
+      country: errors.country,
+    }),
+    [
+      errors.phone,
+      errors.phoneCountryCode,
+      errors.email,
+      errors.address,
+      errors.zipCode,
+      errors.city,
+      errors.state,
+      errors.country,
+    ]
+  );
+
+  // Errors for Emergency Contact Info
+  const emergencyContactErrors = useMemo(
+    () => ({
+      emergencyRelationship: errors.emergencyRelationship,
+      emergencyPhone: errors.emergencyPhone,
+      emergencyPhoneCountryCode: errors.emergencyPhoneCountryCode,
+    }),
+    [
+      errors.emergencyRelationship,
+      errors.emergencyPhone,
+      errors.emergencyPhoneCountryCode,
+    ]
+  );
+
+  // Errors for Terms Agreement
+  const termsErrors = useMemo(
+    () => ({
+      agreeTerms: errors.agreeTerms,
+    }),
+    [errors.agreeTerms]
+  );
+
   return (
     <form
       ref={(el) => {
@@ -281,17 +364,19 @@ const CustomerDetailsForm = ({
         register={register}
         setValue={setValue}
         control={control}
-        errors={errors}
+        errors={driverLicenseErrors}
         watch={watch}
+        clearErrors={clearErrors}
         firstErrorField={firstErrorField}
       />
 
       <DriverInformation
         register={register}
-        errors={errors}
+        errors={driverInfoErrors}
         watch={watch}
         setValue={setValue}
-        // clearErrors={clearErrors}
+        control={control}
+        clearErrors={clearErrors}
         firstErrorField={firstErrorField}
       />
       {/* Driver's Contact Information */}
@@ -299,7 +384,7 @@ const CustomerDetailsForm = ({
         getValues={getValues}
         register={register}
         control={control}
-        errors={errors}
+        errors={driversContactErrors}
         setValue={setValue}
         firstErrorField={firstErrorField}
       />
@@ -307,7 +392,7 @@ const CustomerDetailsForm = ({
       <EmergencyContactInfo
         getValues={getValues}
         register={register}
-        errors={errors}
+        errors={emergencyContactErrors}
         setValue={setValue}
         firstErrorField={firstErrorField}
       />
@@ -343,7 +428,7 @@ const CustomerDetailsForm = ({
             may potentially result in Causeway rejecting my booking.
           </label>
         </div>
-        {getFirstErrorField() === "agreeTerms" && errors.agreeTerms && (
+        {firstErrorField === "agreeTerms" && errors.agreeTerms && (
           <p className="text-red-500 text-sm mt-1 ml-7">
             {errors.agreeTerms.message}
           </p>

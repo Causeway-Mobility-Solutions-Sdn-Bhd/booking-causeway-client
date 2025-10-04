@@ -4,6 +4,7 @@ import { differenceInYears, format, isValid, parse } from "date-fns";
 import { ImageUpload } from "@/components/custom/UploadDocumentInput";
 import CustomDatePicker from "@/components/custom/CustomDatePicker";
 import ErrorMessage from "../../../../components/custom/ErrorMessage";
+import { useWatch } from "react-hook-form";
 
 const DriverInformation = ({
   register,
@@ -12,6 +13,7 @@ const DriverInformation = ({
   clearErrors,
   firstErrorField,
   watch,
+  control,
 }) => {
   // Check if fields have errors
   const hasFirstNameError = !!errors.firstName;
@@ -19,16 +21,16 @@ const DriverInformation = ({
   const hasPassportError = !!errors.passportNumber;
   const hasBirthDateError = !!errors.birthDate;
 
-  const idCardOrPass = watch("idCardOrPass") || [];
+  const idCardOrPass = useWatch({ name: "idCardOrPass", control }) || [];
 
   const handleBirthDateChange = (date) => {
     setValue("birthDate", date ? format(date, "dd/MM/yy") : "", {
-      shouldValidate: false,
+      shouldValidate: true,
     });
   };
 
+  const dateString = useWatch({ name: "birthDate", control });
   const parseLicenseDate = () => {
-    const dateString = watch("birthDate");
     if (!dateString) return null;
 
     try {
@@ -39,8 +41,6 @@ const DriverInformation = ({
       return null;
     }
   };
-
-  console.log("2rd Changed");
 
   return (
     <div className="space-y-6">
@@ -159,7 +159,7 @@ const DriverInformation = ({
               label={"ID Card/Passport image"}
               files={idCardOrPass}
               setFiles={(files) => {
-                setValue("idCardOrPass", files, { shouldValidate: false });
+                setValue("idCardOrPass", files, { shouldValidate: true });
                 if (files && files.length > 0) {
                   clearErrors("idCardOrPass");
                 }
