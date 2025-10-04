@@ -21,8 +21,8 @@ const DropdownInput = ({
   hasError = false,
   firstErrorField,
   disabled = false,
-  getValues,
   control,
+  customWidth = 1,
   onCustomChange, // Optional custom change handler for country logic
 }) => {
   const error = errors[name];
@@ -86,7 +86,10 @@ const DropdownInput = ({
     if (windowWidth < 450 && placeholderText.length >= 19) {
       return placeholderText.substring(0, 13) + "...";
     }
-    if (windowWidth < 500 && placeholderText.length >= 19) {
+    if (
+      (windowWidth < 500 || customWidth === 0) &&
+      placeholderText.length >= 19
+    ) {
       return placeholderText.substring(0, 16) + "...";
     }
 

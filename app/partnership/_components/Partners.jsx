@@ -7,10 +7,10 @@ const Partners = () => {
   ];
 
   return (
-    <div className="max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[30px]">
+    <div className="max-w-[1400px] flex flex-col mx-auto xsm:items-center w-[90%] sm:w-[95%] mt-[50px]">
       <h2 className="text-2xl font-bold text-black mb-5">Partners</h2>
 
-      <div className="grid grid-cols-2 gap-6 max-w-md">
+      <div className="grid grid-cols-2 gap-6 w-full max-w-md">
         {partners.map((partner) => (
           <div
             key={partner.id}

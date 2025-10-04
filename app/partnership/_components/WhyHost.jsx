@@ -5,43 +5,43 @@ const WhyHost = () => {
   const features = [
     {
       text: "Comprehensive Commercial Insurance",
-      image: "/whyCauseway/why-couseway-03.webp",
+      image: "/whyCauseway/whyhost/insurance.svg",
     },
     {
       text: "Hassle Free Service & Maintenance",
-      image: "/whyCauseway/maintenance.svg",
+      image: "/whyCauseway/whyhost/maintenance.svg",
     },
     {
       text: "24/7 Tracking Support",
-      image: "/whyCauseway/tracking.svg",
+      image: "/whyCauseway/whyhost/trackingsupport.svg",
     },
     {
       text: "Business Regulars",
-      image: "/whyCauseway/businessregulars.svg",
+      image: "/whyCauseway/whyhost/correct.svg",
     },
     {
       text: "Guaranteed Monthly Income",
-      image: "/whyCauseway/guaranteedmonthlyincome.svg",
+      image: "/whyCauseway/whyhost/guaranteed.svg",
     },
     {
       text: "Personalized Ownership",
-      image: "/whyCauseway/personalizedownership.svg",
+      image: "/whyCauseway/whyhost/ownership.svg",
     },
   ];
 
   return (
     <div className="max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[30px]">
       {/* Heading */}
-      <h2 className="text-2xl font-bold text-black mb-8">
+      <h2 className="text-2xl xsm:text-center font-bold text-black mb-8">
         Why host with Causeway
       </h2>
 
       {/* Features Grid */}
-      <div className="flex flex-wrap justify-center gap-8 md:gap-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 justify-items-center">
         {features.map((feature, index) => (
           <div
             key={index}
-            className="flex flex-col items-center text-center w-full xsm:w-[calc(50%-2rem)] md:w-[calc(33.333%-3rem)] lg:w-[calc(16.666%-3rem)] min-w-[150px]"
+            className="flex flex-col items-center text-center w-full max-w-[250px] sm:max-w-[350px]"
           >
             {/* Image */}
             <div className="mb-4 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
