@@ -6,22 +6,31 @@ import CustomDatePicker from "@/components/custom/CustomDatePicker";
 import ErrorMessage from "../../../../components/custom/ErrorMessage";
 import hqApi from "@/lib/hqApi";
 import { showErrorToast } from "@/app/_lib/toast";
+import { useWatch } from "react-hook-form";
 
 const DriverLicenseInfo = ({
   register,
   setValue,
   errors,
-  watch,
   clearErrors,
   firstErrorField,
+  control,
 }) => {
+  // Check if fields have errors
+  const hasDriverLicenseError = !!errors.driverLicense;
+  const hasLicenseExpiryError = !!errors.licenseExpiry;
+
+  const licenseFiles = useWatch({ name: "licenseFiles", control }) || [];
+
   const handleLicenseDateChange = (date) => {
     setValue("licenseExpiry", date ? format(date, "dd/MM/yy") : "", {
       shouldValidate: true,
     });
   };
+
+  const dateString = useWatch({ name: "licenseExpiry", control });
+
   const parseLicenseDate = () => {
-    const dateString = watch("licenseExpiry");
     if (!dateString) return null;
 
     try {
@@ -32,10 +41,6 @@ const DriverLicenseInfo = ({
       return null;
     }
   };
-  // Check if fields have errors
-  const hasDriverLicenseError = !!errors.driverLicense;
-  const hasLicenseExpiryError = !!errors.licenseExpiry;
-  const licenseFiles = watch("licenseFiles") || [];
 
   const handleDeleteFile = async (fileId) => {
     try {
@@ -82,7 +87,7 @@ const DriverLicenseInfo = ({
             error={hasLicenseExpiryError}
             errorMessage={
               firstErrorField === "licenseExpiry"
-                ? errors.licenseExpiry.message
+                ? errors.licenseExpiry?.message
                 : ""
             }
             disabledDateCondition={(date) => date < new Date()}
@@ -131,4 +136,28 @@ const DriverLicenseInfo = ({
   );
 };
 
-export default DriverLicenseInfo;
+// Custom comparison function for React.memo
+const arePropsEqual = (prevProps, nextProps) => {
+  // Only re-render if errors for THIS component's fields change
+  const relevantErrorFields = [
+    "driverLicense",
+    "licenseExpiry",
+    "licenseFiles",
+  ];
+
+  // Check if any relevant error changed
+  const errorsChanged = relevantErrorFields.some(
+    (field) => prevProps.errors[field] !== nextProps.errors[field]
+  );
+
+  // Check if firstErrorField changed and it's relevant to this component
+  const firstErrorChanged =
+    prevProps.firstErrorField !== nextProps.firstErrorField &&
+    (relevantErrorFields.includes(prevProps.firstErrorField) ||
+      relevantErrorFields.includes(nextProps.firstErrorField));
+
+  // Re-render if errors changed OR firstErrorField changed for this component
+  return !errorsChanged && !firstErrorChanged;
+};
+
+export default React.memo(DriverLicenseInfo, arePropsEqual);

@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Calendar, Plus, CalendarIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { differenceInYears, format, isValid, parse } from "date-fns";
 import { ImageUpload } from "@/components/custom/UploadDocumentInput";
 import CustomDatePicker from "@/components/custom/CustomDatePicker";
 import ErrorMessage from "../../../../components/custom/ErrorMessage";
+import { useWatch } from "react-hook-form";
 
 const DriverInformation = ({
   register,
@@ -14,6 +13,7 @@ const DriverInformation = ({
   clearErrors,
   firstErrorField,
   watch,
+  control,
 }) => {
   // Check if fields have errors
   const hasFirstNameError = !!errors.firstName;
@@ -21,15 +21,16 @@ const DriverInformation = ({
   const hasPassportError = !!errors.passportNumber;
   const hasBirthDateError = !!errors.birthDate;
 
-  const idCardOrPass = watch("idCardOrPass") || [];
+  const idCardOrPass = useWatch({ name: "idCardOrPass", control }) || [];
+
   const handleBirthDateChange = (date) => {
     setValue("birthDate", date ? format(date, "dd/MM/yy") : "", {
       shouldValidate: true,
     });
   };
 
+  const dateString = useWatch({ name: "birthDate", control });
   const parseLicenseDate = () => {
-    const dateString = watch("birthDate");
     if (!dateString) return null;
 
     try {
@@ -40,6 +41,7 @@ const DriverInformation = ({
       return null;
     }
   };
+
   return (
     <div className="space-y-6">
       <h2 className="text-lg font-bold mb-4 text-gray-800">
@@ -71,6 +73,8 @@ const DriverInformation = ({
               <ErrorMessage message={errors.firstName.message} />
             )}
           </div>
+
+          {/* Last Name Input */}
           <div>
             <Input
               {...register("lastName", {
@@ -115,7 +119,6 @@ const DriverInformation = ({
           </div>
 
           {/* Birthday Picker */}
-
           <CustomDatePicker
             value={parseLicenseDate()}
             onChange={handleBirthDateChange}
@@ -123,16 +126,14 @@ const DriverInformation = ({
             label="Birthday"
             error={hasBirthDateError}
             errorMessage={
-              firstErrorField === "birthDate" ? errors.birthDate.message : ""
+              firstErrorField === "birthDate" ? errors.birthDate?.message : ""
             }
           />
-          {/* </div> */}
 
           <input
             type="hidden"
             {...register("birthDate", {
               required: "Birthday is required",
-
               validate: (value) => {
                 if (!value) return "Birthday is required";
                 console.log("VALUE", value);
@@ -151,6 +152,8 @@ const DriverInformation = ({
               },
             })}
           />
+
+          {/* ID Card/Passport Image Upload */}
           <div className={`col-span-2 lg:col-span-1`}>
             <ImageUpload
               label={"ID Card/Passport image"}
@@ -182,4 +185,30 @@ const DriverInformation = ({
   );
 };
 
-export default DriverInformation;
+// Custom comparison function for React.memo
+const arePropsEqual = (prevProps, nextProps) => {
+  // Only re-render if errors for THIS component's fields change
+  const relevantErrorFields = [
+    "firstName",
+    "lastName",
+    "passportNumber",
+    "birthDate",
+    "idCardOrPass",
+  ];
+
+  // Check if any relevant error changed
+  const errorsChanged = relevantErrorFields.some(
+    (field) => prevProps.errors[field] !== nextProps.errors[field]
+  );
+
+  // Check if firstErrorField changed and it's relevant to this component
+  const firstErrorChanged =
+    prevProps.firstErrorField !== nextProps.firstErrorField &&
+    (relevantErrorFields.includes(prevProps.firstErrorField) ||
+      relevantErrorFields.includes(nextProps.firstErrorField));
+
+  // Re-render if errors changed OR firstErrorField changed for this component
+  return !errorsChanged && !firstErrorChanged;
+};
+
+export default React.memo(DriverInformation, arePropsEqual);

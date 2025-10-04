@@ -15,24 +15,17 @@ const PhoneInput = ({
   errors,
   name = "phone",
   setValue,
-  watch,
   firstErrorField,
+  getValues,
 }) => {
-  const [selectedCountryCode, setSelectedCountryCode] = useState("+60"); // Default Malaysia
-  const [selectedCountryIso, setSelectedCountryIso] = useState("MY"); // Default Malaysia ISO
+  const [selectedCountryCode, setSelectedCountryCode] = useState("+60");
+  const [selectedCountryIso, setSelectedCountryIso] = useState("MY");
 
-  // Use the dynamic country data hook
   const { countryCodes, loading: dataLoading, error } = useCountryData();
 
-  // Get current phone value from form
-  const phoneValue = watch(name);
-  const countryCodeValue = watch(`${name}CountryCode`);
-
-  // Check if fields have errors
   const hasPhoneError = !!errors[name];
   const hasCountryCodeError = !!errors[`${name}CountryCode`];
 
-  // Process country codes from the structure: { AD: {c: '+376', n: 'Andorra'}, ... }
   const countryPhoneCodes = countryCodes
     ? Object.entries(countryCodes).map(([iso2, data]) => ({
         code: data.c,
@@ -41,27 +34,23 @@ const PhoneInput = ({
       }))
     : [];
 
-  // Initialize country code in form on component mount
+  // Initialize country code once
   useEffect(() => {
-    if (!countryCodeValue && !dataLoading) {
-      setValue(`${name}CountryCode`, selectedCountryCode, {
-        shouldValidate: false,
-      });
+    if (!dataLoading && countryCodes) {
+      const currentCode = getValues(`${name}CountryCode`);
+      if (!currentCode) {
+        setValue(`${name}CountryCode`, selectedCountryCode, {
+          shouldValidate: false,
+        });
+      }
     }
-  }, [dataLoading, countryCodeValue, name, selectedCountryCode, setValue]);
+  }, [dataLoading, countryCodes]);
 
   const handleCountryCodeChange = (value) => {
-    // Extract the country code and ISO from the combined value
     const [code, iso] = value.split("|");
     setSelectedCountryCode(code);
     setSelectedCountryIso(iso);
-
-    setValue(`${name}CountryCode`, code, { shouldValidate: true });
-  };
-
-  const handlePhoneChange = (e) => {
-    const value = e.target.value.replace(/[^\d]/g, "");
-    setValue(name, value, { shouldValidate: true });
+    setValue(`${name}CountryCode`, code, { shouldValidate: false });
   };
 
   return (
@@ -73,7 +62,6 @@ const PhoneInput = ({
             : "border-gray-200"
         }`}
       >
-        {/* Country Code Dropdown */}
         <Select
           value={`${selectedCountryCode}|${selectedCountryIso}`}
           onValueChange={handleCountryCodeChange}
@@ -110,7 +98,6 @@ const PhoneInput = ({
           </SelectContent>
         </Select>
 
-        {/* Mobile Number Input */}
         <input
           {...register(name, {
             required: "Phone number is required",
@@ -118,10 +105,11 @@ const PhoneInput = ({
               value: /^[\d]{7,15}$/,
               message: "Please enter a valid phone number",
             },
+            onChange: (e) => {
+              e.target.value = e.target.value.replace(/[^\d]/g, "");
+            },
           })}
           type="tel"
-          value={phoneValue || ""}
-          onChange={handlePhoneChange}
           placeholder="Mobile Number"
           className={`flex-1 h-10 border-0 px-3 placeholder-gray-500 placeholder:font-light placeholder:text-sm focus:outline-none focus:ring-0 bg-transparent ${
             dataLoading ? "opacity-50" : ""

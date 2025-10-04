@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useCallback } from "react";
+import { useFormState } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import DropdownInput from "@/components/custom/DropdownInput";
 import PhoneInput from "@/components/custom/PhoneInput";
@@ -7,10 +8,11 @@ import ErrorMessage from "../../../../components/custom/ErrorMessage";
 
 const DriversContactInfo = ({
   register,
-  errors,
   setValue,
-  watch,
+  control,
+  getValues,
   firstErrorField,
+  errors,
 }) => {
   // Use the dynamic country data hook
   const {
@@ -28,69 +30,84 @@ const DriversContactInfo = ({
   const hasStateError = !!errors.state;
   const hasCountryError = !!errors.country;
 
-  // Watch selected country to update states
-  const selectedCountry = watch("country");
-  const selectedState = watch("state");
+  // Force re-render state for dropdowns
+  const [, forceUpdate] = React.useState({});
 
-  // Format countries for dropdown (convert to {value, label} format) - only when data is loaded
-  const formattedCountries = countryCodes
-    ? Object.entries(countryCodes).map(([isoCode, data]) => ({
-        value: isoCode,
-        label: data.n,
-        flag: isoCode.toLowerCase(),
-      }))
-    : [];
+  // Memoize formatted countries
+  const formattedCountries = useMemo(() => {
+    if (!countryCodes) return [];
+    return Object.entries(countryCodes).map(([isoCode, data]) => ({
+      value: isoCode,
+      label: data.n,
+      flag: isoCode.toLowerCase(),
+    }));
+  }, [countryCodes]);
 
-  // Replace getStatesForCountry function:
-  const getStatesForCountry = (countryCode) => {
-    if (!countryCode || !countryStates) return [];
+  // Memoize getStatesForCountry function
+  const getStatesForCountry = useCallback(
+    (countryCode) => {
+      if (!countryCode || !countryStates) return [];
 
-    const states = countryStates[countryCode] || [];
+      const states = countryStates[countryCode] || [];
 
-    if (Array.isArray(states) && states.length > 0) {
-      if (
-        typeof states[0] === "string" &&
-        states[0].toLowerCase().includes("no states")
-      ) {
-        return [
-          {
-            value: "No states",
-            label: "No States",
-          },
-        ];
-      }
-
-      if (
-        typeof states[0] === "object" &&
-        states[0] !== null &&
-        "name" in states[0]
-      ) {
-        return states.map((state) => ({
-          value: state.name,
-          label: state.name,
-        }));
-      }
-    }
-
-    return [];
-  };
-
-  // Set default state when country changes
-  useEffect(() => {
-    if (selectedCountry && countryStates) {
-      const states = getStatesForCountry(selectedCountry);
-      if (states.length > 0) {
-        // If current state is not valid for new country, reset to first state
-        const currentStateValid = states.some((s) => s.value === selectedState);
-        if (!currentStateValid) {
-          setValue("state", states[0].value, { shouldValidate: true });
+      if (Array.isArray(states) && states.length > 0) {
+        if (
+          typeof states[0] === "string" &&
+          states[0].toLowerCase().includes("no states")
+        ) {
+          return [
+            {
+              value: "No states",
+              label: "No States",
+            },
+          ];
         }
-      } else {
-        // If no states for this country, clear the state field
-        setValue("state", "", { shouldValidate: true });
+
+        if (
+          typeof states[0] === "object" &&
+          states[0] !== null &&
+          "name" in states[0]
+        ) {
+          return states.map((state) => ({
+            value: state.name,
+            label: state.name,
+          }));
+        }
       }
-    }
-  }, [selectedCountry, selectedState, setValue, countryStates]);
+
+      return [];
+    },
+    [countryStates]
+  );
+
+  // Memoize current country states
+  const currentCountryStates = useMemo(() => {
+    return getStatesForCountry(getValues("country"));
+  }, [getValues("country"), getStatesForCountry]);
+
+  // Memoize handler for country change
+  const handleCountryChange = useCallback(
+    (value) => {
+      // Get states for the newly selected country FIRST
+      const states = getStatesForCountry(value);
+
+      // Set state value BEFORE setting country to prevent Shadcn from clearing it
+      if (states.length > 0) {
+        // Always set to first state when country changes
+        setValue("state", states[0].value, { shouldValidate: false });
+      } else {
+        // Clear state if no states available for this country
+        setValue("state", "", { shouldValidate: false });
+      }
+
+      // Now set the country value
+      setValue("country", value, { shouldValidate: false });
+
+      // Force re-render to update the UI
+      forceUpdate({});
+    },
+    [getStatesForCountry, setValue]
+  );
 
   return (
     <div className="space-y-6">
@@ -105,7 +122,8 @@ const DriversContactInfo = ({
             register={register}
             errors={errors}
             setValue={setValue}
-            watch={watch}
+            control={control}
+            getValues={getValues}
             name="phone"
             firstErrorField={firstErrorField}
           />
@@ -194,20 +212,21 @@ const DriversContactInfo = ({
             )}
           </div>
 
+          {/* State Dropdown */}
           <DropdownInput
-            data={getStatesForCountry(selectedCountry)}
+            data={currentCountryStates}
             label="State"
             name="state"
             register={register}
             errors={errors}
             setValue={setValue}
-            watch={watch}
+            getValues={getValues}
             hasError={hasStateError}
             disabled={
               dataLoading ||
               !!error ||
-              !selectedCountry ||
-              getStatesForCountry(selectedCountry).length === 0
+              !getValues("country") ||
+              currentCountryStates.length === 0
             }
             firstErrorField={firstErrorField}
           />
@@ -220,10 +239,11 @@ const DriversContactInfo = ({
             register={register}
             errors={errors}
             setValue={setValue}
-            watch={watch}
+            getValues={getValues}
             hasError={hasCountryError}
             disabled={dataLoading || !!error}
             firstErrorField={firstErrorField}
+            onCustomChange={handleCountryChange}
           />
         </div>
       </div>
@@ -231,4 +251,33 @@ const DriversContactInfo = ({
   );
 };
 
-export default DriversContactInfo;
+// Custom comparison function for React.memo
+const arePropsEqual = (prevProps, nextProps) => {
+  // Only re-render if errors for THIS component's fields change
+  const relevantErrorFields = [
+    "phone",
+    "phoneCountryCode",
+    "email",
+    "address",
+    "zipCode",
+    "city",
+    "state",
+    "country",
+  ];
+
+  // Check if any relevant error changed
+  const errorsChanged = relevantErrorFields.some(
+    (field) => prevProps.errors[field] !== nextProps.errors[field]
+  );
+
+  // Check if firstErrorField changed and it's relevant to this component
+  const firstErrorChanged =
+    prevProps.firstErrorField !== nextProps.firstErrorField &&
+    (relevantErrorFields.includes(prevProps.firstErrorField) ||
+      relevantErrorFields.includes(nextProps.firstErrorField));
+
+  // Re-render if errors changed OR firstErrorField changed for this component
+  return !errorsChanged && !firstErrorChanged;
+};
+
+export default React.memo(DriversContactInfo, arePropsEqual);

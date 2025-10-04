@@ -15,14 +15,15 @@ const EmergencyContactInfo = ({
   register,
   errors,
   setValue,
-  watch,
+
+  getValues,
   firstErrorField,
 }) => {
   // Check if fields have errors
   // const hasEmergencyNameError = !!errors.emergencyName;
   const hasEmergencyRelationshipError = !!errors.emergencyRelationship;
   // const hasEmergencyEmailError = !!errors.emergencyEmail;
-
+  // console.log("4th Changed");
   return (
     <div className="space-y-6">
       <h2 className="text-lg font-bold mb-4 text-gray-800">
@@ -57,13 +58,13 @@ const EmergencyContactInfo = ({
 
           {/* Relationship Dropdown */}
           <DropdownInput
+            getValues={getValues}
             data={relationships}
             label="Relationship"
             name="emergencyRelationship"
             register={register}
             errors={errors}
             setValue={setValue}
-            watch={watch}
             hasError={hasEmergencyRelationshipError}
             firstErrorField={firstErrorField}
           />
@@ -73,7 +74,7 @@ const EmergencyContactInfo = ({
             register={register}
             errors={errors}
             setValue={setValue}
-            watch={watch}
+            getValues={getValues}
             name="emergencyPhone"
             firstErrorField={firstErrorField}
           />
@@ -104,4 +105,23 @@ const EmergencyContactInfo = ({
   );
 };
 
-export default EmergencyContactInfo;
+const arePropsEqual = (prevProps, nextProps) => {
+  // Only re-render if errors for THIS component's fields change
+  const relevantErrorFields = ["emergencyRelationship", "emergencyPhone"];
+
+  // Check if any relevant error changed
+  const errorsChanged = relevantErrorFields.some(
+    (field) => prevProps.errors[field] !== nextProps.errors[field]
+  );
+
+  // Check if firstErrorField changed and it's relevant to this component
+  const firstErrorChanged =
+    prevProps.firstErrorField !== nextProps.firstErrorField &&
+    (relevantErrorFields.includes(prevProps.firstErrorField) ||
+      relevantErrorFields.includes(nextProps.firstErrorField));
+
+  // Re-render if errors changed OR firstErrorField changed for this component
+  return !errorsChanged && !firstErrorChanged;
+};
+
+export default React.memo(EmergencyContactInfo, arePropsEqual);
