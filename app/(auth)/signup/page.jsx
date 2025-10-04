@@ -1,4 +1,4 @@
-import SignupC from "@/app/_components/SignupC";
+import SignupC from "./_components/SignupC";
 
 export default function SignUp() {
   return (

@@ -11,7 +11,6 @@ import Link from "next/link";
 
 function Nav({ isMain = true, value = "" }) {
   const dispatch = useAppDispatch();
-  console.log("Environment:", process.env.NODE_ENV);
   const router = useRouter();
 
   const handleOpenSidebar = () => {

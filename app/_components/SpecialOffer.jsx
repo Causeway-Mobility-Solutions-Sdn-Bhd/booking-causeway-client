@@ -13,10 +13,6 @@ const slides = [
   { id: 2, img: "/special-offers/special-banner-02.png" },
   { id: 3, img: "/special-offers/special-banner-03.png" },
   { id: 4, img: "/special-offers/special-banner-04.png" },
-  { id: 5, img: "/special-offers/special-banner-01.png" },
-  { id: 6, img: "/special-offers/special-banner-02.png" },
-  { id: 7, img: "/special-offers/special-banner-03.png" },
-  { id: 8, img: "/special-offers/special-banner-04.png" },
 ];
 
 function SpecialOffer() {
@@ -43,7 +39,7 @@ function SpecialOffer() {
   };
 
   return (
-    <div className="max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[20px] lg:mt-[50px]">
+    <div className="max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[13px] lg:mt-[50px]">
       <Carousel
         setApi={setApi}
         opts={{

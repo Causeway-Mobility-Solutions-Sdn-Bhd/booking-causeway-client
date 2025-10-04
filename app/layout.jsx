@@ -3,6 +3,7 @@ import "./globals.css";
 import BlackBg from "@/components/custom/BlackBg";
 import { Toaster } from "sonner";
 import Providers from "./provider";
+import RefreshTokenLoader from "./_components/RefreshTokenLoader";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -25,17 +26,8 @@ export default function RootLayout({ children }) {
         <link rel="preload" as="image" href="/banner/banner.webp" />
       </head>
       <body className={`${poppins.variable} antialiased`}>
-        {/* {
-          process.env.Development === 'Development'?
-          <>
-            <UnderDevelpment />
-          </>
-          :
-          (
-          
-          )
-        } */}
         <Providers>
+          {/* <RefreshTokenLoader /> */}
           {children}
           <BlackBg />
           <Toaster

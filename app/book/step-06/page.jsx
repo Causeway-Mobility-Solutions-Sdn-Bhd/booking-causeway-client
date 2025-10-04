@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 function Page() {
   const reservation = useAppSelector((state) => state.reservation.reservation);
-  const finalPaymentLink = useAppSelector((state) => state.reservation.finalPaymentLink);
+  const finalPayment = useAppSelector((state) => state.reservation.finalPayment);
   const router = useRouter()
 
 
@@ -17,11 +17,11 @@ function Page() {
     if (!reservation?.customer_id) {
       router.push(`/`);
     }else{
-      if(finalPaymentLink === ""){
+      if(finalPayment?.link === ""){
         router.push(`/`);
       }
     }
-  }, [reservation , finalPaymentLink]);
+  }, [reservation , finalPayment]);
 
 
   return (
@@ -37,14 +37,12 @@ function Page() {
         <div className="mt-[10px] flex justify-start items-start gap-5 flex-col lg:flex-row">
           <div className="flex-1 w-full">
             {
-              finalPaymentLink && (<PaymentIframe />)
+              finalPayment && (<PaymentIframe />)
             }
           </div>
           <SideBar step={7} />
         </div>
       </div>
-
-      {/* <PriceBottomBar step={7} fetchLoader={loader} /> */}
     </div>
   );
 }

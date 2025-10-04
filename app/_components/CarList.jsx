@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -7,57 +7,32 @@ import {
 } from "@/components/ui/carousel";
 import TitleHead from "@/components/custom/TitleHead";
 import Autoplay from "embla-carousel-autoplay";
-import hqApi from "@/lib/hqApi";
 import { CarCardSkeleton } from "@/components/custom/Skeleton";
 import Car from "@/components/custom/Car";
 import CarType from "./CarType";
+import {
+  useGetVehicleTypesQuery,
+  useGetVehiclesByCategoryQuery,
+} from "@/store/api/fleetApiSlice";
 
 function CarList() {
   const [activeType, setActiveType] = useState(2);
-  const [vehicleClasses, setVehicleClasses] = useState([]);
-  const [vehicleType, setVehicleType] = useState([]);
 
-  const plugin = useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: false, stopOnMouseEnter: true })
-  );
+  const { data: vehicleType = [], isLoading: loadingTypes } =
+    useGetVehicleTypesQuery();
 
-  const filterVehicle = async (categoryId) => {
+  const {
+    data: vehicleClasses = [],
+    isLoading: loadingVehicles,
+    isFetching,
+  } = useGetVehiclesByCategoryQuery(activeType);
+
+  const filterVehicle = (categoryId) => {
     setActiveType(categoryId);
-    try {
-      setVehicleClasses([]);
-      const resVehicles = await hqApi.get(`/fleets/vehicles/${categoryId}`);
-      setVehicleClasses(resVehicles?.data);
-    } catch (err) {
-      console.log("err : ", err);
-    } finally {
-      console.log("vehicle classes fetched");
-    }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [resVehicles, resVehcileType] = await Promise.all([
-          hqApi.get(`/fleets/vehicles/${activeType}`),
-          hqApi.get("/fleets/vehicle-types"),
-        ]);
-        setVehicleClasses(resVehicles?.data);
-        setVehicleType(resVehcileType?.data);
-      } catch (error) {
-        console.log(
-          "HQ API error:",
-          error
-        );
-      } finally {
-        console.log("vehicle classes fetched");
-      }
-    };
-    fetchData();
-  }, []);
 
   return (
     <div className="w-[90%] sm:w-[95%] max-w-[1400px] mx-auto mt-[30px]">
-      {/* Header */}
       <TitleHead name={"Pick Your Ride"} />
 
       <CarType
@@ -66,17 +41,19 @@ function CarList() {
         filterVehicle={filterVehicle}
       />
 
-      {/* Car Carousel */}
       <Carousel
-        plugins={[plugin.current]}
+        plugins={[
+          Autoplay({
+            delay: 2000,
+            stopOnInteraction: false,
+            stopOnMouseEnter: true,
+          }),
+        ]}
         className="w-full py-1 sm:py-3"
-        opts={{
-          align: "start",
-          loop: true,
-        }}
+        opts={{ align: "start", loop: true }}
       >
         <CarouselContent className="-ml-2 md:-ml-4">
-          {vehicleClasses?.length === 0
+          {loadingVehicles || isFetching || vehicleClasses?.length === 0
             ? Array(7)
                 .fill()
                 .map((_, index) => (

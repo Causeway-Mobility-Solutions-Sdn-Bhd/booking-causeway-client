@@ -1,27 +1,24 @@
 "use client";
 import React, { useState } from "react";
-import { Eye, EyeOff, X } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import hqApi from "@/lib/hqApi";
 import { showErrorToast, showSuccessToast } from "../_lib/toast";
 import Spinner from "@/components/custom/Spinner";
 import { useRouter } from "next/navigation";
-import { setLogedUserUser } from "@/store/slices/authSlie";
-import { useDispatch } from "react-redux";
+import { useLoginMutation } from "@/store/api/authApiSlice";
 
 function LoginC({ type }) {
   const [showPassword, setShowPassword] = useState(false);
-  const [loader, setLoader] = useState(false);
   const router = useRouter();
-  const dispatch = useDispatch()
+  const [login, { isLoading }] = useLoginMutation();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    mode: "onSubmit", 
+    mode: "onSubmit",
   });
 
   const togglePasswordVisibility = () => {
@@ -29,22 +26,20 @@ function LoginC({ type }) {
   };
 
   const onSubmit = async (data) => {
-    setLoader(true);
     try {
-      const regData = {
-        email: data?.email,
-        password: data?.password,
-      };
-      const res = await hqApi.post("auth/login", regData);
-      if (res?.status === 200) {
-        dispatch(setLogedUserUser(res?.data?.user))
-        showSuccessToast("Loged successfully");
-        router.push("/");
-      }
-      setLoader(false);
+      console.log({
+        email: data.email,
+        password: data.password,
+      })
+      const res = await login({
+        email: data.email,
+        password: data.password,
+      }).unwrap();
+      showSuccessToast("Logged in successfully!");
+      router.push("/");
     } catch (err) {
-      setLoader(false);
-      showErrorToast(err?.response?.data?.message);
+      console.error("Login error:", err);
+      showErrorToast(err?.data?.message || "Login failed");
     }
   };
 
@@ -57,14 +52,12 @@ function LoginC({ type }) {
       className={`bg-white rounded-lg shadow-lg w-full max-w-sm p-5 md:p-6 relative`}
     >
       {type === "primary" && (
-        <>
-          {/* Title */}
+        <div>
           <h2 className="text-2xl font-bold mb-6">Sign in</h2>
-        </>
+        </div>
       )}
 
       <div>
-        {/* Email Input */}
         <div className="mb-3">
           <input
             type="email"
@@ -89,7 +82,7 @@ function LoginC({ type }) {
           )}
         </div>
 
-        {/* Password Input */}
+
         <div className="mb-3 relative">
           <div className="relative">
             <input
@@ -125,19 +118,18 @@ function LoginC({ type }) {
           )}
         </div>
 
-        {/* Forgot Password Link */}
         <div className="mb-3">
           <a href="#" className="text-cSecondary text-sm font-medium">
             Forgot password
           </a>
         </div>
 
-        {/* Sign In Button */}
         <button
           onClick={handleSubmit(onSubmit)}
+          disabled={isLoading}
           className="w-full bg-cPrimary text-white font-semibold flex justify-center items-center py-3 px-4 rounded-lg cursor-pointer mb-4 hover:bg-cPrimary/90 transition-colors"
         >
-          {loader ? (
+          {isLoading ? (
             <Spinner size={20} color="#fff" thickness={3} />
           ) : (
             <span>Sign In</span>
@@ -145,7 +137,6 @@ function LoginC({ type }) {
         </button>
       </div>
 
-      {/* Sign Up Link */}
       {type === "primary" && (
         <div className="text-center">
           <span className="text-[16px]">

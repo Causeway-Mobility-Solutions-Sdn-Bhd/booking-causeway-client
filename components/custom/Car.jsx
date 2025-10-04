@@ -30,7 +30,6 @@ function Car({ car }) {
         : [...prev, carId]
     );
   };
-  console.log(format(addDays(new Date(), 2), "yyyy-MM-dd"));
 
   const fetchData = async (car) => {
     setLoader(true);
@@ -82,7 +81,6 @@ function Car({ car }) {
               )
             );
             setLoader(false);
-            console.log("routed");
             router.push(`/book/step-03?ssid=${sessionIDNew}`);
           } else {
             setLoader(false);

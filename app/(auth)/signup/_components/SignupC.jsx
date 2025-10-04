@@ -3,16 +3,18 @@ import React, { useState } from "react";
 import { Eye, EyeOff, RefreshCw, X } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import hqApi from "@/lib/hqApi";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/custom/Spinner";
-import { showErrorToast, showSuccessToast } from "../_lib/toast";
+import { showErrorToast, showSuccessToast } from "../../../_lib/toast";
+import { useRegisterMutation } from "@/store/api/authApiSlice";
 
 function SignupC() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loader, setLoader] = useState(false);
+
   const route = useRouter();
+
+  const [registerUser, { isLoading }] = useRegisterMutation();
 
   const {
     register,
@@ -20,7 +22,7 @@ function SignupC() {
     watch,
     formState: { errors },
   } = useForm({
-    mode: "onSubmit", // Validate only on submit
+    mode: "onSubmit",
   });
 
   const togglePasswordVisibility = () => {
@@ -32,26 +34,21 @@ function SignupC() {
   };
 
   const onSubmit = async (data) => {
-    setLoader(true);
     try {
-      const regData = {
-        firstName: data?.firstName,
-        lastName: data?.lastName,
-        email: data?.email,
-        password: data?.password,
-      };
-      const res = await hqApi.post("auth/register", regData);
-      if (res?.status === 200) {
-        showSuccessToast(
-          "Account Created Successfully! Please Enter OTP to verify your email."
-        );
-        route.push(`otp-verify/${res?.data?.user?.clientToken}`);
-      }
-      console.log(res);
-      setLoader(false);
+      const res = await registerUser({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.password,
+      }).unwrap();
+
+      showSuccessToast(
+        "Account Created Successfully! Please Enter OTP to verify your email."
+      );
+      route.push(`otp-verify/${res.user.clientToken}`);
     } catch (err) {
-      setLoader(false);
-      showErrorToast(err?.response?.data?.message);
+      console.error(err);
+      showErrorToast(err?.data?.message || "Registration failed");
     }
   };
 
@@ -80,11 +77,9 @@ function SignupC() {
 
   return (
     <div className="bg-white rounded-lg shadow-lg w-full max-w-sm p-5 md:p-6 relative">
-      {/* Title */}
       <h2 className="text-2xl font-bold mb-6">Sign up</h2>
 
       <div>
-        {/* First Name and Last Name - Side by Side */}
         <div className="flex gap-3 mb-3">
           <div className="flex-1">
             <input
@@ -135,7 +130,6 @@ function SignupC() {
           </div>
         </div>
 
-        {/* Email Input */}
         <div className="mb-3">
           <input
             type="email"
@@ -158,7 +152,6 @@ function SignupC() {
           )}
         </div>
 
-        {/* Password Input */}
         <div className="mb-2 relative">
           <div className="relative">
             <input
@@ -193,7 +186,6 @@ function SignupC() {
           )}
         </div>
 
-        {/* Confirm Password Input */}
         <div className="mb-3 relative">
           <div className="relative">
             <input
@@ -225,13 +217,12 @@ function SignupC() {
           )}
         </div>
 
-        {/* Sign Up Button */}
         <button
-          disabled={loader}
+          disabled={isLoading}
           onClick={handleSubmit(onSubmit)}
           className="w-full bg-cPrimary text-white font-semibold h-12 px-4 rounded-lg cursor-pointer mb-4 hover:bg-cPrimary/90 transition-colors flex justify-center items-center"
         >
-          {loader ? (
+          {isLoading ? (
             <Spinner size={20} color="#fff" thickness={3} />
           ) : (
             <span>Sign up</span>
@@ -239,7 +230,6 @@ function SignupC() {
         </button>
       </div>
 
-      {/* Sign In Link */}
       <div className="text-center">
         <span className="text-[16px]">
           Already have an account?{" "}

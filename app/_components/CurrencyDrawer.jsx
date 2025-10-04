@@ -12,9 +12,10 @@ import { setAllCurrencies, setCurrency } from "@/store/slices/reservationSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { IoIosSearch } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
-import hqApi from "@/lib/hqApi";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { useGetCurrenciesQuery } from "@/store/api/fleetApiSlice";
+import Spinner from "@/components/custom/Spinner";
 
 const currencies = ["myr", "sgd", "usd", "eur", "cny"];
 
@@ -24,10 +25,15 @@ function CurrencyDrawer() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const currency = useAppSelector((state) => state.reservation.currency);
-  const allCurrencies = useAppSelector(
-    (state) => state.reservation.allCurrencies
-  );
   const dispatch = useAppDispatch();
+
+  const { data: allCurrencies = [], isLoading } = useGetCurrenciesQuery();
+
+  useEffect(() => {
+    if (allCurrencies?.length > 0) {
+      setFilterCurrencies(allCurrencies);
+    }
+  }, [allCurrencies]);
 
   const handleCurrencyChange = (newCurrency) => {
     if (newCurrency !== currency) {
@@ -35,20 +41,6 @@ function CurrencyDrawer() {
     }
     setIsDrawerOpen(false);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const currencyRes = await hqApi.get("/fleets/currencies");
-        dispatch(setAllCurrencies(currencyRes?.data?.data));
-        setFilterCurrencies(currencyRes?.data?.data);
-      } catch (error) {
-        console.log("API error:", error);
-      }
-    };
-
-    fetchData();
-  }, [isDrawerOpen]);
 
   const handleClearInput = () => {
     setSearchTerm("");
@@ -103,85 +95,95 @@ function CurrencyDrawer() {
             </div>
           </div>
 
-          <div className="flex-1 h-[480px] overflow-y-auto">
-            {filterCurrencies?.filter((crf) => currencies.includes(crf?.code))?.length > 0 && (
-              <div className="bg-[#F0F0F0] px-[10px] py-[8px] font-semibold">
-                Recommended
+          <div className="flex-1 h-[430px] overflow-y-auto">
+            {isLoading ? (
+              <div className="w-full h-[200px] flex justify-center items-center">
+                <Spinner size={30} color={"#2dbdb6"} thickness={4} />
+              </div>
+            ) : (
+              <div>
+                {filterCurrencies?.filter((crf) =>
+                  currencies.includes(crf?.code)
+                )?.length > 0 && (
+                  <div className="bg-[#F0F0F0] px-[10px] py-[8px] font-semibold">
+                    Recommended
+                  </div>
+                )}
+                <div>
+                  <RadioGroup
+                    className="px-[10px]"
+                    value={currency}
+                    onValueChange={(val) => handleCurrencyChange(val)}
+                  >
+                    {filterCurrencies
+                      ?.filter((crf) => currencies.includes(crf?.code))
+                      .map((cur, index) => (
+                        <div key={index}>
+                          <div
+                            key={cur?.code}
+                            className="py-[4px] w-full border-b flex items-center justify-between  cursor-pointer"
+                          >
+                            <div className="flex justify-start items-center space-x-2">
+                              <RadioGroupItem
+                                value={cur?.code.toString()}
+                                id={`location-${cur?.code}`}
+                              />
+                              <Label
+                                className="w-full cursor-pointer py-[10px]"
+                                htmlFor={`location-${cur?.code}`}
+                              >
+                                {cur?.label}
+                              </Label>
+                            </div>
+                            <p className="text-cGray text-[12px]">
+                              {cur?.code?.toUpperCase()}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                  </RadioGroup>
+                </div>
+                {filterCurrencies?.length > 0 && (
+                  <div className="bg-[#F0F0F0] px-[10px] py-[8px] font-semibold">
+                    Other
+                  </div>
+                )}
+                <div>
+                  <RadioGroup
+                    className="px-[10px]"
+                    value={currency}
+                    onValueChange={(val) => handleCurrencyChange(val)}
+                  >
+                    {filterCurrencies
+                      ?.filter((crf) => !currencies.includes(crf?.code))
+                      .map((cur, index) => (
+                        <div key={index}>
+                          <div
+                            key={cur?.code}
+                            className="py-[4px] w-full border-b flex items-center justify-between  cursor-pointer"
+                          >
+                            <div className="flex justify-start items-center space-x-2">
+                              <RadioGroupItem
+                                value={cur?.code.toString()}
+                                id={`location-${cur?.code}`}
+                              />
+                              <Label
+                                className="w-full cursor-pointer py-[10px]"
+                                htmlFor={`location-${cur?.code}`}
+                              >
+                                {cur?.label}
+                              </Label>
+                            </div>
+                            <p className="text-cGray text-[12px]">
+                              {cur?.code?.toUpperCase()}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                  </RadioGroup>
+                </div>
               </div>
             )}
-            <div>
-              <RadioGroup
-                className="px-[10px]"
-                value={currency}
-                onValueChange={(val) => handleCurrencyChange(val)}
-              >
-                {filterCurrencies
-                  ?.filter((crf) => currencies.includes(crf?.code))
-                  .map((cur, index) => (
-                    <div key={index}>
-                      <div
-                        key={cur?.code}
-                        className="py-[4px] w-full border-b flex items-center justify-between  cursor-pointer"
-                      >
-                        <div className="flex justify-start items-center space-x-2">
-                          <RadioGroupItem
-                            value={cur?.code.toString()}
-                            id={`location-${cur?.code}`}
-                          />
-                          <Label
-                            className="w-full cursor-pointer py-[10px]"
-                            htmlFor={`location-${cur?.code}`}
-                          >
-                            {cur?.label}
-                          </Label>
-                        </div>
-                        <p className="text-cGray text-[12px]">
-                          {cur?.code?.toUpperCase()}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-              </RadioGroup>
-            </div>
-            {filterCurrencies?.length > 0 && (
-              <div className="bg-[#F0F0F0] px-[10px] py-[8px] font-semibold">
-                Other
-              </div>
-            )}
-            <div>
-              <RadioGroup
-                className="px-[10px]"
-                value={currency}
-                onValueChange={(val) => handleCurrencyChange(val)}
-              >
-                {filterCurrencies
-                  ?.filter((crf) => !currencies.includes(crf?.code))
-                  .map((cur, index) => (
-                    <div key={index}>
-                      <div
-                        key={cur?.code}
-                        className="py-[4px] w-full border-b flex items-center justify-between  cursor-pointer"
-                      >
-                        <div className="flex justify-start items-center space-x-2">
-                          <RadioGroupItem
-                            value={cur?.code.toString()}
-                            id={`location-${cur?.code}`}
-                          />
-                          <Label
-                            className="w-full cursor-pointer py-[10px]"
-                            htmlFor={`location-${cur?.code}`}
-                          >
-                            {cur?.label}
-                          </Label>
-                        </div>
-                        <p className="text-cGray text-[12px]">
-                          {cur?.code?.toUpperCase()}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-              </RadioGroup>
-            </div>
           </div>
         </div>
       </DrawerContent>
