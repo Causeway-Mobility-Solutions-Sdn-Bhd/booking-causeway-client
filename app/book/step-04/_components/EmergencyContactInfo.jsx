@@ -15,7 +15,7 @@ const EmergencyContactInfo = ({
   register,
   errors,
   setValue,
-
+  control,
   getValues,
   firstErrorField,
 }) => {
@@ -24,6 +24,8 @@ const EmergencyContactInfo = ({
   const hasEmergencyRelationshipError = !!errors.emergencyRelationship;
   // const hasEmergencyEmailError = !!errors.emergencyEmail;
   // console.log("4th Changed");
+  console.log(getValues("emergencyRelationship"));
+
   return (
     <div className="space-y-6">
       <h2 className="text-lg font-bold mb-4 text-gray-800">
@@ -58,15 +60,16 @@ const EmergencyContactInfo = ({
 
           {/* Relationship Dropdown */}
           <DropdownInput
-            getValues={getValues}
             data={relationships}
+            getValues={getValues}
+            setValue={setValue}
             label="Relationship"
             name="emergencyRelationship"
             register={register}
             errors={errors}
-            setValue={setValue}
             hasError={hasEmergencyRelationshipError}
             firstErrorField={firstErrorField}
+            control={control}
           />
 
           {/* Mobile Number */}

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/select";
 import Image from "next/image";
 import ErrorMessage from "@/components/custom/ErrorMessage";
+import { useWatch } from "react-hook-form";
 
 const DropdownInput = ({
   data,
@@ -21,10 +22,15 @@ const DropdownInput = ({
   firstErrorField,
   disabled = false,
   getValues,
+  control,
   onCustomChange, // Optional custom change handler for country logic
 }) => {
   const error = errors[name];
-
+  const watchedValue = useWatch({
+    control,
+    name,
+    defaultValue: "",
+  });
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
@@ -43,6 +49,7 @@ const DropdownInput = ({
     if (!value || value === "") {
       return;
     }
+
     if (onCustomChange) {
       onCustomChange(value);
     } else {
@@ -86,7 +93,7 @@ const DropdownInput = ({
     return placeholderText;
   };
 
-  const currentValue = getValues(name) || "";
+  const currentValue = watchedValue || "";
 
   return (
     <div>

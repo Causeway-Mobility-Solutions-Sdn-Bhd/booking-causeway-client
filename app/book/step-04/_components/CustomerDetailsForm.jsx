@@ -337,14 +337,6 @@ const CustomerDetailsForm = ({
     ]
   );
 
-  // Errors for Terms Agreement
-  const termsErrors = useMemo(
-    () => ({
-      agreeTerms: errors.agreeTerms,
-    }),
-    [errors.agreeTerms]
-  );
-
   return (
     <form
       ref={(el) => {
@@ -394,6 +386,7 @@ const CustomerDetailsForm = ({
         register={register}
         errors={emergencyContactErrors}
         setValue={setValue}
+        control={control}
         firstErrorField={firstErrorField}
       />
 

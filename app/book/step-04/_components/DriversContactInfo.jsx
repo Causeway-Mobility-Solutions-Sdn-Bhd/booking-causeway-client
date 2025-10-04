@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useCallback } from "react";
-import { useFormState } from "react-hook-form";
+import { useFormState, useWatch } from "react-hook-form"; // Add useWatch
 import { Input } from "@/components/ui/input";
 import DropdownInput from "@/components/custom/DropdownInput";
 import PhoneInput from "@/components/custom/PhoneInput";
@@ -21,6 +21,13 @@ const DriversContactInfo = ({
     loading: dataLoading,
     error,
   } = useCountryData();
+
+  // Watch the country field for changes
+  const watchedCountry = useWatch({
+    control,
+    name: "country",
+    defaultValue: "",
+  });
 
   // Check if fields have errors
   const hasEmailError = !!errors.email;
@@ -80,10 +87,10 @@ const DriversContactInfo = ({
     [countryStates]
   );
 
-  // Memoize current country states
+  // Memoize current country states - now using watchedCountry
   const currentCountryStates = useMemo(() => {
-    return getStatesForCountry(getValues("country"));
-  }, [getValues("country"), getStatesForCountry]);
+    return getStatesForCountry(watchedCountry);
+  }, [watchedCountry, getStatesForCountry]);
 
   // Memoize handler for country change
   const handleCountryChange = useCallback(
@@ -215,20 +222,21 @@ const DriversContactInfo = ({
           {/* State Dropdown */}
           <DropdownInput
             data={currentCountryStates}
+            setValue={setValue}
+            getValues={getValues}
+            control={control}
             label="State"
             name="state"
             register={register}
             errors={errors}
-            setValue={setValue}
-            getValues={getValues}
             hasError={hasStateError}
+            firstErrorField={firstErrorField}
             disabled={
               dataLoading ||
               !!error ||
-              !getValues("country") ||
+              !watchedCountry ||
               currentCountryStates.length === 0
             }
-            firstErrorField={firstErrorField}
           />
 
           {/* Country Dropdown */}
@@ -240,6 +248,7 @@ const DriversContactInfo = ({
             errors={errors}
             setValue={setValue}
             getValues={getValues}
+            control={control}
             hasError={hasCountryError}
             disabled={dataLoading || !!error}
             firstErrorField={firstErrorField}
