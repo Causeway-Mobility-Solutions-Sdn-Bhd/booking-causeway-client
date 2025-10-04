@@ -19,12 +19,9 @@ const EmergencyContactInfo = ({
   getValues,
   firstErrorField,
 }) => {
-  // Check if fields have errors
   // const hasEmergencyNameError = !!errors.emergencyName;
   const hasEmergencyRelationshipError = !!errors.emergencyRelationship;
   // const hasEmergencyEmailError = !!errors.emergencyEmail;
-  // console.log("4th Changed");
-  console.log(getValues("emergencyRelationship"));
 
   return (
     <div className="space-y-6">
@@ -108,22 +105,19 @@ const EmergencyContactInfo = ({
   );
 };
 
+// Custom comparison function(if Relevant Fields Change we Rerender)
 const arePropsEqual = (prevProps, nextProps) => {
-  // Only re-render if errors for THIS component's fields change
   const relevantErrorFields = ["emergencyRelationship", "emergencyPhone"];
 
-  // Check if any relevant error changed
   const errorsChanged = relevantErrorFields.some(
     (field) => prevProps.errors[field] !== nextProps.errors[field]
   );
 
-  // Check if firstErrorField changed and it's relevant to this component
   const firstErrorChanged =
     prevProps.firstErrorField !== nextProps.firstErrorField &&
     (relevantErrorFields.includes(prevProps.firstErrorField) ||
       relevantErrorFields.includes(nextProps.firstErrorField));
 
-  // Re-render if errors changed OR firstErrorField changed for this component
   return !errorsChanged && !firstErrorChanged;
 };
 

@@ -13,6 +13,7 @@ const SubmitVehicleInfoForm = () => {
     watch,
     setValue,
     clearErrors,
+    control,
     formState: { errors },
     reset,
     getValues,
@@ -90,22 +91,22 @@ const SubmitVehicleInfoForm = () => {
     }
   };
   return (
-    <div className="pb-12 sm:pb-0 max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[30px]">
-      <h2 className="text-2xl font-bold text-black mb-2">
-        Earn extra income now
-      </h2>
-      <p className="text-md font-normal text-black mb-5">
-        Share your contact information and the vehicle you wish to subscribe out
-        so we can better serve you.
-      </p>
+    <div className="flex flex-col items-center justify-center md:px-40  pb-12 sm:pb-0 max-w-[1400px] mx-auto w-[90%] sm:w-[90%] mt-[30px]">
+      <div className="xsm:text-center">
+        <h2 className="text-2xl font-bold text-black mb-2">
+          Earn your extra income now
+        </h2>
+        <p className="text-sm font-normal text-black mb-5">
+          Share your contact information and the vehicle you wish to subscribe
+          out so we can better serve you.
+        </p>
+      </div>
 
       {/* Form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="grid grid-cols-4 space-y-6 pb-10"
       >
-        {/* Driver's License Information Component */}
-
         <VehicleInfo
           submitLoader={submitLoader}
           onSubmit={handleSubmit(onSubmit)}
@@ -114,6 +115,7 @@ const SubmitVehicleInfoForm = () => {
           getValues={getValues}
           setValue={setValue}
           watch={watch}
+          control={control}
           firstErrorField={getFirstErrorField()}
         />
 

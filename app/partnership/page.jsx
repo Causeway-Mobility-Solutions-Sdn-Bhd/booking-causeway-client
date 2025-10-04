@@ -13,7 +13,7 @@ function page() {
     <div className="relative">
       <Nav isMain={false} value="Partnership" />
       <SideBar />
-      {/* Partnership Should Come here */}
+      {/* Partnership Page: */}
       <Banner />
       <WhyHost />
       <CausewayEarningsChart />

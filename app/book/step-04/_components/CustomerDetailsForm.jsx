@@ -23,7 +23,6 @@ const CustomerDetailsForm = ({
   const dispatch = useAppDispatch();
   const currentUUID = useAppSelector((state) => state.reservation.currentUUID);
 
-  // Initialize React Hook Form
   const {
     register,
     handleSubmit,
@@ -35,8 +34,6 @@ const CustomerDetailsForm = ({
     formState: { errors },
     control,
   } = useForm({
-    // mode: "onSubmit",
-    // reValidateMode: "onChange",
     defaultValues: {
       driverLicense: "",
       licenseExpiry: "",
@@ -61,7 +58,7 @@ const CustomerDetailsForm = ({
       // emergencyName: "",
       emergencyRelationship: "",
       emergencyPhone: "",
-      emergencyPhoneCountryCode: "+60", // Default for emergency phone
+      emergencyPhoneCountryCode: "+60",
       // emergencyEmail: "",
 
       otherInfo: "",
@@ -69,8 +66,7 @@ const CustomerDetailsForm = ({
       agreeTerms: false,
     },
   });
-  // Watch form values if needed
-  // const formData = watch();
+
   const onSubmit = async (data) => {
     setSubmitLoader(true);
 
@@ -81,7 +77,7 @@ const CustomerDetailsForm = ({
       let response;
 
       if (dataAvailable) {
-        // UPDATE MODE - PUT request
+        // Updating
         response = await hqApi.put(
           `customers/update-customer/${dataAvailable.id}`,
           transformedData
@@ -150,7 +146,6 @@ const CustomerDetailsForm = ({
     }
   };
 
-  // Helper function to upload files
   const uploadFileToHQ = async ({ file, item_id, item_type, field_id }) => {
     try {
       const formData = new FormData();
@@ -224,7 +219,6 @@ const CustomerDetailsForm = ({
     errors.agreeTerms,
   ]);
   const fillFormData = (data) => {
-    // Sample data for form fields
     const sampleData = {
       // Driver License Info
       driverLicense: "D12345678",
@@ -259,7 +253,6 @@ const CustomerDetailsForm = ({
       agreeTerms: true,
     };
 
-    // Set all form values
     Object.entries(data).forEach(([fieldName, value]) => {
       setValue(fieldName, value);
     });
@@ -270,7 +263,7 @@ const CustomerDetailsForm = ({
     }
   }, [dataAvailable]);
 
-  // Errors for Driver License Info
+  // Separate Error States:
   const driverLicenseErrors = useMemo(
     () => ({
       driverLicense: errors.driverLicense,
@@ -280,7 +273,6 @@ const CustomerDetailsForm = ({
     [errors.driverLicense, errors.licenseExpiry, errors.licenseFiles]
   );
 
-  // Errors for Driver Information
   const driverInfoErrors = useMemo(
     () => ({
       firstName: errors.firstName,
@@ -298,7 +290,6 @@ const CustomerDetailsForm = ({
     ]
   );
 
-  // Errors for Driver’s Contact Info
   const driversContactErrors = useMemo(
     () => ({
       phone: errors.phone,
@@ -323,7 +314,6 @@ const CustomerDetailsForm = ({
     ]
   );
 
-  // Errors for Emergency Contact Info
   const emergencyContactErrors = useMemo(
     () => ({
       emergencyRelationship: errors.emergencyRelationship,
@@ -340,7 +330,6 @@ const CustomerDetailsForm = ({
   return (
     <form
       ref={(el) => {
-        // Store the submit function in the ref
         if (el) {
           submitFormRef.current = () => {
             el.requestSubmit();
@@ -350,7 +339,6 @@ const CustomerDetailsForm = ({
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-6"
     >
-      {/* Driver's License Information Component */}
       {/* <button onClick={fillFormData}>Test</button> */}
       <DriverLicenseInfo
         register={register}
@@ -371,7 +359,7 @@ const CustomerDetailsForm = ({
         clearErrors={clearErrors}
         firstErrorField={firstErrorField}
       />
-      {/* Driver's Contact Information */}
+
       <DriversContactInfo
         getValues={getValues}
         register={register}
@@ -391,7 +379,7 @@ const CustomerDetailsForm = ({
       />
 
       <OtherInformation register={register} watch={watch} />
-      {/* Terms and Conditions */}
+
       <div className="">
         <div className="flex gap-3">
           <Checkbox
@@ -402,7 +390,7 @@ const CustomerDetailsForm = ({
             }}
             className="mt-1.5"
           />
-          {/* Hidden input for react-hook-form validation */}
+
           <input
             type="checkbox"
             {...register("agreeTerms", {

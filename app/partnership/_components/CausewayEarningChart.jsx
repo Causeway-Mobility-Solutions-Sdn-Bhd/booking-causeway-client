@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 export const CausewayEarningsChart = () => {
   const [hoveredPoint, setHoveredPoint] = React.useState(null);
-  // Data points for the curve
+
   const dataPoints = [
     { x: 2, y: 2000, cars: 1 },
 
@@ -26,18 +26,15 @@ export const CausewayEarningsChart = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Update chart dimensions based on window width
   const chartWidth =
     windowWidth < 600 ? Math.max(100, 450 - (600 - windowWidth) * 1) : 450;
   const chartHeight = windowWidth < 600 ? 350 - (600 - windowWidth) * 0.3 : 350;
   const padding = 20;
-  console.log(windowWidth, chartWidth);
-  // Scale functions
+
   const xScale = (value) => (value / 12) * chartWidth + padding;
   const yScale = (value) =>
     chartHeight - (value / 30000) * chartHeight + padding;
 
-  // Generate path for the curve
   const generatePath = () => {
     // Use your actual data points to fit a parabola
     // We'll use the first, middle, and last points to define the parabola: y = ax² + bx + c
@@ -85,7 +82,7 @@ export const CausewayEarningsChart = () => {
   };
 
   return (
-    <div className="max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[30px]">
+    <div className="flex flex-col items-center justify-center max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[60px]">
       <h2 className="text-2xl font-bold text-black mb-8">
         How much can you earn with Causeway?
       </h2>

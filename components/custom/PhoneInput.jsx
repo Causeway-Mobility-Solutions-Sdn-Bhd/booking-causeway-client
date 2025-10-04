@@ -17,6 +17,7 @@ const PhoneInput = ({
   setValue,
   firstErrorField,
   getValues,
+  className = "",
 }) => {
   const [selectedCountryCode, setSelectedCountryCode] = useState("+60");
   const [selectedCountryIso, setSelectedCountryIso] = useState("MY");
@@ -54,13 +55,13 @@ const PhoneInput = ({
   };
 
   return (
-    <div>
+    <div className={className}>
       <div
         className={`!h-11 flex items-center w-full border rounded-md hover:border-teal-500 transition-colors focus-within:ring-2 focus-within:ring-teal-500 focus-within:border-transparent overflow-hidden ${
           hasPhoneError || hasCountryCodeError
             ? "border-red-500"
             : "border-gray-200"
-        }`}
+        } ${className}`}
       >
         <Select
           value={`${selectedCountryCode}|${selectedCountryIso}`}

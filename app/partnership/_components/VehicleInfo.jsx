@@ -11,13 +11,13 @@ const VehicleInfo = ({
   register,
   errors,
   setValue,
+  control,
   watch,
   firstErrorField,
   onSubmit,
   submitLoader,
   getValues,
 }) => {
-  // Check if fields have errors
   const hasNameError = !!errors.name;
   const hasEmailError = !!errors.email;
   const hasVehicleMakeError = !!errors.vehicleMake;
@@ -25,7 +25,6 @@ const VehicleInfo = ({
   const hasVehicleYearError = !!errors.vehicleYear;
   const hasVehicleMilageError = !!errors.vehicleMilage;
 
-  // Generate year options (from 1990 to current year + 1)
   const currentYear = new Date().getFullYear();
   const yearOptions = [];
   for (let year = currentYear + 1; year >= 1990; year--) {
@@ -35,7 +34,6 @@ const VehicleInfo = ({
     });
   }
 
-  // Sample vehicle makes and models (you can replace with actual API data)
   const vehicleMakes = [
     { value: "toyota", label: "Toyota" },
     { value: "honda", label: "Honda" },
@@ -59,11 +57,11 @@ const VehicleInfo = ({
   ];
 
   return (
-    <div className="col-span-4 lg:col-span-3 bg-white p-6 rounded-lg shadow-lg">
+    <div className="col-span-4 bg-white p-6 rounded-lg shadow-lg">
       {/* Personal Information Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2  gap-4">
         {/* Name */}
-        <div>
+        <div className="col-span-2">
           <Input
             {...register("name", {
               required: "Full name is required",
@@ -79,19 +77,8 @@ const VehicleInfo = ({
           )}
         </div>
 
-        {/* Mobile Number */}
-        <PhoneInput
-          register={register}
-          errors={errors}
-          setValue={setValue}
-          watch={watch}
-          getValues={getValues}
-          name="phone"
-          firstErrorField={firstErrorField}
-        />
-
         {/* Email Address */}
-        <div className="md:col-span-2">
+        <div className="col-span-2">
           <Input
             {...register("email", {
               required: "Email address is required",
@@ -110,11 +97,23 @@ const VehicleInfo = ({
             <ErrorMessage message={errors.email.message} />
           )}
         </div>
+
+        {/* Mobile Number */}
+        <PhoneInput
+          register={register}
+          errors={errors}
+          setValue={setValue}
+          watch={watch}
+          getValues={getValues}
+          name="phone"
+          className="col-span-2"
+          firstErrorField={firstErrorField}
+        />
       </div>
 
       {/* Vehicle Information Section */}
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+      <div className="grid grid-cols-2 gap-4 mt-4">
         {/* Vehicle Make */}
         <DropdownInput
           data={vehicleMakes}
@@ -128,7 +127,8 @@ const VehicleInfo = ({
           firstErrorField={firstErrorField}
           placeholder="Select Make"
           getValues={getValues}
-          validation={{ required: "Vehicle make is required" }}
+          control={control}
+          customWidth={0}
         />
 
         {/* Vehicle Model */}
@@ -139,12 +139,13 @@ const VehicleInfo = ({
           register={register}
           errors={errors}
           setValue={setValue}
+          control={control}
           watch={watch}
           getValues={getValues}
           hasError={hasVehicleModelError}
           firstErrorField={firstErrorField}
           placeholder="Select Model"
-          validation={{ required: "Vehicle model is required" }}
+          customWidth={0}
         />
 
         {/* Vehicle Year */}
@@ -160,7 +161,8 @@ const VehicleInfo = ({
           hasError={hasVehicleYearError}
           firstErrorField={firstErrorField}
           placeholder="Select Year"
-          validation={{ required: "Vehicle year is required" }}
+          control={control}
+          customWidth={0}
         />
 
         {/* Vehicle Mileage */}
@@ -199,13 +201,13 @@ const VehicleInfo = ({
         <Button
           disabled={submitLoader}
           onClick={onSubmit}
-          className={`w-full md:w-[20%] flex justify-center gap-1 items-center bg-cPrimary py-6 text-white 
+          className={`w-full  flex justify-center gap-1 items-center bg-cPrimary py-6 text-white 
     ${submitLoader ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           {submitLoader ? (
             <Spinner size={20} color="#fff" thickness={3} />
           ) : (
-            "Next"
+            "Submit"
           )}
         </Button>
       </div>

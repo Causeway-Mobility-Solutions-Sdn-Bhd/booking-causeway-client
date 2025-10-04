@@ -15,7 +15,6 @@ const DriverInformation = ({
   watch,
   control,
 }) => {
-  // Check if fields have errors
   const hasFirstNameError = !!errors.firstName;
   const hasLastNameError = !!errors.lastName;
   const hasPassportError = !!errors.passportNumber;
@@ -34,7 +33,6 @@ const DriverInformation = ({
     if (!dateString) return null;
 
     try {
-      // Parse the dd/MM/yy format back to Date object
       return parse(dateString, "dd/MM/yy", new Date());
     } catch (e) {
       console.log("Error parsing license date:", e);
@@ -153,7 +151,6 @@ const DriverInformation = ({
             })}
           />
 
-          {/* ID Card/Passport Image Upload */}
           <div className={`col-span-2 lg:col-span-1`}>
             <ImageUpload
               label={"ID Card/Passport image"}
@@ -185,9 +182,8 @@ const DriverInformation = ({
   );
 };
 
-// Custom comparison function for React.memo
+// Custom comparison function(if Relevant Fields Change we Rerender)
 const arePropsEqual = (prevProps, nextProps) => {
-  // Only re-render if errors for THIS component's fields change
   const relevantErrorFields = [
     "firstName",
     "lastName",
@@ -196,18 +192,15 @@ const arePropsEqual = (prevProps, nextProps) => {
     "idCardOrPass",
   ];
 
-  // Check if any relevant error changed
   const errorsChanged = relevantErrorFields.some(
     (field) => prevProps.errors[field] !== nextProps.errors[field]
   );
 
-  // Check if firstErrorField changed and it's relevant to this component
   const firstErrorChanged =
     prevProps.firstErrorField !== nextProps.firstErrorField &&
     (relevantErrorFields.includes(prevProps.firstErrorField) ||
       relevantErrorFields.includes(nextProps.firstErrorField));
 
-  // Re-render if errors changed OR firstErrorField changed for this component
   return !errorsChanged && !firstErrorChanged;
 };
 
