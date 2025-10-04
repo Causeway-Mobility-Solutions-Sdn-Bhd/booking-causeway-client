@@ -14,7 +14,6 @@ const DriversContactInfo = ({
   firstErrorField,
   errors,
 }) => {
-  // Use the dynamic country data hook
   const {
     countryCodes,
     countryStates,
@@ -22,14 +21,12 @@ const DriversContactInfo = ({
     error,
   } = useCountryData();
 
-  // Watch the country field for changes
   const watchedCountry = useWatch({
     control,
     name: "country",
     defaultValue: "",
   });
 
-  // Check if fields have errors
   const hasEmailError = !!errors.email;
   const hasAddressError = !!errors.address;
   const hasZipCodeError = !!errors.zipCode;
@@ -37,10 +34,8 @@ const DriversContactInfo = ({
   const hasStateError = !!errors.state;
   const hasCountryError = !!errors.country;
 
-  // Force re-render state for dropdowns
   const [, forceUpdate] = React.useState({});
 
-  // Memoize formatted countries
   const formattedCountries = useMemo(() => {
     if (!countryCodes) return [];
     return Object.entries(countryCodes).map(([isoCode, data]) => ({
@@ -50,7 +45,6 @@ const DriversContactInfo = ({
     }));
   }, [countryCodes]);
 
-  // Memoize getStatesForCountry function
   const getStatesForCountry = useCallback(
     (countryCode) => {
       if (!countryCode || !countryStates) return [];
@@ -87,30 +81,22 @@ const DriversContactInfo = ({
     [countryStates]
   );
 
-  // Memoize current country states - now using watchedCountry
   const currentCountryStates = useMemo(() => {
     return getStatesForCountry(watchedCountry);
   }, [watchedCountry, getStatesForCountry]);
 
-  // Memoize handler for country change
   const handleCountryChange = useCallback(
     (value) => {
-      // Get states for the newly selected country FIRST
       const states = getStatesForCountry(value);
 
-      // Set state value BEFORE setting country to prevent Shadcn from clearing it
       if (states.length > 0) {
-        // Always set to first state when country changes
         setValue("state", states[0].value, { shouldValidate: false });
       } else {
-        // Clear state if no states available for this country
         setValue("state", "", { shouldValidate: false });
       }
 
-      // Now set the country value
       setValue("country", value, { shouldValidate: false });
 
-      // Force re-render to update the UI
       forceUpdate({});
     },
     [getStatesForCountry, setValue]
@@ -260,9 +246,8 @@ const DriversContactInfo = ({
   );
 };
 
-// Custom comparison function for React.memo
+// Custom comparison function(if Relevant Fields Change we Rerender)
 const arePropsEqual = (prevProps, nextProps) => {
-  // Only re-render if errors for THIS component's fields change
   const relevantErrorFields = [
     "phone",
     "phoneCountryCode",
@@ -274,18 +259,15 @@ const arePropsEqual = (prevProps, nextProps) => {
     "country",
   ];
 
-  // Check if any relevant error changed
   const errorsChanged = relevantErrorFields.some(
     (field) => prevProps.errors[field] !== nextProps.errors[field]
   );
 
-  // Check if firstErrorField changed and it's relevant to this component
   const firstErrorChanged =
     prevProps.firstErrorField !== nextProps.firstErrorField &&
     (relevantErrorFields.includes(prevProps.firstErrorField) ||
       relevantErrorFields.includes(nextProps.firstErrorField));
 
-  // Re-render if errors changed OR firstErrorField changed for this component
   return !errorsChanged && !firstErrorChanged;
 };
 

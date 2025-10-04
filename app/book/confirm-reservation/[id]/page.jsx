@@ -24,7 +24,7 @@ export default function Page() {
 
   useEffect(() => {
     if (!reservation?.reservation_id) {
-      // router.push(`/`);
+      router.push(`/`);
     } else {
       const fetchData = async () => {
         try {
@@ -34,8 +34,8 @@ export default function Page() {
 
           const responseData = response?.data?.data;
           if (responseData?.reservation?.uuid !== params.id) {
-            // router.replace("/");
-            // return;
+            router.replace("/");
+            return;
           }
           setConformReservation(responseData);
           setRentalAgreement(response?.data?.rental_agreement?.data?.agreement);

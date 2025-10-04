@@ -16,7 +16,6 @@ const DriverLicenseInfo = ({
   firstErrorField,
   control,
 }) => {
-  // Check if fields have errors
   const hasDriverLicenseError = !!errors.driverLicense;
   const hasLicenseExpiryError = !!errors.licenseExpiry;
 
@@ -136,27 +135,23 @@ const DriverLicenseInfo = ({
   );
 };
 
-// Custom comparison function for React.memo
+// Custom comparison function(if Relevant Fields Change we Rerender)
 const arePropsEqual = (prevProps, nextProps) => {
-  // Only re-render if errors for THIS component's fields change
   const relevantErrorFields = [
     "driverLicense",
     "licenseExpiry",
     "licenseFiles",
   ];
 
-  // Check if any relevant error changed
   const errorsChanged = relevantErrorFields.some(
     (field) => prevProps.errors[field] !== nextProps.errors[field]
   );
 
-  // Check if firstErrorField changed and it's relevant to this component
   const firstErrorChanged =
     prevProps.firstErrorField !== nextProps.firstErrorField &&
     (relevantErrorFields.includes(prevProps.firstErrorField) ||
       relevantErrorFields.includes(nextProps.firstErrorField));
 
-  // Re-render if errors changed OR firstErrorField changed for this component
   return !errorsChanged && !firstErrorChanged;
 };
 

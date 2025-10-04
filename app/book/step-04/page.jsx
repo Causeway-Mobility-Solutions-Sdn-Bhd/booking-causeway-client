@@ -85,8 +85,6 @@ function Page() {
           );
           const transformData = transformCustomerData(response.data);
           setFormData(transformData);
-        } else {
-          console.log("NOT AVAILABLE");
         }
         if (response?.status === 200) {
           dispatch(setReservation(response?.data?.reservation));
