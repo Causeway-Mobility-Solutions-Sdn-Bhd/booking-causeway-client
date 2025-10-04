@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Input } from "@/components/ui/input";
 import DropdownInput from "@/components/custom/DropdownInput";
@@ -14,10 +15,10 @@ const VehicleInfo = ({
   firstErrorField,
   onSubmit,
   submitLoader,
+  getValues,
 }) => {
   // Check if fields have errors
   const hasNameError = !!errors.name;
-  const hasPhoneError = !!errors.phone;
   const hasEmailError = !!errors.email;
   const hasVehicleMakeError = !!errors.vehicleMake;
   const hasVehicleModelError = !!errors.vehicleModel;
@@ -84,6 +85,7 @@ const VehicleInfo = ({
           errors={errors}
           setValue={setValue}
           watch={watch}
+          getValues={getValues}
           name="phone"
           firstErrorField={firstErrorField}
         />
@@ -125,6 +127,7 @@ const VehicleInfo = ({
           hasError={hasVehicleMakeError}
           firstErrorField={firstErrorField}
           placeholder="Select Make"
+          getValues={getValues}
           validation={{ required: "Vehicle make is required" }}
         />
 
@@ -137,6 +140,7 @@ const VehicleInfo = ({
           errors={errors}
           setValue={setValue}
           watch={watch}
+          getValues={getValues}
           hasError={hasVehicleModelError}
           firstErrorField={firstErrorField}
           placeholder="Select Model"
@@ -152,6 +156,7 @@ const VehicleInfo = ({
           errors={errors}
           setValue={setValue}
           watch={watch}
+          getValues={getValues}
           hasError={hasVehicleYearError}
           firstErrorField={firstErrorField}
           placeholder="Select Year"

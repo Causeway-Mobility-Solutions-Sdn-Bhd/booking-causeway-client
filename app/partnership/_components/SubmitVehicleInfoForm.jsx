@@ -15,6 +15,7 @@ const SubmitVehicleInfoForm = () => {
     clearErrors,
     formState: { errors },
     reset,
+    getValues,
   } = useForm({
     defaultValues: {
       name: "",
@@ -110,6 +111,7 @@ const SubmitVehicleInfoForm = () => {
           onSubmit={handleSubmit(onSubmit)}
           register={register}
           errors={errors}
+          getValues={getValues}
           setValue={setValue}
           watch={watch}
           firstErrorField={getFirstErrorField()}
