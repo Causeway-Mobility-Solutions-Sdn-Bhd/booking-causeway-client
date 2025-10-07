@@ -28,7 +28,7 @@ function WhyCauseway() {
   ]
 
   return (
-    <div className='max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[30px]'>
+    <div className='max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[7px]'>
       <TitleHead name={'Why Choose Causeway'} />
      
       {/* Grid Layout - 4 columns on desktop, 2 columns on mobile */}
