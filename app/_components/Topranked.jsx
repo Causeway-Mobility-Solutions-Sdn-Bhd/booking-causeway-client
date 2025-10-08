@@ -36,7 +36,7 @@ function TopRanked() {
   );
 
   return (
-    <section className="w-[90%] sm:w-[95%] max-w-[1400px] mx-auto mt-[30px] pb-[5px]">
+    <section className="w-[90%] sm:w-[95%] max-w-[1400px] mx-auto mt-[7px] pb-[0px]">
 
       <div className="relative">
         <Carousel
@@ -47,34 +47,26 @@ function TopRanked() {
             loop: true,
           }}
         >
-          <CarouselContent className="-ml-[10px]">
+          <CarouselContent className="-ml-[15px]">
             {allAwards.map((award, index) => (
               <CarouselItem
                 key={index}
-                className="pl-[10px] basis-auto"
+                className="pl-[15px] basis-[260px]"
               >
-                <div
-                  className="flex items-center justify-center w-[160px] h-[75px] bg-white rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300 hover:scale-105 hover:shadow-lg overflow-hidden"
-                >
-                  <Image
-                    src={award.image}
-                    alt="Award Badge"
-                    className="w-full h-full object-cover opacity-100 transition-all duration-300"
-                    width={320} 
-                    height={150}
-                    quality={100}
-                    unoptimized={false}
-                    loading="lazy" 
-                  />
-                </div>
+                <Image
+                  src={award.image}
+                  alt="Award Badge"
+                  className="w-auto h-auto object-contain"
+                  width={240} 
+                  height={112}
+                  quality={100}
+                  unoptimized={false}
+                  loading="lazy"
+                />
               </CarouselItem>
             ))}
           </CarouselContent>
         </Carousel>
-
-        {/* Gradient overlays for seamless loop effect */}
-        <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-background to-transparent pointer-events-none z-10"></div>
-        <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-background to-transparent pointer-events-none z-10"></div>
       </div>
     </section>
   );
