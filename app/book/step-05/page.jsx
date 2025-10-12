@@ -53,7 +53,7 @@ function Page() {
      setLoader(false);
     } catch (error) {
       setLoader(false);
-      console.error("Error submitting additional charges:", error);
+      console.log("Error submitting additional charges:", error);
     }
   };
 
@@ -94,7 +94,7 @@ function Page() {
         }
       }
     } catch (error) {
-      console.error("Error confirming reservation:", error);
+      console.log("Error confirming reservation:", error);
     }
   };
 

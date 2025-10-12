@@ -47,7 +47,7 @@ function SignupC() {
       );
       route.push(`otp-verify/${res.user.clientToken}`);
     } catch (err) {
-      console.error(err);
+      console.log(err);
       showErrorToast(err?.data?.message || "Registration failed");
     }
   };

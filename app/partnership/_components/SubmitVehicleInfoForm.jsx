@@ -76,7 +76,7 @@ const SubmitVehicleInfoForm = () => {
       showSuccessToast("Form submitted! We'll contact you within 1 day.");
       reset();
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.log("Error submitting form:", error);
 
       // More specific error handling
       if (error.response?.status === 400) {

@@ -39,7 +39,7 @@ function LoginC({ type }) {
       showSuccessToast("Logged in successfully!");
       router.push("/");
     } catch (err) {
-      console.error("Login error:", err);
+      console.log("Login error:", err);
       const clientToken = err?.data?.clientToken;
       if (clientToken && type === "primary") {
         router.push(`otp-verify/${clientToken}`);

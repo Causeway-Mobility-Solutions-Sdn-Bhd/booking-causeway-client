@@ -14,7 +14,7 @@ export const authApi = apiSlice.injectEndpoints({
           const { data } = await queryFulfilled;
           dispatch(setLoggedUser(data.user));
         } catch (err) {
-          console.error("Login failed: ", err);
+          console.log("Login failed: ", err);
         }
       },
       providesTags: ["Auth"],
@@ -47,7 +47,7 @@ export const authApi = apiSlice.injectEndpoints({
           const { data } = await queryFulfilled;
           dispatch(setLoggedUser(data.user));
         } catch (err) {
-          console.error("OTP verification failed: ", err);
+          console.log("OTP verification failed: ", err);
         }
       },
     }),
@@ -71,7 +71,7 @@ export const authApi = apiSlice.injectEndpoints({
 
           dispatch(setLoggedUser(data.user));
         } catch (err) {
-          console.error("Token refresh failed: ", err);
+          console.log("Token refresh failed: ", err);
         }
       },
       providesTags: ["Auth"],

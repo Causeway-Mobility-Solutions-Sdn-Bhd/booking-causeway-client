@@ -48,7 +48,7 @@ export const reservationApi = apiSlice.injectEndpoints({
 
           return { data: response.data };
         } catch (err) {
-          console.error("Failed to fetch additional charges:", err);
+          console.log("Failed to fetch additional charges:", err);
           return { error: err };
         }
       },
@@ -115,7 +115,7 @@ export const reservationApi = apiSlice.injectEndpoints({
 
           return { data: response.data };
         } catch (err) {
-          console.error("Failed to post additional charges:", err);
+          console.log("Failed to post additional charges:", err);
           return { error: err };
         }
       },
@@ -162,7 +162,7 @@ export const reservationApi = apiSlice.injectEndpoints({
             dispatch(setReservation(data));
           }
         } catch (err) {
-          console.error("Failed to fetch reservation:", err);
+          console.log("Failed to fetch reservation:", err);
         }
       },
     }),

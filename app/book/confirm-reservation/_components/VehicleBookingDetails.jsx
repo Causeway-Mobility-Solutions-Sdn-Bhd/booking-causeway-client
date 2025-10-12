@@ -44,7 +44,7 @@ function VehicleBookingDetails({
       window.URL.revokeObjectURL(url);
     } catch (err) {
       showErrorToast("Error Downloading Agreement.");
-      console.error("Download error:", err);
+      console.log("Download error:", err);
     } finally {
       setIsDownloading(false);
     }
