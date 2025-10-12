@@ -4,20 +4,18 @@ import React from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import CurrencyDrawer from "@/app/_components/CurrencyDrawer";
+import StepBar from "./StepBar";
 
-
-function BookNavBar({ topBar, child }) {
-
+function BookNavBar({ topBar = null, child = null }) {
   const router = useRouter();
   const handleBack = () => {
     router.back();
   };
 
-
   return (
     <div className="w-full fixed top-0 z-[50] bg-white">
-      <div className="py-5 sm:py-7">
-        <div className="flex relative justify-between items-center w-[95%] max-w-[1400px] mx-auto">
+      <div className={`${topBar ? 'py-5' : 'py-0' } sm:py-7`}>
+        <div className="flex gap-4 relative justify-between items-center w-[95%] max-w-[1400px] mx-auto">
           <Image
             priority
             className="object-contain w-[150px] sm:w-[200px] hidden sm:block"
@@ -32,10 +30,18 @@ function BookNavBar({ topBar, child }) {
             className="block sm:hidden cursor-pointer z-100"
             onClick={handleBack}
           />
-          <div className="block sm:hidden absolute left-[50%] translate-x-[-50%] w-full">
-            {child}
-          </div>
-          <CurrencyDrawer />
+          {topBar ? (
+            <>
+              <div className="block sm:hidden absolute left-[50%] translate-x-[-50%] w-full">
+                {child}
+              </div>
+              <CurrencyDrawer />
+            </>
+          ) : (
+            <StepBar />
+          )}
+
+      
         </div>
       </div>
       <div className="border-t border-cGrayLight">{topBar}</div>

@@ -19,7 +19,6 @@ function Nav({ isMain = true, value = "" }) {
   };
 
   const user = useLoggedUser();
-  console.log(user)
 
   const buttonClick = () => {
     if (user) {
