@@ -2,17 +2,15 @@
 
 import React from 'react'
 import SideBar from '../_components/SideBar'
-import Nav from '@/components/custom/Nav'
+import Nav from '@/app/_components/Nav'
 import BottomBar from '../_components/BottomBar'
 import { ChevronRight } from 'lucide-react'
 
 function page() {
   return (
     <div className="relative min-h-screen bg-gray-50" style={{backgroundColor: '#f9fafb'}}>
-      <Nav isMain={false} value="Support" />
+      <Nav isMain={false} value="Contact Us"/>
       <SideBar />
-      
-      
       <div className="pt-5 pb-10 px-4">
       
         <div className="mt-1 mb-6">

@@ -59,8 +59,6 @@ function TopRanked() {
                   className="w-auto h-auto object-contain"
                   width={240} 
                   height={112}
-                  quality={100}
-                  unoptimized={false}
                   loading="lazy"
                 />
               </CarouselItem>

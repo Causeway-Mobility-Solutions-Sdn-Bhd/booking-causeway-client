@@ -9,7 +9,7 @@ import VehicleBookingDetails from "../_components/VehicleBookingDetails";
 import Step7Sidebar from "../_components/Step7Sidebar";
 import { transformCustomerData } from "@/app/_lib/transformCustomerData";
 import Spinner from "@/components/custom/Spinner";
-import Nav from "@/components/custom/Nav";
+import Nav from "@/app/_components/Nav";
 import SideBar from "@/app/_components/SideBar";
 
 export default function Page() {

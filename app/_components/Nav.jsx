@@ -18,6 +18,15 @@ function Nav({ isMain = true, value = "" }) {
     dispatch(setSidebarOpen(true));
   };
 
+  console.log(value)
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "Manage Booking", href: "/manage-booking" },
+    { name: "Partnership", href: "/partnership" },
+    { name: "Contact Us", href: "/support" },
+    { name: "Terms & Conditions", href: "/terms-and-condition" },
+  ];
+
   return (
     <div className="w-full py-5 sm:py-4 bg-white z-100">
       <div className="flex justify-between items-center w-[95%] max-w-[1400px] mx-auto">
@@ -27,10 +36,11 @@ function Nav({ isMain = true, value = "" }) {
           size={35}
           className="block sm:hidden cursor-pointer"
         />
+
         {isMain ? (
           <Image
             priority
-            className="object-contain w-[150px] sm:w-[200px] absolute left-[50%] sm:left-[0%] translate-x-[-50%] sm:translate-x-[0%] grayscale sm:grayscale-0 sm:relative"
+            className="object-contain w-[150px] sm:w-[200px] absolute left-[50%] sm:left-[0%] translate-x-[-50%] sm:translate-x-[0%]  sm:relative"
             src="/logo/logo-black.webp"
             alt="Causeway Logo"
             width={200}
@@ -43,7 +53,7 @@ function Nav({ isMain = true, value = "" }) {
             </h3>
             <Image
               priority
-              className="hidden sm:block  object-contain w-[150px] sm:w-[200px] absolute left-[50%] sm:left-[0%] translate-x-[-50%] sm:translate-x-[0%] grayscale sm:grayscale-0 sm:relative"
+              className="hidden sm:block object-contain w-[150px] sm:w-[200px] absolute left-[50%] sm:left-[0%] translate-x-[-50%] sm:translate-x-[0%] grayscale sm:grayscale-0 sm:relative"
               src="/logo/logo-black.webp"
               alt="Causeway Logo"
               width={200}
@@ -54,24 +64,20 @@ function Nav({ isMain = true, value = "" }) {
 
         <div className="basis-[90%] hidden justify-end items-center w-full text-cGr sm:flex">
           <div className="hidden items-center gap-7 border-r border-gray-300 pr-6 font-[400] xxl:flex">
-            <p>
-              <Link href="/">Home</Link>
-            </p>
-            <p>
-              <Link href="/manage-booking">Manage Booking</Link>
-            </p>
-            <p>
-              <Link href="/partnership">Partnership</Link>
-            </p>
-            <p>
-              <Link href="/contact">Contact Us</Link>
-            </p>
-            {/* Suitable next link */}
+            {navLinks.map((link) => (
+              <p key={link.href}>
+                <Link href={link.href} className={`${link.name === value && 'font-bold'}`}>
+                  {link.name}
+                </Link>
+              </p>
+            ))}
           </div>
+
           <div className="px-6 border-r border-gray-300 text-cSecondary text-cGreen font-bold hidden xxl:flex justify-center gap-1 items-center">
             <span>MYR</span>
             <MdKeyboardArrowDown size={20} />
           </div>
+
           <div className="pl-6">
             <SecondaryButton
               onClick={() => router.push("/login")}
