@@ -4,9 +4,7 @@ import React, { useEffect, useState } from "react";
 
 function Page() {
   const [refreshToken, setRefreshToken] = useState("");
-    const logedUser = useAppSelector(
-      (state) => state.auth.logedUser 
-    );
+  const logedUser = useAppSelector((state) => state.auth.logedUser);
 
   useEffect(() => {
     const cookies = document.cookie
@@ -16,10 +14,12 @@ function Page() {
     setRefreshToken(token);
   }, []);
 
-  return <div>
-    <p>Refresh Token: {refreshToken}</p>
-    <p>Name : {logedUser?.fullName}</p>
-  </div>;
+  return (
+    <div>
+      <p>Refresh Token: {refreshToken}</p>
+      <p>Name : {logedUser?.fullName}</p>
+    </div>
+  );
 }
 
 export default Page;
