@@ -1,5 +1,5 @@
 import { apiSlice } from "../apiSlice";
-import { setLogedUser } from "../slices/authSlie";
+import { setLoggedUser } from "../slices/authSlie";
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -12,7 +12,7 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(setLogedUser(data.user));
+          dispatch(setLoggedUser(data.user));
         } catch (err) {
           console.error("Login failed: ", err);
         }
@@ -45,7 +45,7 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(setLogedUser(data.user));
+          dispatch(setLoggedUser(data.user));
         } catch (err) {
           console.error("OTP verification failed: ", err);
         }
@@ -69,7 +69,7 @@ export const authApi = apiSlice.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
 
-          dispatch(setLogedUser(data.user));
+          dispatch(setLoggedUser(data.user));
         } catch (err) {
           console.error("Token refresh failed: ", err);
         }

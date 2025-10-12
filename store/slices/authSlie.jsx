@@ -1,16 +1,18 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  logedUser: {},
+  loggedUser: {},
 };
 
 const generalSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
-    setLogedUser(state, action) { state.logedUser = action.payload; },
+    setLoggedUser(state, action) {
+      state.loggedUser = action.payload;
+    },
   },
 });
 
-export const { setLogedUser } = generalSlice.actions;
+export const { setLoggedUser } = generalSlice.actions;
 export default generalSlice.reducer;

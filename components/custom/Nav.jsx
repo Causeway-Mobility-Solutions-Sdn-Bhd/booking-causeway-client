@@ -4,7 +4,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { IoMdMenu } from "react-icons/io";
 import Image from "next/image";
 import React from "react";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useLoggedUser } from "@/store/hooks";
 import { setOpenBg, setSidebarOpen } from "@/store/slices/generalSlice";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -18,6 +18,15 @@ function Nav({ isMain = true, value = "" }) {
     dispatch(setSidebarOpen(true));
   };
 
+  const user = useLoggedUser();
+
+  const buttonClick = () => {
+    if (user) {
+      console.log("LOGGING OUT");
+    } else {
+      router.push("/login");
+    }
+  };
   return (
     <div className="w-full py-5 sm:py-4 bg-white z-100">
       <div className="flex justify-between items-center w-[95%] max-w-[1400px] mx-auto">
@@ -74,9 +83,9 @@ function Nav({ isMain = true, value = "" }) {
           </div>
           <div className="pl-6">
             <SecondaryButton
-              onClick={() => router.push("/login")}
+              onClick={buttonClick}
               style={"h-12"}
-              content={"Log in/Sign Up"}
+              content={user ? "Log out" : "Log in/Sign Up"}
             />
           </div>
         </div>
