@@ -59,13 +59,7 @@ const UpgradeDrawer = ({
   const [selectedOption, setSelectedOption] = useState("economy");
 
   useEffect(() => {
-    const selectedIds = Object.keys(selectedCharges).map(Number);
     setSelectedOption("economy");
-    // if (selectedIds?.includes(20)) {
-    //   setSelectedOption("basic");
-    // } else {
-    //   setSelectedOption("econamy");
-    // }
   }, [isDrawerOpen]);
 
   const handleDrawerChange = (open) => {
@@ -85,33 +79,6 @@ const UpgradeDrawer = ({
   };
 
   const handleOptionSelect = (option, id) => {
-    // const selectedIds = Object.keys(selectedCharges).map(Number);
-
-    // const isAlreadySelected = selectedIds.includes(id);
-
-    // if (isAlreadySelected) {
-    //   setSelectedOption(option);
-    //   return;
-    // }
-
-    // setSelectedCharges((prev) => {
-    //   const updated = { ...prev };
-
-    //   const otherOptions = options
-    //     .map((opt) => opt.id)
-    //     .filter((optionId) => optionId !== id);
-
-    //   otherOptions.forEach((otherId) => {
-    //     if (updated[otherId]) {
-    //       delete updated[otherId];
-    //     }
-    //   });
-
-    //   updated[id] = { quantity: 0 };
-
-    //   return updated;
-    // });
-
     setSelectedOption(option);
   };
 
@@ -260,17 +227,6 @@ const UpgradeDrawer = ({
               Upgrade to Economy at{" "}
               <span className="font-bold text-black">+RM80/day</span>
             </>
-            {/* {selectedOption === "economy" ? (
-              <>
-                Upgrade to Economy at{" "}
-                <span className="font-bold text-black">+RM80/day</span>
-              </>
-            ) : (
-              <>
-                Selected:{" "}
-                <span className="font-bold text-black">Basic Plan</span>
-              </>
-            )} */}
           </p>
 
           <button
@@ -283,11 +239,6 @@ const UpgradeDrawer = ({
               <>
                 <span>Upgrade to Economy</span>
               </>
-              // <>
-              //   {selectedOption === "economy"
-              //     ? "Upgrade to Economy"
-              //     : "Continue with Basic"}
-              // </>
             )}
           </button>
 

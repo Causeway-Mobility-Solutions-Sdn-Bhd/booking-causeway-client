@@ -136,7 +136,7 @@ function PaymentIframe() {
         <PaymentLoader />
       ) : (
         showIframe && (
-          <div className="w-full h-[105vh] relative flex items-center justify-center mt-3">
+          <div className="w-full h-[100vh] relative flex items-center justify-center mt-3">
             <iframe
               src={finalPayment?.link}
               className="w-full h-full border-0"
