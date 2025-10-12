@@ -26,8 +26,6 @@ export async function middleware(req) {
       pathname.startsWith(route)
     );
 
-    console.log(isProtectedRoute, token);
-
     if (isProtectedRoute && !token) {
       return NextResponse.redirect(new URL("/", req.url));
     }
