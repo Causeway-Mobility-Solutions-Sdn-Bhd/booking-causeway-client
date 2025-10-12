@@ -99,10 +99,22 @@ const TermsConditions = () => {
     <div className="w-[95%] max-w-[1400px] mx-auto mt-[30px] pb-[80px] space-y-4">
       <Accordion type="single" collapsible className="w-full space-y-4">
         {termsData.map((term) => (
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
           <div key={term.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <AccordionItem value={term.id} className="border-0">
               <AccordionTrigger className="px-4 py-4 text-left [&>svg]:text-teal-500 hover:no-underline">
                 <h3 className="text-sm font-semibold text-black leading-5">{term.title}</h3>
+=======
+          <div key={term.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <AccordionItem value={term.id} className="border-0">
+=======
+          <div key={term.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <AccordionItem value={term.id} className="border-0">
+>>>>>>> Stashed changes
+              <AccordionTrigger className="px-4 py-4 text-left [&>svg]:text-teal-500">
+                <h3 className="text-[14px] font-bold text-gray-900">{term.title}</h3>
+>>>>>>> Stashed changes
               </AccordionTrigger>
               <AccordionContent className="px-4 py-4 bg-white border-t border-gray-200">
                 <p className="text-gray-700 text-sm leading-5 text-justify">
