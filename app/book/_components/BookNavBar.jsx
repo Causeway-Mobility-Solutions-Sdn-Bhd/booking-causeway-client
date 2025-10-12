@@ -2,36 +2,17 @@
 import Image from "next/image";
 import React from "react";
 import { FaChevronLeft } from "react-icons/fa";
-import { MdKeyboardArrowDown } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setCurrency } from "@/store/slices/reservationSlice";
 import CurrencyDrawer from "@/app/_components/CurrencyDrawer";
 
-const currencies = ["MYR", "USD"];
 
 function BookNavBar({ topBar, child }) {
-  const dispatch = useAppDispatch();
-  const currency = useAppSelector(
-    (state) => state.reservation.currency
-  );
 
   const router = useRouter();
   const handleBack = () => {
     router.back();
   };
 
-  const handleCurrencyChange = (newCurrency) => {
-    if (newCurrency !== currency) {
-      dispatch(setCurrency(newCurrency));
-    }
-  };
 
   return (
     <div className="w-full fixed top-0 z-[50] bg-white">
@@ -55,27 +36,6 @@ function BookNavBar({ topBar, child }) {
             {child}
           </div>
           <CurrencyDrawer />
-          {/* <DropdownMenu>
-            <DropdownMenuTrigger className="z-100">
-              <div className="text-cSecondary cursor-pointer z-100 text-cGreen font-bold flex justify-center gap-0 items-center">
-                <span>{currency}</span> <MdKeyboardArrowDown size={20} />{" "}
-              </div>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent align="end" className="w-24">
-              {currencies.map((cur) => (
-                <DropdownMenuItem
-                  key={cur}
-                  onClick={() => handleCurrencyChange(cur)}
-                  className={`${
-                    currency === cur ? "font-semibold text-primary" : ""
-                  }`}
-                >
-                  {cur}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu> */}
         </div>
       </div>
       <div className="border-t border-cGrayLight">{topBar}</div>
