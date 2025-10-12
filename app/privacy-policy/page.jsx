@@ -3,7 +3,7 @@ import React from "react";
 import BottomBar from "../_components/BottomBar";
 import SideBar from "../_components/SideBar";
 import PrivacyPolicy from "./_components/PrivacyPolicy";
-import Nav from "@/components/custom/Nav";
+import Nav from "../_components/Nav";
 
 export default function PrivacyPolicyPage() {
 

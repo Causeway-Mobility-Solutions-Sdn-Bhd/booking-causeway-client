@@ -1,4 +1,4 @@
-import Nav from "../../components/custom/Nav";
+import Nav from "../_components/Nav";
 import BottomBar from "../_components/BottomBar";
 import SideBar from "../_components/SideBar";
 

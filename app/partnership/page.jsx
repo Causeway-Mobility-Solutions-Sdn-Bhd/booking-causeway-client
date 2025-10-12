@@ -1,6 +1,6 @@
 import React from "react";
 import SideBar from "../_components/SideBar";
-import Nav from "@/components/custom/Nav";
+import Nav from "@/app/_components/Nav";
 import BottomBar from "../_components/BottomBar";
 import Banner from "./_components/Banner";
 import WhyHost from "./_components/WhyHost";

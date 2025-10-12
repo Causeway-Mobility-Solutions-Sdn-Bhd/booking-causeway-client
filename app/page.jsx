@@ -1,6 +1,6 @@
 "use client";
 
-import Nav from "../components/custom/Nav";
+import Nav from "./_components/Nav";
 import Banner from "./_components/Banner";
 import BottomBar from "./_components/BottomBar";
 import SideBar from "./_components/SideBar";
@@ -14,7 +14,7 @@ import TopRanked from "./_components/Topranked";
 export default function Home() {
   return (
     <div>
-      <Nav isPrimary={false} />
+      <Nav isMain={true} value="Home"/>
       <Banner />
       <Feauters />
       <SpecialOffer />
