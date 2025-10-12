@@ -34,7 +34,7 @@ export default function Page() {
     };
 
     fetchAndRedirect();
-  }, [router, currentUUID, dispatch]);
+  }, []);
 
   return null;
 }

@@ -69,7 +69,7 @@ const UpgradeDrawer = ({
       const hasPlatinum = selectedIds.some((id) => platinumIds.includes(id));
 
       if (hasPlatinum) {
-        conformNextStep();
+        conformNextStep(false);
       } else {
         setIsDrawerOpen(open);
       }
@@ -82,27 +82,36 @@ const UpgradeDrawer = ({
     setSelectedOption(option);
   };
 
-  const transformSelectedCharges = (id) => {
-    const protectionIds = [9, 10, 11, 20];
-    let newSelectedCharges = { ...selectedCharges };
+  const transformSelectedCharges = (id, isUpgrade) => {
+    if (isUpgrade) {
+      const protectionIds = [9, 10, 11, 20];
+      let newSelectedCharges = { ...selectedCharges };
 
-    protectionIds.forEach((pid) => {
-      if (newSelectedCharges[pid]) {
-        delete newSelectedCharges[pid];
-      }
-    });
+      protectionIds.forEach((pid) => {
+        if (newSelectedCharges[pid]) {
+          delete newSelectedCharges[pid];
+        }
+      });
+      console.log(newSelectedCharges);
 
-    newSelectedCharges[id] = { quantity: 0 };
-    setSelectedCharges(newSelectedCharges);
+      newSelectedCharges[id] = { quantity: 0 };
+      console.log(newSelectedCharges, "new");
+      setSelectedCharges(newSelectedCharges);
 
-    return Object.entries(newSelectedCharges).map(([id, { quantity }]) => {
-      const parsedId = parseInt(id, 10);
-      return quantity === 0 ? `${parsedId}` : `${parsedId}_${quantity}`;
-    });
+      return Object.entries(newSelectedCharges).map(([id, { quantity }]) => {
+        const parsedId = parseInt(id, 10);
+        return quantity === 0 ? `${parsedId}` : `${parsedId}_${quantity}`;
+      });
+    } else {
+      return Object.entries(selectedCharges).map(([id, { quantity }]) => {
+        const parsedId = parseInt(id, 10);
+        return quantity === 0 ? `${parsedId}` : `${parsedId}_${quantity}`;
+      });
+    }
   };
 
-  const conformNextStep = () => {
-    const ac = transformSelectedCharges(11);
+  const conformNextStep = (isUpgrade) => {
+    const ac = transformSelectedCharges(11, isUpgrade);
     fetchData(ac, true);
   };
 
@@ -231,7 +240,7 @@ const UpgradeDrawer = ({
 
           <button
             className="w-full bg-[#ff748b] hover:bg-[#ff5a73] text-white py-3 rounded-lg font-medium transition-colors"
-            onClick={conformNextStep}
+            onClick={() => conformNextStep(true)}
           >
             {finalLoader ? (
               <Spinner size={20} color="#fff" thickness={3} />

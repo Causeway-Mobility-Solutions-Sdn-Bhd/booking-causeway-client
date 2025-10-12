@@ -24,6 +24,7 @@ function AdditionalCharges({
   useEffect(() => {
     if (shouldFetch) {
       const ac = transformSelectedCharges();
+      console.log(ac)
       fetchData(ac, false);
       setShouldFetch(false);
     }

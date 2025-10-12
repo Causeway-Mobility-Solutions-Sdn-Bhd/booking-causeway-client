@@ -18,7 +18,7 @@ export const reservationApi = apiSlice.injectEndpoints({
           const currentUUID = state.reservation.currentUUID;
 
           if (!reservation?.vehicle_class_id || !currentUUID) {
-            return { data: null }; 
+            return { data: null };
           }
 
           const requestData = {
@@ -152,9 +152,11 @@ export const reservationApi = apiSlice.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["Reservation"],
+
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
+
           if (data) {
             dispatch(setCurrentUUID(data._id));
             dispatch(setReservation(data));
@@ -170,6 +172,7 @@ export const reservationApi = apiSlice.injectEndpoints({
 
 export const {
   useGetAdditionalChargesQuery,
+  useLazyGetAdditionalChargesQuery,
   usePostAdditionalChargesMutation,
   useConfirmReservationMutation,
   useProcessPaymentMutation,
