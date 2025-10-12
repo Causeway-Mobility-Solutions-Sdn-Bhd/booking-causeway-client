@@ -8,6 +8,7 @@ import {
   useResendOtpMutation,
   useVerifyOtpMutation,
 } from "@/store/api/authApiSlice";
+import Spinner from "@/components/custom/Spinner";
 
 function OtpVerify({ type, userData }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -119,7 +120,6 @@ function OtpVerify({ type, userData }) {
     }
   };
 
-
   return (
     <div className="bg-white rounded-lg shadow-lg w-full max-w-sm p-5 md:p-6 relative">
       {type === "primary" && (
@@ -165,26 +165,17 @@ function OtpVerify({ type, userData }) {
         <button
           onClick={handleVerify}
           disabled={isLoading || otp.join("").length !== 6}
-          className={`w-full font-semibold py-3 px-4 rounded-lg cursor-pointer mb-4 transition-colors ${
-            isLoading || otp.join("").length !== 6
-              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-              : "bg-cPrimary text-white hover:bg-cPrimary/90"
-          }`}
+          className="w-full bg-cPrimary text-white font-semibold flex justify-center items-center py-3 px-4 rounded-lg cursor-pointer mb-4 hover:bg-cPrimary/90 transition-colors"
         >
           {isLoading ? (
-            <div className="flex items-center justify-center">
-              <RefreshCw size={16} className="animate-spin mr-2" />
-              Verifying...
-            </div>
+            <Spinner size={24} color="#fff" thickness={3} />
           ) : (
-            "Verify OTP"
+            <span>Verify OTP</span>
           )}
         </button>
 
         <div className="text-center flex justify-center items-center gap-1">
-          <p className="text-gray-600 text-sm">
-            Didn't receive the code?{" "}
-          </p>
+          <p className="text-gray-600 text-sm">Didn't receive the code? </p>
           {canResend ? (
             <button
               onClick={handleResend}
