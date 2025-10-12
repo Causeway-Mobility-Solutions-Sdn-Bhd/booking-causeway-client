@@ -161,3 +161,41 @@ export const PaymentLoader = () => {
     </div>
   );
 };
+export const OtpFormSkeleton = () => {
+  return (
+    <div className="bg-white rounded-lg shadow-lg w-full max-w-sm p-5 md:p-6 relative animate-pulse">
+      {/* Back button skeleton */}
+      <div className="absolute top-5 left-5 w-5 h-5 bg-gray-200 rounded"></div>
+
+      {/* Header skeleton */}
+      <div className="text-center mb-6 mt-2">
+        <div className="h-8 bg-gray-200 rounded w-32 mx-auto mb-2"></div>
+        <div className="h-4 bg-gray-200 rounded w-48 mx-auto mb-1"></div>
+        <div className="h-4 bg-gray-200 rounded w-40 mx-auto"></div>
+      </div>
+
+      {/* OTP input boxes skeleton */}
+      <div className="mb-6">
+        <div className="flex justify-center space-x-3 mb-4">
+          {[...Array(6)].map((_, index) => (
+            <div key={index} className="w-12 h-12 bg-gray-200 rounded-lg"></div>
+          ))}
+        </div>
+      </div>
+
+      {/* Verify button skeleton */}
+      <div className="h-12 bg-gray-200 rounded-lg mb-4"></div>
+
+      {/* Resend text skeleton */}
+      <div className="flex justify-center items-center gap-1">
+        <div className="h-4 bg-gray-200 rounded w-36"></div>
+        <div className="h-4 bg-gray-200 rounded w-20"></div>
+      </div>
+
+      {/* Back to login skeleton */}
+      <div className="text-center mt-4">
+        <div className="h-4 bg-gray-200 rounded w-24 mx-auto"></div>
+      </div>
+    </div>
+  );
+};

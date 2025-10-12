@@ -30,15 +30,20 @@ function LoginC({ type }) {
       console.log({
         email: data.email,
         password: data.password,
-      })
+      });
       const res = await login({
         email: data.email,
         password: data.password,
       }).unwrap();
+
       showSuccessToast("Logged in successfully!");
       router.push("/");
     } catch (err) {
       console.error("Login error:", err);
+      const clientToken = err?.data?.clientToken;
+      if (clientToken && type === "primary") {
+        router.push(`otp-verify/${clientToken}`);
+      }
       showErrorToast(err?.data?.message || "Login failed");
     }
   };
@@ -81,7 +86,6 @@ function LoginC({ type }) {
             </p>
           )}
         </div>
-
 
         <div className="mb-3 relative">
           <div className="relative">

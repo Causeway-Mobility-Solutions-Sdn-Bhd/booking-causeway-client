@@ -5,15 +5,16 @@ import { useParams, useRouter } from "next/navigation";
 import OtpVerify from "../_components/OtpVerify";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 import { useVerifyClientMutation } from "@/store/api/authApiSlice";
+import { OtpFormSkeleton } from "@/components/custom/Skeleton";
 
 export default function OtpVerifyPage() {
   const { clientToken } = useParams();
-  const router = useRouter()
+  const router = useRouter();
   const [userData, setUserData] = useState(null);
 
-  const [verifyClient, { isLoading}] = useVerifyClientMutation();
+  const [verifyClient, { isLoading }] = useVerifyClientMutation();
 
- useEffect(() => {
+  useEffect(() => {
     const verifyToken = async () => {
       try {
         const res = await verifyClient(clientToken).unwrap();
@@ -24,7 +25,9 @@ export default function OtpVerifyPage() {
           router.push("/");
         }
       } catch (err) {
-        showErrorToast(err?.data?.message || "Invalid or expired verification link.");
+        showErrorToast(
+          err?.data?.message || "Invalid or expired verification link."
+        );
         router.push("/signup");
       }
     };
@@ -34,8 +37,8 @@ export default function OtpVerifyPage() {
 
   if (isLoading || userData === null) {
     return (
-      <div className="flex items-center justify-center h-screen text-lg">
-        Checking verification link...
+      <div className="w-[95%] mx-auto flex justify-center items-center absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]">
+        <OtpFormSkeleton />
       </div>
     );
   }
