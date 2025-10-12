@@ -17,6 +17,7 @@ import {
 
 import {
   useConfirmReservationMutation,
+  usePostAdditionalChargesMutation,
   useProcessPaymentMutation,
 } from "@/store/api/reservationApiSlice";
 import hqApi from "@/lib/hqApi";
@@ -32,6 +33,7 @@ function Page() {
   const [confirmReservation, { isLoading: isConfirming }] =
     useConfirmReservationMutation();
   const [processPayment, { isLoading: isPaying }] = useProcessPaymentMutation();
+  const [postAdditionalCharges] = usePostAdditionalChargesMutation();
 
   useEffect(() => {
     if (!reservation?.customer_id) {
@@ -39,58 +41,19 @@ function Page() {
     }
   }, [reservation]);
 
+  useEffect(() => {
+    fetchData();
+  }, [reservation?.customer_id]);
+
   const fetchData = async () => {
     try {
-      if (reservation?.vehicle_class_id && currentUUID) {
-        setLoader(true);
-        const requestData = {
-          pick_up_date: reservation?.pick_up_date
-            ? format(reservation.pick_up_date, "yyyy-MM-dd")
-            : null,
-          pick_up_time: reservation?.pick_up_time || null,
-          return_date: reservation?.return_date
-            ? format(reservation.return_date, "yyyy-MM-dd")
-            : null,
-          return_time: reservation?.return_time || null,
-          pick_up_location: reservation?.pick_up_location?.id || null,
-          return_location: reservation?.return_location?.id || null,
-          brand_id: reservation?.brand_id ?? null,
-          vehicle_class_id: reservation?.vehicle_class_id,
-        };
-
-        const params = new URLSearchParams();
-        for (const key in requestData) {
-          if (requestData[key] !== null && requestData[key] !== undefined) {
-            params.append(key, requestData[key]);
-          }
-        }
-
-        if (reservation?.selected_additional_charges) {
-          reservation?.selected_additional_charges?.forEach((charge) => {
-            params.append("additional_charges", charge);
-          });
-        } else {
-          params.append("additional_charges", "20");
-        }
-
-        const response = await hqApi.post(
-          `/car-rental/reservations/additional-charges?${params.toString()}`,
-          {}
-        );
-
-        const data = response?.data;
-        if (response.status === 200) {
-          dispatch(setReservation(data?.reservation));
-          dispatch(setSelectedVehicle(data?.selected_vehicle));
-          dispatch(
-            setSelectedAdditionalCharges(data?.selected_additional_charges)
-          );
-        }
-      }
+      setLoader(true);
+      const ac = reservation?.selected_additional_charges;
+      const result = await postAdditionalCharges({ ac }).unwrap();
+     setLoader(false);
     } catch (error) {
-      console.log(error);
-    } finally {
       setLoader(false);
+      console.error("Error submitting additional charges:", error);
     }
   };
 
@@ -124,7 +87,9 @@ function Page() {
           paymentRes?.payment_gateways_transaction?.external_url;
 
         if (paymentLink) {
-          dispatch(setFinalPayment({link:paymentLink , price:outstandingBalance}));
+          dispatch(
+            setFinalPayment({ link: paymentLink, price: outstandingBalance })
+          );
           router.push(`/book/step-06?ssid=${currentUUID}`);
         }
       }
