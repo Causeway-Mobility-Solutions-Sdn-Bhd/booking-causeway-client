@@ -3,7 +3,6 @@ import { setLogedUser } from "../slices/authSlie";
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-
     login: builder.mutation({
       query: (credentials) => ({
         url: "auth/login",
@@ -37,7 +36,7 @@ export const authApi = apiSlice.injectEndpoints({
       }),
     }),
 
-     verifyOtp: builder.mutation({
+    verifyOtp: builder.mutation({
       query: (data) => ({
         url: "auth/verify",
         method: "POST",
@@ -57,11 +56,26 @@ export const authApi = apiSlice.injectEndpoints({
       query: (data) => ({
         url: "auth/resend-verify",
         method: "POST",
-        data: data, 
+        data: data,
       }),
     }),
+    refresh: builder.mutation({
+      query: () => ({
+        url: "auth/refresh",
+        method: "POST",
+        withCredentials: true,
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
 
-
+          dispatch(setLogedUser(data.user));
+        } catch (err) {
+          console.error("Token refresh failed: ", err);
+        }
+      },
+      providesTags: ["Auth"],
+    }),
   }),
   overrideExisting: true,
 });
@@ -72,4 +86,5 @@ export const {
   useVerifyClientMutation,
   useVerifyOtpMutation,
   useResendOtpMutation,
+  useRefreshMutation,
 } = authApi;

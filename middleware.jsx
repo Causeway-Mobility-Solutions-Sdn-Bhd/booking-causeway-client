@@ -20,21 +20,18 @@ export async function middleware(req) {
     if (isDevRoute) {
       return NextResponse.redirect(new URL("/feature-development", req.url));
     }
-  } 
-  // else if (env === "staging") {
-  //   const authRoutes = ["/login", "/signup", "/otp-verify"];
-  //   const manageRoutes = ["/profile", "/manage-booking"];
+  } else {
+    const protectedRoutes = ["/profile", "/manage-booking"];
+    const isProtectedRoute = protectedRoutes.some((route) =>
+      pathname.startsWith(route)
+    );
 
-  //   if (token) {
-  //     if (authRoutes.some((route) => pathname.startsWith(route))) {
-  //       return NextResponse.redirect(new URL("/profile", req.url));
-  //     }
-  //   } else {
-  //     if (manageRoutes.some((route) => pathname.startsWith(route))) {
-  //       return NextResponse.redirect(new URL("/login", req.url));
-  //     }
-  //   }
-  // }
+    console.log(isProtectedRoute, token);
+
+    if (isProtectedRoute && !token) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+  }
 
   return NextResponse.next();
 }
