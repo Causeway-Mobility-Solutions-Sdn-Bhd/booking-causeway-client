@@ -36,7 +36,7 @@ function RefreshTokenLoader({ children }) {
           setIsChecking(false);
         }
       } catch (err) {
-        console.error("Auth check failed:", err);
+        console.log("Auth check failed:", err);
         hasChecked.current = true;
 
         const isProtected = protectedRoutes.some((r) => pathname.startsWith(r));

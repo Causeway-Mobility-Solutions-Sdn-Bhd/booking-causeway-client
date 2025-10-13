@@ -37,7 +37,7 @@ export const fleetApi = apiSlice.injectEndpoints({
           const { data } = await queryFulfilled;
           dispatch(setAllCurrencies(data));
         } catch (err) {
-          console.error("getCurrencies error: ", err);
+          console.log("getCurrencies error: ", err);
         }
       },
     }),

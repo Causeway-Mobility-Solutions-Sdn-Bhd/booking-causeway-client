@@ -124,7 +124,7 @@ function PaymentIframe() {
         }
       }
     } catch (error) {
-      console.error("Error confirming reservation:", error);
+      console.log("Error confirming reservation:", error);
     }
   };
 

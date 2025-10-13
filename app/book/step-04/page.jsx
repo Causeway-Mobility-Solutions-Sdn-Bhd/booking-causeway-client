@@ -48,7 +48,7 @@ function Page() {
       }
     } catch (error) {
       setLoading(false)
-      console.error("Error submitting additional charges:", error);
+      console.log("Error submitting additional charges:", error);
     }
   };
 
@@ -65,7 +65,7 @@ function Page() {
       setLoading(false)
     } catch (error) {
       setLoading(false)
-      console.error("Failed to fetch customer data:", error);
+      console.log("Failed to fetch customer data:", error);
     }
   };
 

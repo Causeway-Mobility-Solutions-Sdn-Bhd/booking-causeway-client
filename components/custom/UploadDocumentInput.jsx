@@ -79,7 +79,7 @@ export const ImageUpload = ({
     }
 
     if (!onDeleteExisting) {
-      console.error("onDeleteExisting function not provided");
+      console.log("onDeleteExisting function not provided");
       return;
     }
 
@@ -90,7 +90,7 @@ export const ImageUpload = ({
       // Remove from files array after successful deletion
       setFiles(fileArray.filter((_, index) => index !== fileIndex));
     } catch (error) {
-      console.error("Error deleting file:", error);
+      console.log("Error deleting file:", error);
     } finally {
       setDeletingIds((prev) => {
         const newSet = new Set(prev);
