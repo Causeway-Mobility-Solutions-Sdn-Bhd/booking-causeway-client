@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
           <RefreshTokenLoader>{children}</RefreshTokenLoader>
           <BlackBg />
           <Toaster
-            position="top-left"
+            position="top-right"
             expand={true}
             richColors={true}
             closeButton={false}
