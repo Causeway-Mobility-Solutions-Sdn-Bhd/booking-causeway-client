@@ -1,15 +1,13 @@
-// components/custom/DropdownInput.jsx
 import React, { useEffect, useState } from "react";
-import { ChevronDown } from "lucide-react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import Image from "next/image";
 import ErrorMessage from "@/components/custom/ErrorMessage";
+import { useWatch } from "react-hook-form";
 
 const DropdownInput = ({
   data,
@@ -18,14 +16,18 @@ const DropdownInput = ({
   register,
   errors,
   setValue,
-  watch,
   hasError = false,
   firstErrorField,
   disabled = false,
+  control,
+  required = true,
 }) => {
-  const selectedValue = watch(name);
   const error = errors[name];
-
+  const watchedValue = useWatch({
+    control,
+    name,
+    defaultValue: "",
+  });
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
@@ -37,10 +39,11 @@ const DropdownInput = ({
   }, []);
 
   const handleChange = (value) => {
-    setValue(name, value, { shouldValidate: true });
+    if (!value || value === "") return;
+    setValue(name, value, { shouldValidate: false });
   };
 
-  const getDisplayLabel = () => {
+  const getDisplayLabel = (selectedValue) => {
     const item = data.find((i) => i.value === selectedValue);
     if (!item) return `Select ${label}`;
 
@@ -58,10 +61,27 @@ const DropdownInput = ({
     return text;
   };
 
+  const getPlaceholderText = () => {
+    const placeholderText = `Select ${label}`;
+    if (windowWidth < 400 && placeholderText.length >= 19) {
+      return placeholderText.substring(0, 11) + "...";
+    }
+    if (windowWidth < 450 && placeholderText.length >= 19) {
+      return placeholderText.substring(0, 13) + "...";
+    }
+    if (windowWidth < 500 && placeholderText.length >= 19) {
+      return placeholderText.substring(0, 16) + "...";
+    }
+
+    return placeholderText;
+  };
+
+  const currentValue = watchedValue || "";
+
   return (
     <div>
       <Select
-        value={selectedValue || ""}
+        value={currentValue}
         onValueChange={handleChange}
         disabled={disabled}
       >
@@ -73,7 +93,9 @@ const DropdownInput = ({
           <div className="flex flex-col h-full items-start justify-center w-full">
             <span className="text-gray-500 text-xs leading-tight">{label}</span>
             <span className="text-sm leading-tight text-left">
-              {selectedValue ? getDisplayLabel() : `Select ${label}`}
+              {currentValue
+                ? getDisplayLabel(currentValue)
+                : getPlaceholderText()}
             </span>
           </div>
         </SelectTrigger>
@@ -102,9 +124,14 @@ const DropdownInput = ({
       )}
       <input
         type="hidden"
-        {...register(name, {
-          required: `${label} is required`,
-        })}
+        {...register(
+          name,
+          required
+            ? {
+                required: `${label} is required`,
+              }
+            : {}
+        )}
       />
     </div>
   );

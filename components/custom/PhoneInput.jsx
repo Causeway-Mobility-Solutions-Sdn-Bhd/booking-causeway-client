@@ -15,66 +15,66 @@ const PhoneInput = ({
   errors,
   name = "phone",
   setValue,
-  watch,
   firstErrorField,
+  control,
+  className = "",
+  required = true,
 }) => {
-  const [selectedCountryCode, setSelectedCountryCode] = useState("+60"); // Default Malaysia
-  const [selectedCountryIso, setSelectedCountryIso] = useState("MY"); // Default Malaysia ISO
+  const [selectedCountryCode, setSelectedCountryCode] = useState("+60");
+  const [selectedCountryIso, setSelectedCountryIso] = useState("MY");
 
-  // Use the dynamic country data hook
   const { countryCodes, loading: dataLoading, error } = useCountryData();
 
-  // Get current phone value from form
-  const phoneValue = watch(name);
-  const countryCodeValue = watch(`${name}CountryCode`);
-
-  // Check if fields have errors
   const hasPhoneError = !!errors[name];
   const hasCountryCodeError = !!errors[`${name}CountryCode`];
 
-  // Only process country codes when data is loaded
   const countryPhoneCodes = countryCodes
     ? Object.entries(countryCodes).map(([iso2, data]) => ({
         code: data.c,
         country: data.n,
-        iso2: iso2,
+        iso2: iso2.toLowerCase(),
       }))
     : [];
 
-  // Initialize country code in form on component mount
   useEffect(() => {
-    if (!countryCodeValue && !dataLoading) {
+    if (!dataLoading && countryCodes && required) {
       setValue(`${name}CountryCode`, selectedCountryCode, {
         shouldValidate: false,
       });
     }
-  }, [dataLoading]);
+  }, [dataLoading, countryCodes, required]);
 
   const handleCountryCodeChange = (value) => {
-    // Extract the country code and ISO from the combined value
     const [code, iso] = value.split("|");
     setSelectedCountryCode(code);
     setSelectedCountryIso(iso);
-    console.log("Selected code:", code);
-
-    setValue(`${name}CountryCode`, code, { shouldValidate: true });
+    setValue(`${name}CountryCode`, code, { shouldValidate: false });
   };
 
-  const handlePhoneChange = (e) => {
-    const value = e.target.value.replace(/[^\d]/g, "");
-    setValue(name, value, { shouldValidate: true });
-  };
+  const validationRules = required
+    ? {
+        required: "Phone number is required",
+        pattern: {
+          value: /^[\d]{7,15}$/,
+          message: "Please enter a valid phone number",
+        },
+      }
+    : {
+        pattern: {
+          value: /^[\d]{7,15}$/,
+          message: "Please enter a valid phone number",
+        },
+      };
 
   return (
-    <div className={``}>
+    <div className={className}>
       <div
         className={`!h-11 flex items-center w-full border rounded-md hover:border-teal-500 transition-colors focus-within:ring-2 focus-within:ring-teal-500 focus-within:border-transparent overflow-hidden ${
           hasPhoneError || hasCountryCodeError
             ? "border-red-500"
             : "border-gray-200"
-        }`}
+        } ${className}`}
       >
-        {/* Country Code Dropdown */}
         <Select
           value={`${selectedCountryCode}|${selectedCountryIso}`}
           onValueChange={handleCountryCodeChange}
@@ -89,49 +89,44 @@ const PhoneInput = ({
           </SelectTrigger>
 
           <SelectContent className="w-[250px]">
-            {countryPhoneCodes?.map((country) => {
-              return (
-                <SelectItem
-                  key={`${country.iso2}-${country.code}-${country.country}`}
-                  value={`${country.code}|${country.iso2}`}
-                >
-                  <div className="flex items-center gap-2">
-                    <Image
-                      src={`/flagicons/${country.iso2}.svg`}
-                      alt={`${country.country} flag`}
-                      width={20}
-                      height={20}
-                    />
-                    <span>{country.code}</span>
-                    <span className="text-gray-500 text-sm">
-                      {country.country}
-                    </span>
-                  </div>
-                </SelectItem>
-              );
-            })}
+            {countryPhoneCodes.map((country) => (
+              <SelectItem
+                key={`${country.iso2}-${country.code}`}
+                value={`${country.code}|${country.iso2}`}
+              >
+                <div className="flex items-center gap-2">
+                  <Image
+                    src={`/flagicons/${country.iso2}.svg`}
+                    alt={`${country.country} flag`}
+                    width={20}
+                    height={20}
+                  />
+                  <span>{country.code}</span>
+                  <span className="text-gray-500 text-sm">
+                    {country.country}
+                  </span>
+                </div>
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
 
-        {/* Mobile Number Input */}
         <input
           {...register(name, {
-            required: "Phone number is required",
-            pattern: {
-              value: /^[\d]{7,15}$/,
-              message: "Please enter a valid phone number",
+            ...validationRules,
+            onChange: (e) => {
+              e.target.value = e.target.value.replace(/[^\d]/g, "");
             },
           })}
           type="tel"
-          value={phoneValue || ""}
-          onChange={handlePhoneChange}
-          placeholder={"Mobile Number"}
+          placeholder="Mobile Number"
           className={`flex-1 h-10 border-0 px-3 placeholder-gray-500 placeholder:font-light placeholder:text-sm focus:outline-none focus:ring-0 bg-transparent ${
             dataLoading ? "opacity-50" : ""
           }`}
           disabled={dataLoading || !!error}
         />
       </div>
+
       {(hasPhoneError || hasCountryCodeError) && firstErrorField === name && (
         <ErrorMessage
           message={
@@ -141,11 +136,17 @@ const PhoneInput = ({
           }
         />
       )}
+
       <input
         type="hidden"
-        {...register(`${name}CountryCode`, {
-          required: "Country code is required",
-        })}
+        {...register(
+          `${name}CountryCode`,
+          required
+            ? {
+                required: "Country code is required",
+              }
+            : {}
+        )}
       />
     </div>
   );

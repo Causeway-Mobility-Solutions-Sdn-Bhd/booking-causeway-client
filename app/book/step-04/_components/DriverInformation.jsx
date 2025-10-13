@@ -1,45 +1,53 @@
-import React, { useState } from "react";
-import { Calendar, Plus, CalendarIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import React from "react";
 import { Input } from "@/components/ui/input";
 import { differenceInYears, format, isValid, parse } from "date-fns";
-import { ImageUpload } from "@/components/custom/UploadDocumentInput";
 import CustomDatePicker from "@/components/custom/CustomDatePicker";
 import ErrorMessage from "../../../../components/custom/ErrorMessage";
+import { useWatch } from "react-hook-form";
+import DropdownInput from "@/components/custom/DropdownInput";
+import { useCountryData } from "@/hooks/useCountryData";
 
 const DriverInformation = ({
   register,
   setValue,
   errors,
-  clearErrors,
-  firstErrorField,
-  watch,
-}) => {
-  // Check if fields have errors
-  const hasFirstNameError = !!errors.firstName;
-  const hasLastNameError = !!errors.lastName;
-  const hasPassportError = !!errors.passportNumber;
-  const hasBirthDateError = !!errors.birthDate;
 
-  const idCardOrPass = watch("idCardOrPass") || [];
+  firstErrorField,
+
+  control,
+}) => {
+  const { countryCodes, loading: dataLoading, error } = useCountryData();
+
+  const formattedCountries = React.useMemo(() => {
+    if (!countryCodes) return [];
+    return Object.entries(countryCodes).map(([isoCode, data]) => ({
+      value: isoCode,
+      label: data.n,
+      flag: isoCode.toLowerCase(),
+    }));
+  }, [countryCodes]);
+
   const handleBirthDateChange = (date) => {
     setValue("birthDate", date ? format(date, "dd/MM/yy") : "", {
       shouldValidate: true,
     });
   };
+  console.log(errors);
+  console.log(firstErrorField);
 
-  const parseLicenseDate = () => {
-    const dateString = watch("birthDate");
+  const dateString = useWatch({ name: "birthDate", control });
+
+  const parseBirthDate = () => {
     if (!dateString) return null;
-
     try {
-      // Parse the dd/MM/yy format back to Date object
       return parse(dateString, "dd/MM/yy", new Date());
     } catch (e) {
-      console.error("Error parsing license date:", e);
       return null;
     }
   };
+
+  console.log("RERENDERED");
+
   return (
     <div className="space-y-6">
       <h2 className="text-lg font-bold mb-4 text-gray-800">
@@ -47,15 +55,14 @@ const DriverInformation = ({
       </h2>
 
       <div className="bg-white p-6 pb-4 rounded-lg shadow-lg">
-        <div className={`grid grid-cols-2 lg:grid-cols-3 gap-4 items-start`}>
-          {/* First Name Input */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 items-start">
           <div>
             <Input
               {...register("firstName", {
                 required: "First name is required",
                 minLength: {
                   value: 2,
-                  message: "Full name must be at least 2 characters",
+                  message: "First name must be at least 2 characters",
                 },
                 pattern: {
                   value: /^[A-Za-z\s]+$/,
@@ -64,13 +71,14 @@ const DriverInformation = ({
               })}
               placeholder="First Name"
               className={`h-11 placeholder:font-light placeholder:text-sm border-gray-200 placeholder-gray-500 focus-visible:ring-teal-500 focus-visible:ring-2 hover:border-teal-500 transition-colors ${
-                hasFirstNameError ? "border-red-500" : ""
+                errors.firstName ? "border-red-500" : ""
               }`}
             />
-            {hasFirstNameError && firstErrorField === "firstName" && (
+            {firstErrorField === "firstName" && errors.firstName && (
               <ErrorMessage message={errors.firstName.message} />
             )}
           </div>
+
           <div>
             <Input
               {...register("lastName", {
@@ -86,90 +94,53 @@ const DriverInformation = ({
               })}
               placeholder="Last Name"
               className={`h-11 placeholder:font-light placeholder:text-sm border-gray-200 placeholder-gray-500 focus-visible:ring-teal-500 focus-visible:ring-2 hover:border-teal-500 transition-colors ${
-                hasLastNameError ? "border-red-500" : ""
+                errors.lastName ? "border-red-500" : ""
               }`}
             />
-            {hasLastNameError && firstErrorField === "lastName" && (
+            {firstErrorField === "lastName" && errors.lastName && (
               <ErrorMessage message={errors.lastName.message} />
             )}
           </div>
 
-          {/* ID Card/Passport Number Input */}
+          <DropdownInput
+            data={formattedCountries}
+            label="Country of Origin"
+            name="country"
+            register={register}
+            errors={errors}
+            setValue={setValue}
+            control={control}
+            hasError={!!errors.country}
+            disabled={dataLoading || !!error}
+            firstErrorField={firstErrorField}
+          />
+
           <div>
-            <Input
-              {...register("passportNumber", {
-                required: "ID/Passport number is required",
-                pattern: {
-                  value: /^[A-Z0-9]{5,20}$/,
-                  message: "Please enter a valid ID/Passport number",
-                },
-              })}
-              placeholder="ID Card/Passport Number"
-              className={`!w-full h-11 placeholder:font-light placeholder:text-sm border-gray-200 placeholder-gray-500 focus-visible:ring-teal-500 focus-visible:ring-2 hover:border-teal-500 transition-colors ${
-                hasPassportError ? "border-red-500" : ""
-              }`}
-            />
-            {hasPassportError && firstErrorField === "passportNumber" && (
-              <ErrorMessage message={errors.passportNumber.message} />
-            )}
-          </div>
-
-          {/* Birthday Picker */}
-
-          <CustomDatePicker
-            value={parseLicenseDate()}
-            onChange={handleBirthDateChange}
-            placeholder="DD/MM/YY"
-            label="Birthday"
-            error={hasBirthDateError}
-            errorMessage={
-              firstErrorField === "birthDate" ? errors.birthDate.message : ""
-            }
-          />
-          {/* </div> */}
-
-          <input
-            type="hidden"
-            {...register("birthDate", {
-              required: "Birthday is required",
-
-              validate: (value) => {
-                if (!value) return "Birthday is required";
-                console.log("VALUE", value);
-
-                const birthDate = parse(value, "dd/MM/yy", new Date());
-                console.log(birthDate);
-
-                if (!isValid(birthDate)) return "Invalid date";
-
-                const age = differenceInYears(new Date(), birthDate);
-
-                if (age < 23 || age > 75) {
-                  return "Age must be between 23 and 75 years";
-                }
-                return true;
-              },
-            })}
-          />
-          <div className={`col-span-2 lg:col-span-1`}>
-            <ImageUpload
-              label={"ID Card/Passport image"}
-              files={idCardOrPass}
-              setFiles={(files) => {
-                setValue("idCardOrPass", files, { shouldValidate: true });
-                if (files && files.length > 0) {
-                  clearErrors("idCardOrPass");
-                }
-              }}
-              error={errors.idCardOrPass ? errors.idCardOrPass.message : false}
+            <CustomDatePicker
+              value={parseBirthDate()}
+              onChange={handleBirthDateChange}
+              placeholder="DD/MM/YY"
+              label="Birthday"
+              error={!!errors.birthDate}
+              errorMessage={
+                firstErrorField === "birthDate" ? errors.birthDate?.message : ""
+              }
             />
             <input
               type="hidden"
-              {...register("idCardOrPass", {
-                required: "At least one license image is required",
+              {...register("birthDate", {
+                required: "Birthday is required",
                 validate: (value) => {
-                  if (!value || value.length === 0) {
-                    return "At least one license image is required";
+                  if (!value) return "Birthday is required";
+
+                  const birthDate = parse(value, "dd/MM/yy", new Date());
+
+                  if (!isValid(birthDate)) return "Invalid date";
+
+                  const age = differenceInYears(new Date(), birthDate);
+
+                  if (age < 23 || age > 75) {
+                    return "Age must be between 23 and 75 years";
                   }
                   return true;
                 },
@@ -182,4 +153,16 @@ const DriverInformation = ({
   );
 };
 
-export default DriverInformation;
+export default React.memo(DriverInformation, (prevProps, nextProps) => {
+  const relevantFields = ["firstName", "lastName", "country", "birthDate"];
+
+  const errorChanged = relevantFields.some(
+    (field) => prevProps.errors[field] !== nextProps.errors[field]
+  );
+
+  const firstErrorChanged =
+    prevProps.firstErrorField !== nextProps.firstErrorField &&
+    relevantFields.includes(nextProps.firstErrorField);
+
+  return !errorChanged && !firstErrorChanged;
+});

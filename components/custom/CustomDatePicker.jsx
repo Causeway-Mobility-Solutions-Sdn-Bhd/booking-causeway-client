@@ -23,7 +23,7 @@ const CustomDatePicker = ({
   placeholder = "Select date",
   label = "Date",
   error = false,
-  disabledDateCondition = (date) => date > new Date(), // Default: disable future dates
+  disabledDateCondition = (date) => date > new Date(),
   className = "",
   errorMessage,
 }) => {
