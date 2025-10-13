@@ -2,6 +2,8 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import PhoneInput from "@/components/custom/PhoneInput";
 import ErrorMessage from "../../../../components/custom/ErrorMessage";
+import { InfoIcon } from "lucide-react";
+import { Tooltip } from "@/components/custom/InputInfoTooltip";
 
 const DriversContactInfo = ({
   register,
@@ -27,9 +29,10 @@ const DriversContactInfo = ({
             control={control}
             name="phone"
             firstErrorField={firstErrorField}
+            instructions={true}
           />
 
-          <div>
+          <div className="relative">
             <Input
               {...register("email", {
                 required: "Email address is required",
@@ -40,10 +43,16 @@ const DriversContactInfo = ({
               })}
               type="email"
               placeholder="Email Address"
-              className={`border-gray-200 !h-11 placeholder:font-light placeholder:text-sm placeholder-gray-500 focus-visible:ring-teal-500 focus-visible:ring-2 hover:border-teal-500 transition-colors ${
+              className={`border-gray-200 !h-11 placeholder:font-light placeholder:text-sm placeholder-gray-500 focus-visible:ring-teal-500 focus-visible:ring-2 hover:border-teal-500 transition-colors pr-10 ${
                 errors.email ? "border-red-500" : ""
               }`}
             />
+            <div className="absolute right-3 top-6 -translate-y-1/2">
+              <Tooltip
+                message="Enter a valid email to receive updates. Your information stays private."
+                title="Instructions"
+              />
+            </div>
             {firstErrorField === "email" && errors.email && (
               <ErrorMessage message={errors.email.message} />
             )}

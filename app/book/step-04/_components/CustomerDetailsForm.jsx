@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Checkbox } from "@/components/ui/checkbox";
 import DriverLicenseInfo from "./DriverLicenseInfo";
@@ -22,8 +22,8 @@ const CustomerDetailsForm = ({
   const router = useRouter();
   const dispatch = useAppDispatch();
   const currentUUID = useAppSelector((state) => state.reservation.currentUUID);
-  const firstErrorRef = useRef(null);
 
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   const {
     register,
     handleSubmit,
@@ -33,12 +33,12 @@ const CustomerDetailsForm = ({
     formState: { errors },
     control,
   } = useForm({
-    mode: "onBlur",
+    mode: hasSubmitted ? "onBlur" : "onSubmit",
     reValidateMode: "onBlur",
     defaultValues: {
       firstName: "",
       lastName: "",
-      country: "MY",
+      country: "Malaysia",
       birthDate: "",
 
       phone: "",
@@ -59,6 +59,10 @@ const CustomerDetailsForm = ({
 
   const onSubmit = async (data) => {
     setSubmitLoader(true);
+    setHasSubmitted(true);
+    console.log(data);
+
+    return;
 
     try {
       const transformedData = transformCustomerFormData(data);

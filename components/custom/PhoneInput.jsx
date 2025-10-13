@@ -9,6 +9,7 @@ import {
 import Image from "next/image";
 import { useCountryData } from "@/hooks/useCountryData";
 import ErrorMessage from "@/components/custom/ErrorMessage";
+import { Tooltip } from "./InputInfoTooltip";
 
 const PhoneInput = ({
   register,
@@ -19,6 +20,7 @@ const PhoneInput = ({
   control,
   className = "",
   required = true,
+  instructions = false,
 }) => {
   const [selectedCountryCode, setSelectedCountryCode] = useState("+60");
   const [selectedCountryIso, setSelectedCountryIso] = useState("MY");
@@ -67,7 +69,7 @@ const PhoneInput = ({
       };
 
   return (
-    <div className={className}>
+    <div className={`${className} relative`}>
       <div
         className={`!h-11 flex items-center w-full border rounded-md hover:border-teal-500 transition-colors focus-within:ring-2 focus-within:ring-teal-500 focus-within:border-transparent overflow-hidden ${
           hasPhoneError || hasCountryCodeError
@@ -126,7 +128,14 @@ const PhoneInput = ({
           disabled={dataLoading || !!error}
         />
       </div>
-
+      {instructions && (
+        <div className="z-500 absolute right-3 top-6 -translate-y-1/2">
+          <Tooltip
+            message="Provide your active phone number in the correct format, including country code."
+            title="Instructions"
+          />
+        </div>
+      )}
       {(hasPhoneError || hasCountryCodeError) && firstErrorField === name && (
         <ErrorMessage
           message={

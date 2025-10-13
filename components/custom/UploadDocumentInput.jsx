@@ -1,23 +1,36 @@
 import React, { useState, useRef } from "react";
-import { Plus, X, Camera, ImageIcon } from "lucide-react";
+import {
+  Plus,
+  X,
+  Camera,
+  ImageIcon,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 export const ImageUpload = ({
   files,
   setFiles,
   placeholder = "Upload Document Here",
   accept = ".jpg,.jpeg,.png,.webp",
   multiple = true,
-  maxFiles = 10,
+  maxFiles = 4,
   label,
   error = false,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -150,7 +163,43 @@ export const ImageUpload = ({
       </div>
 
       {/* Label - Outside the height-constrained container */}
-      <p className={`text-sm mt-2 ${error ? "text-red-500" : ""}`}>{label}</p>
+
+      {/* <p className={`text-sm mt-2 ${error ? "text-red-500" : ""}`}>{label}</p> */}
+
+      {/* Instuction */}
+      <Collapsible
+        open={isOpen}
+        onOpenChange={setIsOpen}
+        className="w-full mt-2"
+      >
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-normal text-gray-800">Instructions</p>
+          <CollapsibleTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-9 p-0 flex items-center gap-2"
+            >
+              {isOpen ? (
+                <>
+                  <ChevronUp color="#000" className="h-4 w-4" />
+                </>
+              ) : (
+                <>
+                  <ChevronDown color="#000" className="h-4 w-4" />
+                </>
+              )}
+            </Button>
+          </CollapsibleTrigger>
+        </div>
+
+        <CollapsibleContent>
+          <ul className="list-disc list-inside text-sm">
+            <li>File must be JPG, PNG & PDF</li>
+            <li>Max 4 files, up to 5 MB</li>
+          </ul>
+        </CollapsibleContent>
+      </Collapsible>
 
       {/* Image Previews - Outside the height-constrained container */}
       {fileArray && fileArray.length > 0 && (

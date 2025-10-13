@@ -16,24 +16,22 @@ const DriverInformation = ({
 
   control,
 }) => {
-  const { countryCodes, loading: dataLoading, error } = useCountryData();
+  // const { countryCodes, loading: dataLoading, error } = useCountryData();
 
-  const formattedCountries = React.useMemo(() => {
-    if (!countryCodes) return [];
-    return Object.entries(countryCodes).map(([isoCode, data]) => ({
-      value: isoCode,
-      label: data.n,
-      flag: isoCode.toLowerCase(),
-    }));
-  }, [countryCodes]);
+  // const formattedCountries = React.useMemo(() => {
+  //   if (!countryCodes) return [];
+  //   return Object.entries(countryCodes).map(([isoCode, data]) => ({
+  //     value: isoCode,
+  //     label: data.n,
+  //     flag: isoCode.toLowerCase(),
+  //   }));
+  // }, [countryCodes]);
 
   const handleBirthDateChange = (date) => {
     setValue("birthDate", date ? format(date, "dd/MM/yy") : "", {
       shouldValidate: true,
     });
   };
-  console.log(errors);
-  console.log(firstErrorField);
 
   const dateString = useWatch({ name: "birthDate", control });
 
@@ -45,8 +43,6 @@ const DriverInformation = ({
       return null;
     }
   };
-
-  console.log("RERENDERED");
 
   return (
     <div className="space-y-6">
@@ -102,7 +98,29 @@ const DriverInformation = ({
             )}
           </div>
 
-          <DropdownInput
+          <div>
+            <Input
+              {...register("country", {
+                required: "Country is required",
+                // minLength: {
+                //   value: 2,
+                //   message: "Country must be at least 2 characters",
+                // },
+                pattern: {
+                  value: /^[A-Za-z\s]+$/,
+                  message: "Only alphabets are allowed",
+                },
+              })}
+              placeholder="Country of Origin"
+              className={`h-11 placeholder:font-light placeholder:text-sm border-gray-200 placeholder-gray-500 focus-visible:ring-teal-500 focus-visible:ring-2 hover:border-teal-500 transition-colors ${
+                errors.country ? "border-red-500" : ""
+              }`}
+            />
+            {firstErrorField === "country" && errors.country && (
+              <ErrorMessage message={errors.country.message} />
+            )}
+          </div>
+          {/* <DropdownInput
             data={formattedCountries}
             label="Country of Origin"
             name="country"
@@ -113,7 +131,7 @@ const DriverInformation = ({
             hasError={!!errors.country}
             disabled={dataLoading || !!error}
             firstErrorField={firstErrorField}
-          />
+          /> */}
 
           <div>
             <CustomDatePicker
