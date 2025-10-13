@@ -1,10 +1,15 @@
-import hqApi from "@/lib/hqApi";
+import { createHqApi } from "@/lib/hqApi";
 
 export const axiosBaseQuery =
   ({ baseUrl } = { baseUrl: "" }) =>
-  async ({ url, method, data, params }) => {
+  async ({ url, method, data, params }, api) => {
     try {
-      const result = await hqApi({
+      const state = api.getState();
+      const accessToken = state.auth?.loggedUser?.accessToken;
+
+      const apiInstance = createHqApi(accessToken);
+
+      const result = await apiInstance({
         url: baseUrl + url,
         method,
         data,

@@ -4,7 +4,7 @@ import { IoIosSearch } from "react-icons/io";
 import PickupReturnDateDrawer from "./PickupReturnDateDrawer";
 import PickupReturnLocationDrawer from "./PickupReturnLocationDrawer";
 import { Button } from "@/components/ui/button";
-import hqApi from "@/lib/hqApi";
+import hqApi, { createHqApi } from "@/lib/hqApi";
 import Spinner from "@/components/custom/Spinner";
 import { addDays, format } from "date-fns";
 import AnimatedTransparentGuarantee from "@/components/custom/AnimatedTransparentGuarantee";
@@ -60,9 +60,14 @@ function SearchFillter({
   const isDifferentReturnLocation = useAppSelector(
     (state) => state.reservation.isDifferentReturnLocation
   );
+  const logedUser = useAppSelector(
+    (state) => state.auth.loggedUser
+  );
 
   const [loader, setLoader] = useState(false);
   const router = useRouter();
+
+  const api = createHqApi(logedUser?.accessToken);
 
   const handleBookingSearch = async () => {
     try {
@@ -85,7 +90,7 @@ function SearchFillter({
         isEdit: isMid,
       };
 
-      const response = await hqApi.post(
+      const response = await api.post(
         "car-rental/reservations/dates",
         requestData
       );
