@@ -38,7 +38,7 @@ const CustomerDetailsForm = ({
     defaultValues: {
       firstName: "",
       lastName: "",
-      country: "Malaysia",
+      country: "MY",
       birthDate: "",
 
       phone: "",
