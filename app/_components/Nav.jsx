@@ -8,6 +8,8 @@ import { useAppDispatch, useLoggedUser } from "@/store/hooks";
 import { setOpenBg, setSidebarOpen } from "@/store/slices/generalSlice";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useLogoutMutation } from "@/store/api/authApiSlice";
+import { showErrorToast, showSuccessToast } from "../_lib/toast";
 
 function Nav({ isMain = true, value = "" }) {
   const dispatch = useAppDispatch();
@@ -20,9 +22,18 @@ function Nav({ isMain = true, value = "" }) {
 
   const user = useLoggedUser();
 
-  const buttonClick = () => {
+  const [logout, { isLoading }] = useLogoutMutation();
+
+  const buttonClick = async () => {
     if (user) {
-      console.log("LOGGING OUT");
+      try {
+        await logout().unwrap();
+        showSuccessToast("Logged out successfully");
+        router.push("/");
+      } catch (error) {
+        showErrorToast("Logout failed. Please try again.");
+        console.error("Logout error:", error);
+      }
     } else {
       router.push("/login");
     }
@@ -35,7 +46,6 @@ function Nav({ isMain = true, value = "" }) {
     { name: "Contact Us", href: "/support" },
     { name: "Terms & Conditions", href: "/terms-and-condition" },
   ];
-
 
   return (
     <div className="w-full py-5 sm:py-4 bg-white z-100">
@@ -76,7 +86,10 @@ function Nav({ isMain = true, value = "" }) {
           <div className="hidden items-center gap-7 border-r border-gray-300 pr-6 font-[400] xxl:flex">
             {navLinks.map((link) => (
               <p key={link.href}>
-                <Link href={link.href} className={`${link.name === value && 'font-bold'}`}>
+                <Link
+                  href={link.href}
+                  className={`${link.name === value && "font-bold"}`}
+                >
                   {link.name}
                 </Link>
               </p>
