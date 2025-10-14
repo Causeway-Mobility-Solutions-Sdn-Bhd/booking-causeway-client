@@ -14,6 +14,11 @@ import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 
 import { useMemo } from "react";
 import { transformCustomerFormData } from "@/app/_lib/transformCustomerData";
+import {
+  useCreateCustomerMutation,
+  useUpdateCustomerMutation,
+  useUploadLicenseFileMutation,
+} from "@/store/api/customerApiSlice";
 
 const CustomerDetailsForm = ({
   submitFormRef,
@@ -24,7 +29,13 @@ const CustomerDetailsForm = ({
   const dispatch = useAppDispatch();
   const currentUUID = useAppSelector((state) => state.reservation.currentUUID);
 
+  const [createCustomer, { isLoading: isCreating }] =
+    useCreateCustomerMutation();
+  const [updateCustomer, { isLoading: isUpdating }] =
+    useUpdateCustomerMutation();
+  const [uploadLicenseFile] = useUploadLicenseFileMutation();
   const [hasSubmitted, setHasSubmitted] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -59,57 +70,53 @@ const CustomerDetailsForm = ({
   });
 
   const onSubmit = async (data) => {
-    // setSubmitLoader(true);
+    setSubmitLoader(true);
     setHasSubmitted(true);
-    console.log(data);
-
-    return;
 
     try {
       const transformedData = transformCustomerFormData(data);
-
       let customerId;
       let response;
 
+      // Create or Update Customer
       if (dataAvailable) {
-        response = await hqApi.put(
-          `customers/update-customer/${dataAvailable.id}`,
-          transformedData
-        );
+        response = await updateCustomer({
+          id: dataAvailable.id,
+          data: transformedData,
+        }).unwrap();
         customerId = dataAvailable.id;
       } else {
-        response = await hqApi.post("customers/create-customers", null, {
-          params: transformedData,
-        });
-        customerId = response.data?.customer?.contact.id;
+        response = await createCustomer(transformedData).unwrap();
+        customerId = response?.customer?.contact?.id;
       }
 
+      // Upload License Files
       if (data.licenseFiles && data.licenseFiles.length > 0) {
         const newLicenseFiles = data.licenseFiles.filter(
           (file) => file instanceof File
         );
 
         for (const file of newLicenseFiles) {
-          await uploadFileToHQ({
+          await uploadLicenseFile({
             file,
             item_id: customerId,
             item_type: "contacts.3",
             field_id: 252,
-          });
+          }).unwrap();
         }
       }
 
-      if (!dataAvailable) {
-        dispatch(setReservation(response.data?.reservation));
-      }
+      // Show success message
       showSuccessToast(
         dataAvailable
           ? "Customer updated successfully!"
           : "Customer created successfully!"
       );
+
+      // Redirect
       router.push(`/book/step-05?ssid=${currentUUID}`);
     } catch (error) {
-      console.log("Error submitting form:", error);
+      console.error("Error submitting form:", error);
       showErrorToast(
         dataAvailable
           ? "Failed to update customer. Please try again."
@@ -199,6 +206,14 @@ const CustomerDetailsForm = ({
     [errors.phone, errors.email]
   );
 
+  const emergencyErrors = useMemo(
+    () => ({
+      emergencyPhone: errors.emergencyPhone,
+      emergencyRelationship: errors.emergencyRelationship,
+    }),
+    [errors.emergencyPhone, errors.emergencyRelationship]
+  );
+
   return (
     <form
       ref={(el) => {
@@ -231,7 +246,7 @@ const CustomerDetailsForm = ({
 
       <EmergencyContactInfo
         register={register}
-        errors={errors}
+        errors={emergencyErrors}
         setValue={setValue}
         control={control}
         firstErrorField={firstErrorField}

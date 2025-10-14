@@ -61,6 +61,7 @@ export default React.memo(EmergencyContactInfo, (prevProps, nextProps) => {
   const firstErrorChanged =
     prevProps.firstErrorField !== nextProps.firstErrorField &&
     relevantFields.includes(nextProps.firstErrorField);
+  console.log("MEMO", !errorChanged && !firstErrorChanged);
 
   return !errorChanged && !firstErrorChanged;
 });

@@ -9,6 +9,7 @@ import {
 import Image from "next/image";
 import { useCountryData } from "@/hooks/useCountryData";
 import ErrorMessage from "@/components/custom/ErrorMessage";
+import { Tooltip } from "./InputInfoTooltip";
 
 const PhoneInput = ({
   register,
@@ -16,8 +17,10 @@ const PhoneInput = ({
   name = "phone",
   setValue,
   firstErrorField,
-  getValues,
+  control,
   className = "",
+  required = true,
+  instructions = false,
 }) => {
   const [selectedCountryCode, setSelectedCountryCode] = useState("+60");
   const [selectedCountryIso, setSelectedCountryIso] = useState("MY");
@@ -35,17 +38,13 @@ const PhoneInput = ({
       }))
     : [];
 
-  // Initialize country code once
   useEffect(() => {
-    if (!dataLoading && countryCodes) {
-      const currentCode = getValues(`${name}CountryCode`);
-      if (!currentCode) {
-        setValue(`${name}CountryCode`, selectedCountryCode, {
-          shouldValidate: false,
-        });
-      }
+    if (!dataLoading && countryCodes && required) {
+      setValue(`${name}CountryCode`, selectedCountryCode, {
+        shouldValidate: false,
+      });
     }
-  }, [dataLoading, countryCodes]);
+  }, [dataLoading, countryCodes, required]);
 
   const handleCountryCodeChange = (value) => {
     const [code, iso] = value.split("|");
@@ -54,8 +53,23 @@ const PhoneInput = ({
     setValue(`${name}CountryCode`, code, { shouldValidate: false });
   };
 
+  const validationRules = required
+    ? {
+        required: "Phone number is required",
+        pattern: {
+          value: /^[\d]{7,15}$/,
+          message: "Please enter a valid phone number",
+        },
+      }
+    : {
+        pattern: {
+          value: /^[\d]{7,15}$/,
+          message: "Please enter a valid phone number",
+        },
+      };
+
   return (
-    <div className={className}>
+    <div className={`${className} relative`}>
       <div
         className={`!h-11 flex items-center w-full border rounded-md hover:border-teal-500 transition-colors focus-within:ring-2 focus-within:ring-teal-500 focus-within:border-transparent overflow-hidden ${
           hasPhoneError || hasCountryCodeError
@@ -101,11 +115,7 @@ const PhoneInput = ({
 
         <input
           {...register(name, {
-            required: "Phone number is required",
-            pattern: {
-              value: /^[\d]{7,15}$/,
-              message: "Please enter a valid phone number",
-            },
+            ...validationRules,
             onChange: (e) => {
               e.target.value = e.target.value.replace(/[^\d]/g, "");
             },
@@ -118,7 +128,14 @@ const PhoneInput = ({
           disabled={dataLoading || !!error}
         />
       </div>
-
+      {instructions && (
+        <div className="z-5 absolute right-3 top-6 -translate-y-1/2">
+          <Tooltip
+            message="Provide your active phone number in the correct format, including country code."
+            title="Instructions"
+          />
+        </div>
+      )}
       {(hasPhoneError || hasCountryCodeError) && firstErrorField === name && (
         <ErrorMessage
           message={
@@ -131,9 +148,14 @@ const PhoneInput = ({
 
       <input
         type="hidden"
-        {...register(`${name}CountryCode`, {
-          required: "Country code is required",
-        })}
+        {...register(
+          `${name}CountryCode`,
+          required
+            ? {
+                required: "Country code is required",
+              }
+            : {}
+        )}
       />
     </div>
   );

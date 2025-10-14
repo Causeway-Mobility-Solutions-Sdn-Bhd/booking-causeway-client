@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Plus,
   X,
@@ -6,6 +6,7 @@ import {
   ImageIcon,
   ChevronDown,
   ChevronUp,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -20,9 +21,12 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { showErrorToast } from "@/app/_lib/toast";
+
 export const ImageUpload = ({
   files,
   setFiles,
+  onDeleteExisting,
   placeholder = "Upload Document Here",
   accept = ".jpg,.jpeg,.png,.webp",
   multiple = true,
@@ -34,9 +38,10 @@ export const ImageUpload = ({
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [deletingIds, setDeletingIds] = useState(new Set());
 
   // Check if device is mobile on component mount
-  React.useEffect(() => {
+  useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 640); // sm breakpoint
     };
@@ -53,6 +58,10 @@ export const ImageUpload = ({
   };
 
   const fileArray = Array.isArray(files) ? files : [];
+
+  // Separate existing (from backend) and new (local) files
+  const existingFiles = fileArray.filter((file) => file.id && file.public_link);
+  const newFiles = fileArray.filter((file) => file instanceof File);
 
   const processFiles = (selectedFiles) => {
     const imageFiles = selectedFiles.filter((file) =>
@@ -74,6 +83,35 @@ export const ImageUpload = ({
     setFiles(fileArray.filter((_, index) => index !== indexToRemove));
   };
 
+  const removeExistingFile = async (fileId, fileIndex) => {
+    // Check if this is the last existing file
+    if (existingFiles.length === 1) {
+      showErrorToast("All Existing Uploaded Files can't be deleted!");
+      return;
+    }
+
+    if (!onDeleteExisting) {
+      console.log("onDeleteExisting function not provided");
+      return;
+    }
+
+    try {
+      setDeletingIds((prev) => new Set(prev).add(fileId));
+
+      await onDeleteExisting(fileId);
+      // Remove from files array after successful deletion
+      setFiles(fileArray.filter((_, index) => index !== fileIndex));
+    } catch (error) {
+      console.log("Error deleting file:", error);
+    } finally {
+      setDeletingIds((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(fileId);
+        return newSet;
+      });
+    }
+  };
+
   const createImagePreview = (file) => {
     return URL.createObjectURL(file);
   };
@@ -92,22 +130,27 @@ export const ImageUpload = ({
     }
   };
 
+  const canUploadMore = fileArray.length < maxFiles;
+
   const UploadButton = () => {
     const buttonContent = (
       <Button
         type="button"
         variant="outline"
         onClick={!isMobile ? handleButtonClick : undefined}
+        disabled={!canUploadMore}
         className={`w-full h-full flex items-center justify-between px-3 bg-white transition-colors hover:border-teal-500 focus:border-teal-500 focus:ring-2 focus:ring-teal-500 border-gray-200 ${
           error ? "border-red-500" : ""
-        }`}
+        } ${!canUploadMore ? "opacity-50 cursor-not-allowed" : ""}`}
       >
-        <span className="font-light text-gray-500 text-sm">{placeholder}</span>
+        <span className="font-light text-gray-500 text-sm">
+          {canUploadMore ? placeholder : `Maximum ${maxFiles} files reached`}
+        </span>
         <Plus className="h-4 w-4" style={{ color: "#2dbdb6" }} />
       </Button>
     );
 
-    if (isMobile) {
+    if (isMobile && canUploadMore) {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>{buttonContent}</DropdownMenuTrigger>
@@ -204,29 +247,47 @@ export const ImageUpload = ({
       {/* Image Previews - Outside the height-constrained container */}
       {fileArray && fileArray.length > 0 && (
         <div className="w-full mt-2 flex flex-wrap gap-3">
-          {fileArray.map((file, index) => (
-            <div
-              key={index}
-              className="relative group w-[70px] h-[70px] flex-shrink-0"
-            >
-              <div className="w-full h-full rounded-md overflow-hidden bg-gray-100 border border-gray-200">
-                <img
-                  src={createImagePreview(file)}
-                  alt={`Upload ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+          {fileArray.map((file, index) => {
+            const isExisting = file.id && file.public_link;
+            const imageUrl = isExisting
+              ? file.public_link
+              : createImagePreview(file);
+            const isDeleting = isExisting && deletingIds.has(file.id);
 
-              <button
-                type="button"
-                onClick={() => removeFile(index)}
-                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 z-20"
-                aria-label="Remove image"
+            return (
+              <div
+                key={isExisting ? `existing-${file.id}` : `new-${index}`}
+                className="relative group w-[70px] h-[70px] flex-shrink-0"
               >
-                <X className="h-3 w-3" />
-              </button>
-            </div>
-          ))}
+                <div className="w-full h-full rounded-md overflow-hidden bg-gray-100 border border-gray-200">
+                  <img
+                    src={imageUrl}
+                    alt={isExisting ? file.label : `Upload ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                {isDeleting ? (
+                  <div className="absolute -top-2 -right-2 bg-gray-800 text-white rounded-full p-1 shadow-lg z-20">
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      isExisting
+                        ? removeExistingFile(file.id, index)
+                        : removeFile(index)
+                    }
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 z-20"
+                    aria-label="Remove image"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

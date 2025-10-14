@@ -38,8 +38,6 @@ const DropdownInput = ({
   }, []);
 
   const handleChange = (value) => {
-    console.log("Setting Value");
-
     if (!value || value === "") return;
     setValue(name, value, { shouldValidate: false });
   };
