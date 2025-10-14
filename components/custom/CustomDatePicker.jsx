@@ -23,7 +23,7 @@ const CustomDatePicker = ({
   placeholder = "Select date",
   label = "Date",
   error = false,
-  disabledDateCondition = (date) => date > new Date(), // Default: disable future dates
+  disabledDateCondition = (date) => date > new Date(),
   className = "",
   errorMessage,
 }) => {
@@ -65,7 +65,7 @@ const CustomDatePicker = ({
   ];
 
   return (
-    <div>
+    <div className="z-[2000]">
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
           <Button
