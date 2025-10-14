@@ -1,15 +1,15 @@
 "use client";
 import React from "react";
-import { X, ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { showErrorToast, showSuccessToast } from "../_lib/toast";
+import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 import Spinner from "@/components/custom/Spinner";
-import { useForgotPasswordMutation } from "@/store/api/authApiSlice";
+import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 
-function ForgotPasswordC() {
+function ForgotPasswordC({ type }) {
   const router = useRouter();
-  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const {
     register,
@@ -21,48 +21,37 @@ function ForgotPasswordC() {
 
   const onSubmit = async (data) => {
     try {
-      console.log({ email: data.email });
+      setIsLoading(true);
+      console.log({
+        email: data.email,
+      });
+
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
-      const res = await forgotPassword({ email: data.email }).unwrap();
-      
-      showSuccessToast("OTP sent to your email!");
-      
-      // Redirect to OTP verification page with clientToken
-      const clientToken = res?.data?.clientToken;
-      if (clientToken) {
-        router.push(`/otp-verify/${clientToken}?type=forgot-password`);
-      }
+      showSuccessToast("Password recovery email sent!");
+      router.push("/login");
     } catch (err) {
-      console.log("Password recovery error:", err);
+      console.log("Forgot password error:", err);
       showErrorToast(err?.data?.message || "Failed to send recovery email");
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const handleBackToSignIn = () => {
-    router.push("/login");
-  };
-
-  const handleClose = () => {
-    router.push("/login");
   };
 
   const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
   return (
-    <div className="bg-white rounded-lg shadow-lg w-full max-w-sm p-5 md:p-6 relative">
-      <button
-        onClick={handleClose}
-        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
-      >
-        <X size={24} />
-      </button>
+    <div
+      className={`bg-white rounded-lg shadow-lg w-full max-w-sm p-5 md:p-6 relative`}
+    >
+      {type === "primary" && (
+        <div>
+          <h2 className="text-2xl font-bold mb-6">Forgot password</h2>
+        </div>
+      )}
 
       <div>
-        <h2 className="text-2xl font-bold mb-6">Forgot password</h2>
-      </div>
-
-      <div>
-        <div className="mb-6">
+        <div className="mb-3">
           <input
             type="email"
             placeholder="Email"
@@ -89,7 +78,7 @@ function ForgotPasswordC() {
         <button
           onClick={handleSubmit(onSubmit)}
           disabled={isLoading}
-          className="w-full bg-[#FF7B9C] text-white font-semibold flex justify-center items-center py-3 px-4 rounded-lg cursor-pointer mb-4 hover:bg-[#FF7B9C]/90 transition-colors"
+          className="w-full bg-cPrimary text-white font-semibold flex justify-center items-center py-3 px-4 rounded-lg cursor-pointer mb-4 hover:bg-cPrimary/90 transition-colors"
         >
           {isLoading ? (
             <Spinner size={20} color="#fff" thickness={3} />
@@ -97,17 +86,21 @@ function ForgotPasswordC() {
             <span>Recover password</span>
           )}
         </button>
-
-        <button
-          onClick={handleBackToSignIn}
-          className="w-full flex items-center justify-center gap-2 text-gray-700 font-medium py-2"
-        >
-          <ArrowLeft size={20} />
-          <span>
-            Back to <span className="text-cSecondary">Sign in</span>
-          </span>
-        </button>
       </div>
+
+      {type === "primary" && (
+        <div className="text-center">
+          <Link
+            href="/login"
+            className="text-[16px] inline-flex items-center gap-2 hover:text-cSecondary transition-colors"
+          >
+            <ArrowLeft size={18} />
+            <span>
+              Back to <span className="text-cSecondary font-bold">Sign in</span>
+            </span>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
