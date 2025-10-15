@@ -127,28 +127,6 @@ const CustomerDetailsForm = ({
     }
   };
 
-  const uploadFileToHQ = async ({ file, item_id, item_type, field_id }) => {
-    try {
-      const formData = new FormData();
-      formData.append("item_id", item_id);
-      formData.append("item_type", item_type);
-      formData.append("filename", file.name);
-      formData.append("field_id", field_id);
-      formData.append("file", file);
-
-      const response = await hqApi.post("file/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      return response.data;
-    } catch (error) {
-      console.log("Error uploading file:", error);
-      throw error;
-    }
-  };
-
   const firstErrorField = useMemo(() => {
     const fieldOrder = [
       "firstName",

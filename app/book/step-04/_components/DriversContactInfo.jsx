@@ -12,8 +12,6 @@ const DriversContactInfo = ({
   firstErrorField,
   errors,
 }) => {
-  console.log("CONTACT RERENDERED");
-
   return (
     <div className="space-y-6">
       <h2 className="text-lg font-bold mb-4 text-gray-800">
