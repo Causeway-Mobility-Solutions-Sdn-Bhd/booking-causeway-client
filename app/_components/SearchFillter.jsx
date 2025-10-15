@@ -66,6 +66,8 @@ function SearchFillter({
   const router = useRouter();
 
   const handleBookingSearch = async () => {
+    console.log("CLICK");
+
     try {
       setLoader(true);
 
@@ -84,7 +86,7 @@ function SearchFillter({
         sort_by: "lowToHigh",
         isCreate: !isMid,
         isEdit: isMid,
-        customer_id: loggedUser.HqId,
+        ...(loggedUser?.HqId && { customer_id: loggedUser.HqId }),
       };
 
       const response = await hqApi.post(
