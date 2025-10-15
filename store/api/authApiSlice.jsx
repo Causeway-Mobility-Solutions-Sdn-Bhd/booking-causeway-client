@@ -92,6 +92,13 @@ export const authApi = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["Auth"],
     }),
+    testPermission: builder.query({
+      query: () => ({
+        url: "auth/test-permission",
+        method: "GET",
+      }),
+      providesTags: ["Auth"],
+    }),
   }),
   overrideExisting: true,
 });
@@ -104,4 +111,6 @@ export const {
   useResendOtpMutation,
   useRefreshMutation,
   useLogoutMutation,
+  useTestPermissionQuery,
+  useLazyTestPermissionQuery,
 } = authApi;
