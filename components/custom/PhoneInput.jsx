@@ -10,6 +10,7 @@ import Image from "next/image";
 import { useCountryData } from "@/hooks/useCountryData";
 import ErrorMessage from "@/components/custom/ErrorMessage";
 import { Tooltip } from "./InputInfoTooltip";
+import { useWatch } from "react-hook-form";
 
 const PhoneInput = ({
   register,
@@ -37,14 +38,30 @@ const PhoneInput = ({
         iso2: iso2.toLowerCase(),
       }))
     : [];
+  const currentCountryCode = useWatch({
+    control,
+    name: `${name}CountryCode`,
+  });
 
   useEffect(() => {
-    if (!dataLoading && countryCodes && required) {
-      setValue(`${name}CountryCode`, selectedCountryCode, {
-        shouldValidate: false,
-      });
+    if (!dataLoading && countryCodes) {
+      if (currentCountryCode) {
+        if (currentCountryCode !== selectedCountryCode) {
+          setSelectedCountryCode(currentCountryCode);
+          const country = countryPhoneCodes.find(
+            (c) => c.code === currentCountryCode
+          );
+          if (country) {
+            setSelectedCountryIso(country.iso2);
+          }
+        }
+      } else {
+        setValue(`${name}CountryCode`, selectedCountryCode, {
+          shouldValidate: false,
+        });
+      }
     }
-  }, [dataLoading, countryCodes, required]);
+  }, [dataLoading, countryCodes, currentCountryCode, countryPhoneCodes]);
 
   const handleCountryCodeChange = (value) => {
     const [code, iso] = value.split("|");

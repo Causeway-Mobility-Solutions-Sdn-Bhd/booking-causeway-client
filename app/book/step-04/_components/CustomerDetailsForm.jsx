@@ -70,6 +70,9 @@ const CustomerDetailsForm = ({
   });
 
   const onSubmit = async (data) => {
+    console.log("CLICK");
+    console.log(data);
+
     setSubmitLoader(true);
     setHasSubmitted(true);
 

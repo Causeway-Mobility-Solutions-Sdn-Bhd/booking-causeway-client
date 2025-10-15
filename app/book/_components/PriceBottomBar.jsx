@@ -24,6 +24,8 @@ function PriceBottomBar({
 
   const handlePress = () => {
     if (onSubmit) {
+      console.log("CLICL");
+
       onSubmit();
     }
   };
