@@ -1,30 +1,44 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Plus, X, Camera, Image, Loader2 } from "lucide-react";
+import {
+  Plus,
+  X,
+  Camera,
+  ImageIcon,
+  ChevronDown,
+  ChevronUp,
+  Loader2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { showErrorToast } from "@/app/_lib/toast";
 
 export const ImageUpload = ({
   files,
   setFiles,
-  onDeleteExisting, // Function to delete existing file: (id) => Promise<void>
+  onDeleteExisting,
   placeholder = "Upload Document Here",
   accept = ".jpg,.jpeg,.png,.webp",
   multiple = true,
-  maxFiles = 10,
+  maxFiles = 4,
   label,
   error = false,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
   const [deletingIds, setDeletingIds] = useState(new Set());
-  const [deleteError, setDeleteError] = useState(null);
 
   // Check if device is mobile on component mount
   useEffect(() => {
@@ -41,8 +55,6 @@ export const ImageUpload = ({
     const selectedFiles = Array.from(e.target.files);
     processFiles(selectedFiles);
     e.target.value = null;
-    // Clear delete error when user uploads new files
-    setDeleteError(null);
   };
 
   const fileArray = Array.isArray(files) ? files : [];
@@ -154,7 +166,7 @@ export const ImageUpload = ({
               onClick={handleGalleryUpload}
               className="cursor-pointer"
             >
-              <Image className="mr-2 h-4 w-4" />
+              <ImageIcon className="mr-2 h-4 w-4" />
               <span>From Image Gallery</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -194,12 +206,43 @@ export const ImageUpload = ({
       </div>
 
       {/* Label - Outside the height-constrained container */}
-      <p className={`text-sm mt-2 ${error ? "text-red-500" : ""}`}>{label}</p>
 
-      {/* Delete Error Message */}
-      {/* {deleteError && (
-        <p className="text-sm mt-1 text-red-500">{deleteError}</p>
-      )} */}
+      {/* <p className={`text-sm mt-2 ${error ? "text-red-500" : ""}`}>{label}</p> */}
+
+      {/* Instuction */}
+      <Collapsible
+        open={isOpen}
+        onOpenChange={setIsOpen}
+        className="w-full mt-2"
+      >
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-normal text-gray-800">Instructions</p>
+          <CollapsibleTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-9 p-0 flex items-center gap-2"
+            >
+              {isOpen ? (
+                <>
+                  <ChevronUp color="#000" className="h-4 w-4" />
+                </>
+              ) : (
+                <>
+                  <ChevronDown color="#000" className="h-4 w-4" />
+                </>
+              )}
+            </Button>
+          </CollapsibleTrigger>
+        </div>
+
+        <CollapsibleContent>
+          <ul className="list-disc list-inside text-sm">
+            <li>File must be JPG, PNG & PDF</li>
+            <li>Max 4 files, up to 5 MB</li>
+          </ul>
+        </CollapsibleContent>
+      </Collapsible>
 
       {/* Image Previews - Outside the height-constrained container */}
       {fileArray && fileArray.length > 0 && (

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Checkbox } from "@/components/ui/checkbox";
 import DriverLicenseInfo from "./DriverLicenseInfo";
@@ -6,13 +6,19 @@ import DriverInformation from "./DriverInformation";
 import DriversContactInfo from "./DriversContactInfo";
 import EmergencyContactInfo from "./EmergencyContactInfo";
 import OtherInformation from "./OtherInformation";
-import { transformCustomerFormData } from "@/app/_lib/transformCustomerData";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import axios from "axios";
 import hqApi from "@/lib/hqApi";
 import { useRouter } from "next/navigation";
 import { setReservation } from "@/store/slices/reservationSlice";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
+
+import { useMemo } from "react";
+import { transformCustomerFormData } from "@/app/_lib/transformCustomerData";
+import {
+  useCreateCustomerMutation,
+  useUpdateCustomerMutation,
+  useUploadLicenseFileMutation,
+} from "@/store/api/customerApiSlice";
 
 const CustomerDetailsForm = ({
   submitFormRef,
@@ -23,43 +29,39 @@ const CustomerDetailsForm = ({
   const dispatch = useAppDispatch();
   const currentUUID = useAppSelector((state) => state.reservation.currentUUID);
 
+  const [createCustomer, { isLoading: isCreating }] =
+    useCreateCustomerMutation();
+  const [updateCustomer, { isLoading: isUpdating }] =
+    useUpdateCustomerMutation();
+  const [uploadLicenseFile] = useUploadLicenseFileMutation();
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
   const {
     register,
     handleSubmit,
     watch,
     setValue,
     clearErrors,
-    getValues,
-
     formState: { errors },
     control,
   } = useForm({
+    mode: hasSubmitted ? "onBlur" : "onSubmit",
+    reValidateMode: "onBlur",
     defaultValues: {
-      driverLicense: "",
-      licenseExpiry: "",
-      licenseFiles: [],
-
       firstName: "",
-      passportNumber: "",
+      lastName: "",
+      country: "MY",
       birthDate: "",
-      idCardOrPass: [],
 
       phone: "",
       phoneCountryCode: "+60",
       email: "",
-      address: "",
-      address2: "",
-      zipCode: "",
-      city: "",
-      state: "Johor",
-      country: "MY",
 
-      // Emergency Contact Information
-      // emergencyName: "",
-      emergencyRelationship: "",
       emergencyPhone: "",
       emergencyPhoneCountryCode: "+60",
-      // emergencyEmail: "",
+      emergencyRelationship: "",
+
+      licenseFiles: [],
 
       otherInfo: "",
 
@@ -68,74 +70,56 @@ const CustomerDetailsForm = ({
   });
 
   const onSubmit = async (data) => {
+    console.log("CLICK");
+    console.log(data);
+
     setSubmitLoader(true);
+    setHasSubmitted(true);
 
     try {
       const transformedData = transformCustomerFormData(data);
-
       let customerId;
       let response;
 
+      // Create or Update Customer
       if (dataAvailable) {
-        // Updating
-        response = await hqApi.put(
-          `customers/update-customer/${dataAvailable.id}`,
-          transformedData
-        );
-
+        response = await updateCustomer({
+          id: dataAvailable.id,
+          data: transformedData,
+        }).unwrap();
         customerId = dataAvailable.id;
       } else {
-        // CREATE MODE - POST request
-        response = await hqApi.post("customers/create-customers", null, {
-          params: transformedData,
-        });
-
-        customerId = response.data?.customer?.contact.id;
+        response = await createCustomer(transformedData).unwrap();
+        customerId = response?.customer?.contact?.id;
       }
 
-      // Upload NEW license files (only File objects, not existing ones with id/public_link)
+      // Upload License Files
       if (data.licenseFiles && data.licenseFiles.length > 0) {
         const newLicenseFiles = data.licenseFiles.filter(
           (file) => file instanceof File
         );
 
         for (const file of newLicenseFiles) {
-          await uploadFileToHQ({
+          await uploadLicenseFile({
             file,
             item_id: customerId,
             item_type: "contacts.3",
             field_id: 252,
-          });
+          }).unwrap();
         }
       }
 
-      // Upload NEW ID/Passport files (only File objects, not existing ones with id/public_link)
-      if (data.idCardOrPass && data.idCardOrPass.length > 0) {
-        const newIdCardFiles = data.idCardOrPass.filter(
-          (file) => file instanceof File
-        );
-
-        for (const file of newIdCardFiles) {
-          await uploadFileToHQ({
-            file,
-            item_id: customerId,
-            item_type: "contacts.3",
-            field_id: 274,
-          });
-        }
-      }
-
-      if (!dataAvailable) {
-        dispatch(setReservation(response.data?.reservation));
-      }
+      // Show success message
       showSuccessToast(
         dataAvailable
           ? "Customer updated successfully!"
           : "Customer created successfully!"
       );
+
+      // Redirect
       router.push(`/book/step-05?ssid=${currentUUID}`);
     } catch (error) {
-      console.log("Error submitting form:", error);
+      console.error("Error submitting form:", error);
       showErrorToast(
         dataAvailable
           ? "Failed to update customer. Please try again."
@@ -146,185 +130,69 @@ const CustomerDetailsForm = ({
     }
   };
 
-  const uploadFileToHQ = async ({ file, item_id, item_type, field_id }) => {
-    try {
-      const formData = new FormData();
-      formData.append("item_id", item_id);
-      formData.append("item_type", item_type);
-      formData.append("filename", file.name);
-      formData.append("field_id", field_id);
-      formData.append("file", file);
-
-      const response = await hqApi.post("file/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      return response.data;
-    } catch (error) {
-      console.log("Error uploading file:", error);
-      throw error;
-    }
-  };
-
   const firstErrorField = useMemo(() => {
-    const errorFields = Object.keys(errors);
-
-    if (errorFields.length === 0) return null;
-
-    // Order of fields
     const fieldOrder = [
-      "driverLicense",
-      "licenseExpiry",
-      "licenseFiles",
       "firstName",
       "lastName",
-      "passportNumber",
+      "country",
       "birthDate",
-      "idCardOrPass",
       "phone",
       "email",
-      "address",
-      "zipCode",
-      "city",
-      "state",
-      "country",
-      "emergencyRelationship",
       "emergencyPhone",
+      "emergencyRelationship",
+      "licenseFiles",
       "agreeTerms",
     ];
 
-    const firstError = fieldOrder.find((field) => errors[field]) || null;
-
-    return firstError;
+    for (const field of fieldOrder) {
+      if (errors?.[field]) return field;
+    }
+    return null;
   }, [
-    errors.driverLicense,
-    errors.licenseExpiry,
-    errors.licenseFiles,
     errors.firstName,
     errors.lastName,
-    errors.passportNumber,
+    errors.country,
     errors.birthDate,
-    errors.idCardOrPass,
     errors.phone,
     errors.email,
-    errors.address,
-    errors.zipCode,
-    errors.city,
-    errors.state,
-    errors.country,
-    errors.emergencyRelationship,
     errors.emergencyPhone,
+    errors.emergencyRelationship,
+    errors.licenseFiles,
     errors.agreeTerms,
   ]);
-  const fillFormData = (data) => {
-    const sampleData = {
-      // Driver License Info
-      driverLicense: "D12345678",
-      licenseExpiry: "31/12/25",
 
-      // Driver Information
-      firstName: "JohnTest",
-      lastName: "Test",
-      passportNumber: "A12345678",
-      birthDate: "31/12/86",
-
-      // Contact Information
-      phone: "123456789",
-      phoneCountryCode: "+60",
-      email: "john.smith@example.com",
-      address: "123 Main Street",
-      address2: "Apt 4B",
-      zipCode: "50000",
-      city: "Kuala Lumpur",
-
-      // Emergency Contact Information
-      // emergencyName: "Jane Smith",
-      emergencyRelationship: "Spouse",
-      emergencyPhone: "987654321",
-      emergencyPhoneCountryCode: "+60",
-      // emergencyEmail: "jane.smith@example.com",
-
-      // Other Information
-      otherInfo: "Sample customer data for testing purposes",
-
-      // Terms Agreement
-      agreeTerms: true,
-    };
-
-    Object.entries(data).forEach(([fieldName, value]) => {
-      setValue(fieldName, value);
-    });
-  };
   useEffect(() => {
     if (dataAvailable) {
-      fillFormData(dataAvailable);
+      Object.entries(dataAvailable).forEach(([fieldName, value]) => {
+        setValue(fieldName, value);
+      });
     }
-  }, [dataAvailable]);
-
-  // Separate Error States:
-  const driverLicenseErrors = useMemo(
-    () => ({
-      driverLicense: errors.driverLicense,
-      licenseExpiry: errors.licenseExpiry,
-      licenseFiles: errors.licenseFiles,
-    }),
-    [errors.driverLicense, errors.licenseExpiry, errors.licenseFiles]
-  );
+  }, [dataAvailable, setValue]);
 
   const driverInfoErrors = useMemo(
     () => ({
       firstName: errors.firstName,
       lastName: errors.lastName,
-      passportNumber: errors.passportNumber,
+      country: errors.country,
       birthDate: errors.birthDate,
-      idCardOrPass: errors.idCardOrPass,
     }),
-    [
-      errors.firstName,
-      errors.lastName,
-      errors.passportNumber,
-      errors.birthDate,
-      errors.idCardOrPass,
-    ]
+    [errors.firstName, errors.lastName, errors.country, errors.birthDate]
   );
 
-  const driversContactErrors = useMemo(
+  const driverContactErrors = useMemo(
     () => ({
       phone: errors.phone,
-      phoneCountryCode: errors.phoneCountryCode,
       email: errors.email,
-      address: errors.address,
-
-      zipCode: errors.zipCode,
-      city: errors.city,
-      state: errors.state,
-      country: errors.country,
     }),
-    [
-      errors.phone,
-      errors.phoneCountryCode,
-      errors.email,
-      errors.address,
-      errors.zipCode,
-      errors.city,
-      errors.state,
-      errors.country,
-    ]
+    [errors.phone, errors.email]
   );
 
-  const emergencyContactErrors = useMemo(
+  const emergencyErrors = useMemo(
     () => ({
-      emergencyRelationship: errors.emergencyRelationship,
       emergencyPhone: errors.emergencyPhone,
-      emergencyPhoneCountryCode: errors.emergencyPhoneCountryCode,
+      emergencyRelationship: errors.emergencyRelationship,
     }),
-    [
-      errors.emergencyRelationship,
-      errors.emergencyPhone,
-      errors.emergencyPhoneCountryCode,
-    ]
+    [errors.emergencyPhone, errors.emergencyRelationship]
   );
 
   return (
@@ -339,17 +207,6 @@ const CustomerDetailsForm = ({
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-6"
     >
-      {/* <button onClick={fillFormData}>Test</button> */}
-      <DriverLicenseInfo
-        register={register}
-        setValue={setValue}
-        control={control}
-        errors={driverLicenseErrors}
-        watch={watch}
-        clearErrors={clearErrors}
-        firstErrorField={firstErrorField}
-      />
-
       <DriverInformation
         register={register}
         errors={driverInfoErrors}
@@ -361,24 +218,31 @@ const CustomerDetailsForm = ({
       />
 
       <DriversContactInfo
-        getValues={getValues}
         register={register}
         control={control}
-        errors={driversContactErrors}
+        errors={driverContactErrors}
         setValue={setValue}
         firstErrorField={firstErrorField}
       />
 
       <EmergencyContactInfo
-        getValues={getValues}
         register={register}
-        errors={emergencyContactErrors}
+        errors={emergencyErrors}
         setValue={setValue}
         control={control}
         firstErrorField={firstErrorField}
       />
 
-      <OtherInformation register={register} watch={watch} />
+      <DriverLicenseInfo
+        register={register}
+        setValue={setValue}
+        control={control}
+        errors={errors}
+        clearErrors={clearErrors}
+        firstErrorField={firstErrorField}
+      />
+
+      <OtherInformation register={register} />
 
       <div className="">
         <div className="flex gap-3">
@@ -397,8 +261,6 @@ const CustomerDetailsForm = ({
               required: "You must agree to the terms and conditions",
             })}
             className="hidden"
-            checked={watch("agreeTerms")}
-            onChange={(e) => setValue("agreeTerms", e.target.checked)}
           />
           <label
             htmlFor="agreeTerms"

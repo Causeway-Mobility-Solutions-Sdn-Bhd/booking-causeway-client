@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { ChevronDown } from "lucide-react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import Image from "next/image";
 import ErrorMessage from "@/components/custom/ErrorMessage";
@@ -22,21 +20,16 @@ const DropdownInput = ({
   firstErrorField,
   disabled = false,
   control,
-  customWidth = 1,
-  onCustomChange, // Optional custom change handler for country logic
+  required = true,
 }) => {
   const error = errors[name];
   const watchedValue = useWatch({
     control,
     name,
-    defaultValue: "",
   });
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
-
-  // Force re-render state
-  const [, forceUpdate] = useState({});
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -45,19 +38,8 @@ const DropdownInput = ({
   }, []);
 
   const handleChange = (value) => {
-    // Use custom change handler if provided (for country dropdown)
-    if (!value || value === "") {
-      return;
-    }
-
-    if (onCustomChange) {
-      onCustomChange(value);
-    } else {
-      // Default behavior - no validation to avoid re-renders
-      setValue(name, value, { shouldValidate: true });
-      // Force re-render to update the UI
-      forceUpdate({});
-    }
+    if (!value || value === "") return;
+    setValue(name, value, { shouldValidate: false });
   };
 
   const getDisplayLabel = (selectedValue) => {
@@ -86,10 +68,7 @@ const DropdownInput = ({
     if (windowWidth < 450 && placeholderText.length >= 19) {
       return placeholderText.substring(0, 13) + "...";
     }
-    if (
-      (windowWidth < 500 || customWidth === 0) &&
-      placeholderText.length >= 19
-    ) {
+    if (windowWidth < 500 && placeholderText.length >= 19) {
       return placeholderText.substring(0, 16) + "...";
     }
 
@@ -144,9 +123,14 @@ const DropdownInput = ({
       )}
       <input
         type="hidden"
-        {...register(name, {
-          required: `${label} is required`,
-        })}
+        {...register(
+          name,
+          required
+            ? {
+                required: `${label} is required`,
+              }
+            : {}
+        )}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import { apiSlice } from "../apiSlice";
-import { setLoggedUser } from "../slices/authSlie";
+import { clearLoggedUser, setLoggedUser } from "../slices/authSlie";
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -76,6 +76,29 @@ export const authApi = apiSlice.injectEndpoints({
       },
       providesTags: ["Auth"],
     }),
+    logout: builder.mutation({
+      query: () => ({
+        url: "auth/logout",
+        method: "POST",
+        withCredentials: true,
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(clearLoggedUser());
+        } catch (err) {
+          console.error("Logout failed: ", err);
+        }
+      },
+      invalidatesTags: ["Auth"],
+    }),
+    testPermission: builder.query({
+      query: () => ({
+        url: "auth/test-permission",
+        method: "GET",
+      }),
+      providesTags: ["Auth"],
+    }),
   }),
   overrideExisting: true,
 });
@@ -87,4 +110,7 @@ export const {
   useVerifyOtpMutation,
   useResendOtpMutation,
   useRefreshMutation,
+  useLogoutMutation,
+  useTestPermissionQuery,
+  useLazyTestPermissionQuery,
 } = authApi;

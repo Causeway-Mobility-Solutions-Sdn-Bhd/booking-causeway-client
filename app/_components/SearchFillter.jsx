@@ -61,10 +61,13 @@ function SearchFillter({
     (state) => state.reservation.isDifferentReturnLocation
   );
 
+  const loggedUser = useAppSelector((state) => state.auth.loggedUser);
   const [loader, setLoader] = useState(false);
   const router = useRouter();
 
   const handleBookingSearch = async () => {
+    console.log("CLICK");
+
     try {
       setLoader(true);
 
@@ -83,6 +86,7 @@ function SearchFillter({
         sort_by: "lowToHigh",
         isCreate: !isMid,
         isEdit: isMid,
+        ...(loggedUser?.HqId && { customer_id: loggedUser.HqId }),
       };
 
       const response = await hqApi.post(
