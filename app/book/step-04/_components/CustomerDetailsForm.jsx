@@ -224,21 +224,19 @@ const CustomerDetailsForm = ({
         setValue={setValue}
         firstErrorField={firstErrorField}
       />
-
-      <EmergencyContactInfo
-        register={register}
-        errors={emergencyErrors}
-        setValue={setValue}
-        control={control}
-        firstErrorField={firstErrorField}
-      />
-
       <DriverLicenseInfo
         register={register}
         setValue={setValue}
         control={control}
         errors={errors}
         clearErrors={clearErrors}
+        firstErrorField={firstErrorField}
+      />
+      <EmergencyContactInfo
+        register={register}
+        errors={emergencyErrors}
+        setValue={setValue}
+        control={control}
         firstErrorField={firstErrorField}
       />
 
