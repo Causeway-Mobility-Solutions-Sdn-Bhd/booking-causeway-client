@@ -1,13 +1,6 @@
 "use client";
-import React from "react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
-
 
 const allAwards = [
   {
@@ -31,40 +24,67 @@ const allAwards = [
 ];
 
 function TopRanked() {
-  const plugin = React.useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })
-  );
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
+
+    let scrollSpeed = 1;
+    let animationFrame;
+
+    const scrollStep = () => {
+      scrollContainer.scrollLeft += scrollSpeed;
+
+      if (
+        scrollContainer.scrollLeft >=
+        scrollContainer.scrollWidth / 2
+      ) {
+        scrollContainer.scrollLeft = 0;
+      }
+
+      animationFrame = requestAnimationFrame(scrollStep);
+    };
+
+    animationFrame = requestAnimationFrame(scrollStep);
+
+    const stop = () => cancelAnimationFrame(animationFrame);
+    const start = () => {
+      animationFrame = requestAnimationFrame(scrollStep);
+    };
+
+    scrollContainer.addEventListener("mouseenter", stop);
+    scrollContainer.addEventListener("mouseleave", start);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      scrollContainer.removeEventListener("mouseenter", stop);
+      scrollContainer.removeEventListener("mouseleave", start);
+    };
+  }, []);
 
   return (
     <section className="w-[90%] sm:w-[95%] max-w-[1400px] mx-auto mt-[7px] pb-[0px]">
-
-      <div className="relative">
-        <Carousel
-          plugins={[plugin.current]}
-          className="w-full"
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-        >
-          <CarouselContent className="-ml-[15px]">
-            {allAwards.map((award, index) => (
-              <CarouselItem
-                key={index}
-                className="pl-[15px] basis-[260px]"
-              >
-                <Image
-                  src={award.image}
-                  alt="Award Badge"
-                  className="w-auto h-auto object-contain"
-                  width={240} 
-                  height={112}
-                  loading="lazy"
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+      <div
+        ref={scrollRef}
+        className="relative flex overflow-x-scroll scrollbar-hide"
+      >
+        {[...allAwards, ...allAwards].map((award, index) => (
+          <div
+            key={index}
+            className="shrink-0 px-4 w-[260px] flex items-center justify-center"
+          >
+            <Image
+              src={award.image}
+              alt={`Award Badge ${index + 1}`}
+              className="w-auto h-auto object-contain hover:scale-105 transition-transform duration-300"
+              width={240}
+              height={112}
+              loading="lazy"
+              quality={100}
+            />
+          </div>
+        ))}
       </div>
     </section>
   );
