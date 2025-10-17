@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+"use client";
+import React, { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Checkbox } from "@/components/ui/checkbox";
 import DriverLicenseInfo from "./DriverLicenseInfo";
@@ -7,9 +8,8 @@ import DriversContactInfo from "./DriversContactInfo";
 import EmergencyContactInfo from "./EmergencyContactInfo";
 import OtherInformation from "./OtherInformation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import hqApi from "@/lib/hqApi";
+
 import { useRouter } from "next/navigation";
-import { setReservation } from "@/store/slices/reservationSlice";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 
 import { useMemo } from "react";
@@ -20,17 +20,8 @@ import {
   useUploadLicenseFileMutation,
 } from "@/store/api/customerApiSlice";
 
-const CustomerDetailsForm = ({
-  submitFormRef,
-  setSubmitLoader,
-  dataAvailable,
-}) => {
+const ProfileUpdateForm = ({ setSubmitLoader, submitFormRef }) => {
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const currentUUID = useAppSelector((state) => state.reservation.currentUUID);
-
-  const [createCustomer, { isLoading: isCreating }] =
-    useCreateCustomerMutation();
   const [updateCustomer, { isLoading: isUpdating }] =
     useUpdateCustomerMutation();
   const [uploadLicenseFile] = useUploadLicenseFileMutation();
@@ -62,14 +53,13 @@ const CustomerDetailsForm = ({
       emergencyRelationship: "",
 
       licenseFiles: [],
-
-      otherInfo: "",
-
-      agreeTerms: false,
     },
   });
 
   const onSubmit = async (data) => {
+    console.log("CLICK");
+    console.log(data);
+
     setSubmitLoader(true);
     setHasSubmitted(true);
 
@@ -155,7 +145,6 @@ const CustomerDetailsForm = ({
     errors.emergencyPhone,
     errors.emergencyRelationship,
     errors.licenseFiles,
-    errors.agreeTerms,
   ]);
 
   useEffect(() => {
@@ -238,42 +227,8 @@ const CustomerDetailsForm = ({
       />
 
       <OtherInformation register={register} />
-
-      <div className="">
-        <div className="flex gap-3">
-          <Checkbox
-            id="agreeTerms"
-            checked={watch("agreeTerms")}
-            onCheckedChange={(checked) => {
-              setValue("agreeTerms", checked, { shouldValidate: true });
-            }}
-            className="mt-1.5"
-          />
-
-          <input
-            type="checkbox"
-            {...register("agreeTerms", {
-              required: "You must agree to the terms and conditions",
-            })}
-            className="hidden"
-          />
-          <label
-            htmlFor="agreeTerms"
-            className="text-md flex-1 leading-relaxed"
-          >
-            By proceed, I confirm that all the information provided is true and
-            complete to the best of my knowledge. Providing false information
-            may potentially result in Causeway rejecting my booking.
-          </label>
-        </div>
-        {firstErrorField === "agreeTerms" && errors.agreeTerms && (
-          <p className="text-red-500 text-sm mt-1 ml-7">
-            {errors.agreeTerms.message}
-          </p>
-        )}
-      </div>
     </form>
   );
 };
 
-export default CustomerDetailsForm;
+export default ProfileUpdateForm;
