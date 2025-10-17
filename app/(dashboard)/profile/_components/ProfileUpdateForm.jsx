@@ -1,26 +1,26 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { Checkbox } from "@/components/ui/checkbox";
-import DriverLicenseInfo from "./DriverLicenseInfo";
-import DriverInformation from "./DriverInformation";
-import DriversContactInfo from "./DriversContactInfo";
-import EmergencyContactInfo from "./EmergencyContactInfo";
-import OtherInformation from "./OtherInformation";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useRouter } from "next/navigation";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 
 import { useMemo } from "react";
 import { transformCustomerFormData } from "@/app/_lib/transformCustomerData";
 import {
-  useCreateCustomerMutation,
   useUpdateCustomerMutation,
   useUploadLicenseFileMutation,
 } from "@/store/api/customerApiSlice";
+import DriverInformation from "@/app/book/step-04/_components/DriverInformation";
+import DriversContactInfo from "@/app/book/step-04/_components/DriversContactInfo";
+import EmergencyContactInfo from "@/app/book/step-04/_components/EmergencyContactInfo";
 
-const ProfileUpdateForm = ({ setSubmitLoader, submitFormRef }) => {
+const ProfileUpdateForm = ({
+  dataAvailable,
+  setSubmitLoader,
+  submitFormRef,
+}) => {
   const router = useRouter();
   const [updateCustomer, { isLoading: isUpdating }] =
     useUpdateCustomerMutation();
@@ -57,28 +57,17 @@ const ProfileUpdateForm = ({ setSubmitLoader, submitFormRef }) => {
   });
 
   const onSubmit = async (data) => {
-    console.log("CLICK");
-    console.log(data);
-
     setSubmitLoader(true);
     setHasSubmitted(true);
 
     try {
       const transformedData = transformCustomerFormData(data);
       let customerId;
-      let response;
-
-      // Create or Update Customer
-      if (dataAvailable) {
-        response = await updateCustomer({
-          id: dataAvailable.id,
-          data: transformedData,
-        }).unwrap();
-        customerId = dataAvailable.id;
-      } else {
-        response = await createCustomer(transformedData).unwrap();
-        customerId = response?.customer?.contact?.id;
-      }
+      let response = await updateCustomer({
+        id: dataAvailable.id,
+        data: transformedData,
+      }).unwrap();
+      customerId = dataAvailable.id;
 
       // Upload License Files
       if (data.licenseFiles && data.licenseFiles.length > 0) {
@@ -97,14 +86,7 @@ const ProfileUpdateForm = ({ setSubmitLoader, submitFormRef }) => {
       }
 
       // Show success message
-      showSuccessToast(
-        dataAvailable
-          ? "Customer updated successfully!"
-          : "Customer created successfully!"
-      );
-
-      // Redirect
-      router.push(`/book/step-05?ssid=${currentUUID}`);
+      showSuccessToast("Profile updated successfully!");
     } catch (error) {
       console.error("Error submitting form:", error);
       showErrorToast(
@@ -191,7 +173,7 @@ const ProfileUpdateForm = ({ setSubmitLoader, submitFormRef }) => {
         }
       }}
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6"
+      className="space-y-6 pb-20"
     >
       <DriverInformation
         register={register}
@@ -210,14 +192,7 @@ const ProfileUpdateForm = ({ setSubmitLoader, submitFormRef }) => {
         setValue={setValue}
         firstErrorField={firstErrorField}
       />
-      <DriverLicenseInfo
-        register={register}
-        setValue={setValue}
-        control={control}
-        errors={errors}
-        clearErrors={clearErrors}
-        firstErrorField={firstErrorField}
-      />
+
       <EmergencyContactInfo
         register={register}
         errors={emergencyErrors}
@@ -225,8 +200,6 @@ const ProfileUpdateForm = ({ setSubmitLoader, submitFormRef }) => {
         control={control}
         firstErrorField={firstErrorField}
       />
-
-      <OtherInformation register={register} />
     </form>
   );
 };

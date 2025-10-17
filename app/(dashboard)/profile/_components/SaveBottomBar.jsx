@@ -3,36 +3,28 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import Spinner from "@/components/custom/Spinner";
 
-function SaveBottomBar({
-  onSubmit = () => {},
-  fetching = false,
-  submitLoader = false,
-}) {
+function SaveBottomBar({ onSubmit = () => {}, load = false }) {
   const handlePress = () => {
     if (onSubmit) {
       onSubmit();
     }
   };
 
-  if (fetching) {
-    return <BottomBarSkeleton />;
-  }
+  // if (load) {
+  //   return <BottomBarSkeleton />;
+  // }
 
   return (
-    <div className="bg-white border-t border-gray-200 fixed bottom-0 p-3 left-0 right-0 z-50">
-      <div className="flex items-center justify-between gap-2  sm:hidden">
+    <div className="bg-white border-t border-gray-200 fixed bottom-0 p-3 px-8 left-0 right-0 z-50">
+      <div className="flex items-center justify-end gap-2 ">
         <Button
           onClick={handlePress}
-          className={`items-center bg-cPrimary basis-[40%] h-[53px] text-white ${
-            fetching || submitLoader ? "opacity-50 cursor-not-allowed" : ""
+          className={`items-center bg-cPrimary basis-[20%] h-[53px] text-white ${
+            load ? "opacity-50 cursor-not-allowed" : ""
           }`}
-          disabled={fetching || submitLoader}
+          disabled={load}
         >
-          {submitLoader ? (
-            <Spinner size={20} color="#fff" thickness={3} />
-          ) : (
-            "Save"
-          )}
+          {load ? <Spinner size={20} color="#fff" thickness={3} /> : "Save"}
         </Button>
       </div>
     </div>
