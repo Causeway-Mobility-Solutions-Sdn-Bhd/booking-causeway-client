@@ -92,6 +92,15 @@ export const authApi = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["Auth"],
     }),
+    resetPassword: builder.mutation({
+      query: (data) => ({
+        url: "auth/reset-password",
+        method: "POST",
+        data: data,
+        withCredentials: true,
+      }),
+      invalidatesTags: ["Auth"],
+    }),
     testPermission: builder.query({
       query: () => ({
         url: "auth/test-permission",
@@ -113,4 +122,5 @@ export const {
   useLogoutMutation,
   useTestPermissionQuery,
   useLazyTestPermissionQuery,
+  useResetPasswordMutation,
 } = authApi;
