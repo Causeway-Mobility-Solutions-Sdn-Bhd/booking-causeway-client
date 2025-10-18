@@ -32,6 +32,7 @@ export const ImageUpload = ({
   multiple = true,
   maxFiles = 4,
   label,
+  instructionsRequired = true,
   error = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -210,43 +211,45 @@ export const ImageUpload = ({
       {/* <p className={`text-sm mt-2 ${error ? "text-red-500" : ""}`}>{label}</p> */}
 
       {/* Instuction */}
-      <Collapsible
-        open={isOpen}
-        onOpenChange={setIsOpen}
-        className="w-full mt-2"
-      >
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-normal text-gray-800">Instructions</p>
-          <CollapsibleTrigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="w-9 p-0 flex items-center gap-2"
-            >
-              {isOpen ? (
-                <>
-                  <ChevronUp color="#000" className="h-4 w-4" />
-                </>
-              ) : (
-                <>
-                  <ChevronDown color="#000" className="h-4 w-4" />
-                </>
-              )}
-            </Button>
-          </CollapsibleTrigger>
-        </div>
+      {instructionsRequired && (
+        <Collapsible
+          open={isOpen}
+          onOpenChange={setIsOpen}
+          className="w-full mt-2"
+        >
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-normal text-gray-800">Instructions</p>
+            <CollapsibleTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-9 p-0 flex items-center gap-2"
+              >
+                {isOpen ? (
+                  <>
+                    <ChevronUp color="#000" className="h-4 w-4" />
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown color="#000" className="h-4 w-4" />
+                  </>
+                )}
+              </Button>
+            </CollapsibleTrigger>
+          </div>
 
-        <CollapsibleContent>
-          <ul className="list-disc list-inside text-sm">
-            <li>File must be JPG, PNG & PDF</li>
-            <li>Max 4 files, up to 5 MB</li>
-          </ul>
-        </CollapsibleContent>
-      </Collapsible>
+          <CollapsibleContent>
+            <ul className="list-disc list-inside text-sm">
+              <li>File must be JPG, PNG & PDF</li>
+              <li>Max 4 files, up to 5 MB</li>
+            </ul>
+          </CollapsibleContent>
+        </Collapsible>
+      )}
 
       {/* Image Previews - Outside the height-constrained container */}
       {fileArray && fileArray.length > 0 && (
-        <div className="w-full mt-2 flex flex-wrap gap-3">
+        <div className="w-full mt-5 flex flex-wrap gap-3">
           {fileArray.map((file, index) => {
             const isExisting = file.id && file.public_link;
             const imageUrl = isExisting
