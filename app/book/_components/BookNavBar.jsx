@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import CurrencyDrawer from "@/app/_components/CurrencyDrawer";
 import StepBar from "./StepBar";
 
-function BookNavBar({ topBar = null, child = null }) {
+function BookNavBar({ topBar = null, child = null,currencyDrawer=true }) {
   const router = useRouter();
   const handleBack = () => {
     router.back();
@@ -35,7 +35,7 @@ function BookNavBar({ topBar = null, child = null }) {
               <div className="block sm:hidden absolute left-[50%] translate-x-[-50%] w-full">
                 {child}
               </div>
-              <CurrencyDrawer />
+              {currencyDrawer &&<CurrencyDrawer />}
             </>
           ) : (
             <StepBar />

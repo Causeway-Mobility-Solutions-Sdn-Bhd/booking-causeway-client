@@ -3,7 +3,13 @@ import { setReservation } from "../slices/reservationSlice";
 
 export const customerApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    // Create Customer
+    getCustomer: builder.query({
+      query: (customerId) => ({
+        url: `customers/get-customer/${customerId}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, id) => [{ type: "Customers", id }],
+    }),
     createCustomer: builder.mutation({
       query: (customerData) => ({
         url: "customers/create-customers",
@@ -74,4 +80,6 @@ export const {
   useCreateCustomerMutation,
   useUpdateCustomerMutation,
   useUploadLicenseFileMutation,
+  useLazyGetCustomerQuery,
+  useGetCustomerQuery,
 } = customerApi;

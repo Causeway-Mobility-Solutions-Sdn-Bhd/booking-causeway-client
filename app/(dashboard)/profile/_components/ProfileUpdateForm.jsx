@@ -1,36 +1,27 @@
-import React, { useEffect, useState } from "react";
+"use client";
+import React, { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { Checkbox } from "@/components/ui/checkbox";
-import DriverLicenseInfo from "./DriverLicenseInfo";
-import DriverInformation from "./DriverInformation";
-import DriversContactInfo from "./DriversContactInfo";
-import EmergencyContactInfo from "./EmergencyContactInfo";
-import OtherInformation from "./OtherInformation";
+
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import hqApi from "@/lib/hqApi";
 import { useRouter } from "next/navigation";
-import { setReservation } from "@/store/slices/reservationSlice";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 
 import { useMemo } from "react";
 import { transformCustomerFormData } from "@/app/_lib/transformCustomerData";
 import {
-  useCreateCustomerMutation,
   useUpdateCustomerMutation,
   useUploadLicenseFileMutation,
 } from "@/store/api/customerApiSlice";
+import DriverInformation from "@/app/book/step-04/_components/DriverInformation";
+import DriversContactInfo from "@/app/book/step-04/_components/DriversContactInfo";
+import EmergencyContactInfo from "@/app/book/step-04/_components/EmergencyContactInfo";
 
-const CustomerDetailsForm = ({
-  submitFormRef,
-  setSubmitLoader,
+const ProfileUpdateForm = ({
   dataAvailable,
+  setSubmitLoader,
+  submitFormRef,
 }) => {
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const currentUUID = useAppSelector((state) => state.reservation.currentUUID);
-
-  const [createCustomer, { isLoading: isCreating }] =
-    useCreateCustomerMutation();
   const [updateCustomer, { isLoading: isUpdating }] =
     useUpdateCustomerMutation();
   const [uploadLicenseFile] = useUploadLicenseFileMutation();
@@ -62,10 +53,6 @@ const CustomerDetailsForm = ({
       emergencyRelationship: "",
 
       licenseFiles: [],
-
-      otherInfo: "",
-
-      agreeTerms: false,
     },
   });
 
@@ -76,19 +63,11 @@ const CustomerDetailsForm = ({
     try {
       const transformedData = transformCustomerFormData(data);
       let customerId;
-      let response;
-
-      // Create or Update Customer
-      if (dataAvailable) {
-        response = await updateCustomer({
-          id: dataAvailable.id,
-          data: transformedData,
-        }).unwrap();
-        customerId = dataAvailable.id;
-      } else {
-        response = await createCustomer(transformedData).unwrap();
-        customerId = response?.customer?.contact?.id;
-      }
+      let response = await updateCustomer({
+        id: dataAvailable.id,
+        data: transformedData,
+      }).unwrap();
+      customerId = dataAvailable.id;
 
       // Upload License Files
       if (data.licenseFiles && data.licenseFiles.length > 0) {
@@ -107,14 +86,7 @@ const CustomerDetailsForm = ({
       }
 
       // Show success message
-      showSuccessToast(
-        dataAvailable
-          ? "Customer updated successfully!"
-          : "Customer created successfully!"
-      );
-
-      // Redirect
-      router.push(`/book/step-05?ssid=${currentUUID}`);
+      showSuccessToast("Profile updated successfully!");
     } catch (error) {
       console.error("Error submitting form:", error);
       showErrorToast(
@@ -155,7 +127,6 @@ const CustomerDetailsForm = ({
     errors.emergencyPhone,
     errors.emergencyRelationship,
     errors.licenseFiles,
-    errors.agreeTerms,
   ]);
 
   useEffect(() => {
@@ -202,7 +173,7 @@ const CustomerDetailsForm = ({
         }
       }}
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6"
+      className="space-y-6 pb-0 sm:pb-20"
     >
       <DriverInformation
         register={register}
@@ -221,14 +192,7 @@ const CustomerDetailsForm = ({
         setValue={setValue}
         firstErrorField={firstErrorField}
       />
-      <DriverLicenseInfo
-        register={register}
-        setValue={setValue}
-        control={control}
-        errors={errors}
-        clearErrors={clearErrors}
-        firstErrorField={firstErrorField}
-      />
+
       <EmergencyContactInfo
         register={register}
         errors={emergencyErrors}
@@ -236,44 +200,8 @@ const CustomerDetailsForm = ({
         control={control}
         firstErrorField={firstErrorField}
       />
-
-      <OtherInformation register={register} />
-
-      <div className="">
-        <div className="flex gap-3">
-          <Checkbox
-            id="agreeTerms"
-            checked={watch("agreeTerms")}
-            onCheckedChange={(checked) => {
-              setValue("agreeTerms", checked, { shouldValidate: true });
-            }}
-            className="mt-1.5"
-          />
-
-          <input
-            type="checkbox"
-            {...register("agreeTerms", {
-              required: "You must agree to the terms and conditions",
-            })}
-            className="hidden"
-          />
-          <label
-            htmlFor="agreeTerms"
-            className="text-md flex-1 leading-relaxed"
-          >
-            By proceed, I confirm that all the information provided is true and
-            complete to the best of my knowledge. Providing false information
-            may potentially result in Causeway rejecting my booking.
-          </label>
-        </div>
-        {firstErrorField === "agreeTerms" && errors.agreeTerms && (
-          <p className="text-red-500 text-sm mt-1 ml-7">
-            {errors.agreeTerms.message}
-          </p>
-        )}
-      </div>
     </form>
   );
 };
 
-export default CustomerDetailsForm;
+export default ProfileUpdateForm;
