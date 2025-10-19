@@ -108,7 +108,29 @@ export const authApi = apiSlice.injectEndpoints({
       }),
       providesTags: ["Auth"],
     }),
+    forgotPassword: builder.mutation({
+      query: (data) => ({
+        url: "auth/forgot-password",
+        method: "POST",
+        data,
+      }),
+    }),
+    verifyResetOtp: builder.mutation({
+      query: (data) => ({
+        url: "auth/verify-resetotp",
+        method: "POST",
+        data,
+      }),
+    }),
+    resendResetOtp: builder.mutation({
+      query: (data) => ({
+        url: "auth/forgot-password",
+        method: "POST",
+        data,
+      }),
+    }),
   }),
+
   overrideExisting: true,
 });
 
@@ -123,4 +145,7 @@ export const {
   useTestPermissionQuery,
   useLazyTestPermissionQuery,
   useResetPasswordMutation,
+  useForgotPasswordMutation,
+  useVerifyResetOtpMutation,
+  useResendResetOtpMutation,
 } = authApi;
