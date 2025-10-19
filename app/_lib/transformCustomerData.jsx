@@ -1,7 +1,6 @@
 import { parse, format } from "date-fns";
 
-export const transformCustomerFormData = (formData) => {
-  // Helper to transform date from dd/MM/yy → yyyy-MM-dd
+export const transformCustomerFormData = (formData = {}) => {
   const transformDate = (dateString) => {
     if (!dateString) return "";
     try {
@@ -13,28 +12,45 @@ export const transformCustomerFormData = (formData) => {
     }
   };
 
-  const phone = `${formData.phoneCountryCode}-${formData.phone}`;
-  const transformedBirthDate = transformDate(formData.birthDate);
+  console.log(formData);
 
-  const result = {
-    field_2: formData.firstName,
-    field_3: formData.lastName,
-    field_62: formData.country,
-    field_15: transformedBirthDate,
-    field_8: phone,
-    field_9: formData.email,
-    field_279: phone,
-  };
+  const result = {};
 
-  // Add emergency contact info only if at least one field is filled
+  // Conditional fields
+  if (formData.firstName) result.field_2 = formData.firstName;
+  if (formData.lastName) result.field_3 = formData.lastName;
+  if (formData.country) result.field_62 = formData.country;
+
+  if (formData.birthDate) {
+    const transformedBirthDate = transformDate(formData.birthDate);
+    if (transformedBirthDate) result.field_15 = transformedBirthDate;
+  }
+
+  if (formData.phoneCountryCode && formData.phone) {
+    const phone = `${formData.phoneCountryCode}-${formData.phone}`;
+    result.field_8 = phone;
+    result.field_279 = phone;
+  }
+
+  if (formData.email) result.field_9 = formData.email;
+
+  // Emergency contact only if at least one field is provided
   const hasEmergencyInfo =
     formData.emergencyPhone?.trim() || formData.emergencyRelationship?.trim();
 
   if (hasEmergencyInfo) {
-    result.field_277 = `${formData.emergencyPhoneCountryCode}-${formData.emergencyPhone}`;
+    if (formData.emergencyPhoneCountryCode && formData.emergencyPhone) {
+      result.field_277 = `${formData.emergencyPhoneCountryCode}-${formData.emergencyPhone}`;
+    }
     if (formData.emergencyRelationship?.trim()) {
       result.field_280 = formData.emergencyRelationship;
     }
+  }
+
+  if (formData?.driverLicense) result.field_254 = formData.driverLicense;
+  if (formData?.licenseExpiry) {
+    const transformedLicenseExpiry = transformDate(formData.licenseExpiry);
+    result.field_256 = transformedLicenseExpiry;
   }
 
   return result;
@@ -90,6 +106,8 @@ export const transformCustomerData = (data) => {
     // emergencyEmail: data.f278 || "",
 
     // File arrays (extract from API response)
+    driverLicense: data.f254 || "",
+    licenseExpiry: reverseTransformDate(data.f256) || "",
     licenseFiles: data.f252
       ? data.f252.map((file) => ({
           id: file.id,

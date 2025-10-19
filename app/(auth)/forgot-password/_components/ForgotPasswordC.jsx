@@ -6,11 +6,12 @@ import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 import Spinner from "@/components/custom/Spinner";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { useForgotPasswordMutation } from "@/store/api/authApiSlice";
 
 function ForgotPasswordC({ type }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = React.useState(false);
 
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
   const {
     register,
     handleSubmit,
@@ -21,20 +22,12 @@ function ForgotPasswordC({ type }) {
 
   const onSubmit = async (data) => {
     try {
-      setIsLoading(true);
-      console.log({
-        email: data.email,
-      });
-
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      showSuccessToast("Password recovery email sent!");
-      router.push("/login");
+      const res = await forgotPassword({ email: data.email }).unwrap();
+      showSuccessToast(res?.message || "OTP sent to your email");
+      router.push(`/forgot-password/${res.data.clientToken}`);
     } catch (err) {
       console.log("Forgot password error:", err);
-      showErrorToast(err?.data?.message || "Failed to send recovery email");
-    } finally {
-      setIsLoading(false);
+      showErrorToast(err?.data?.message || "Failed to send OTP");
     }
   };
 
