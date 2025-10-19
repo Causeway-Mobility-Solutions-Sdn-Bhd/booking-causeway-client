@@ -24,7 +24,7 @@ function ForgotPasswordC({ type }) {
     try {
       const res = await forgotPassword({ email: data.email }).unwrap();
       showSuccessToast(res?.message || "OTP sent to your email");
-      router.push("/verify-resetotp");
+      router.push(`/forgot-password/${res.data.clientToken}`);
     } catch (err) {
       console.log("Forgot password error:", err);
       showErrorToast(err?.data?.message || "Failed to send OTP");

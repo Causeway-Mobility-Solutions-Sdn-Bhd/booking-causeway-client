@@ -10,7 +10,7 @@ import {
 } from "@/store/api/authApiSlice";
 import Spinner from "@/components/custom/Spinner";
 
-function VerifyResetOtp({ type, userData }) {
+function VerifyResetOtp({ type, userData, clientToken }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [resendTimer, setResendTimer] = useState(90);
   const [canResend, setCanResend] = useState(false);
@@ -27,7 +27,7 @@ function VerifyResetOtp({ type, userData }) {
   }, [userData]);
 
   const setTimer = (data) => {
-    if (data?.forgotPasswordExpiresAt) {
+    if (data?.expiresAt) {
       const expiryTime = new Date(data.forgotPasswordExpiresAt).getTime();
       const now = Date.now();
       const diff = Math.max(Math.floor((expiryTime - now) / 1000), 0);
@@ -75,7 +75,7 @@ function VerifyResetOtp({ type, userData }) {
     try {
       const res = await verifyResetOtp({ code: otpValue }).unwrap();
       showSuccessToast("OTP verified successfully");
-      router.push(`/reset-forgot-password/${res?.data?.clientToken}`);
+      router.push(`/new-password/${res?.clientToken}`);
     } catch (err) {
       showErrorToast(
         err?.data?.message || "Verification failed. Please try again."
@@ -88,15 +88,32 @@ function VerifyResetOtp({ type, userData }) {
     setCanResend(false);
 
     try {
-      const res = await resendResetOtp({ email: userData.email }).unwrap();
+      const res = await resendResetOtp({
+        email: userData.email,
+        clientToken: clientToken,
+      }).unwrap();
+
       setTimer(res?.data);
       showSuccessToast("OTP resent successfully");
     } catch (err) {
-      showErrorToast(
-        err?.data?.message || "Failed to resend OTP. Please try again."
-      );
-      setCanResend(true);
-      setResendTimer(0);
+      const message =
+        err?.data?.message || "Failed to resend OTP. Please try again.";
+
+      if (
+        err?.status === 403 ||
+        message.toLowerCase().includes("expired") ||
+        message.toLowerCase().includes("invalid")
+      ) {
+        showErrorToast("Session expired. Please restart password reset.");
+        router.push("/forgot-password");
+      } else if (err?.status === 404) {
+        showErrorToast("No account found with this email.");
+        router.push("/forgot-password");
+      } else {
+        showErrorToast(message);
+        setCanResend(true);
+        setResendTimer(0);
+      }
     }
   };
 
