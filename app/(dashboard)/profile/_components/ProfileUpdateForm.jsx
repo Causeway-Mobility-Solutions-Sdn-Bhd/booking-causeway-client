@@ -173,7 +173,7 @@ const ProfileUpdateForm = ({
         }
       }}
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 pb-20"
+      className="space-y-6 pb-0 sm:pb-20"
     >
       <DriverInformation
         register={register}
