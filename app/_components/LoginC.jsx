@@ -8,7 +8,7 @@ import Spinner from "@/components/custom/Spinner";
 import { useRouter } from "next/navigation";
 import { useLoginMutation } from "@/store/api/authApiSlice";
 
-function LoginC({ type }) {
+function LoginC({ type, setIsDrawerOpen }) {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const [login, { isLoading }] = useLoginMutation();
@@ -37,7 +37,11 @@ function LoginC({ type }) {
       }).unwrap();
 
       showSuccessToast("Logged in successfully!");
-      router.push("/");
+      if (type === "primary") {
+        router.push("/");
+      } else {
+        setIsDrawerOpen(false);
+      }
     } catch (err) {
       console.log("Login error:", err);
       const clientToken = err?.data?.clientToken;
@@ -123,7 +127,10 @@ function LoginC({ type }) {
         </div>
 
         <div className="mb-3">
-          <a href="/forgot-password" className="text-cSecondary text-sm font-medium">
+          <a
+            href="/forgot-password"
+            className="text-cSecondary text-sm font-medium"
+          >
             Forgot password
           </a>
         </div>
