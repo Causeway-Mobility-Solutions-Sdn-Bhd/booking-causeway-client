@@ -30,7 +30,7 @@ function Nav({ isMain = true, value = "" }) {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Manage Booking", href: "/manage-booking" },
+    { name: "Manage Booking", href: "/manage"},
     { name: "Partnership", href: "/partnership" },
     { name: "Contact Us", href: "/support" },
     { name: "Terms & Conditions", href: "/terms-and-condition" },
