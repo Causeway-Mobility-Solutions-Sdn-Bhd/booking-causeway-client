@@ -12,46 +12,6 @@ import Image from "next/image";
 
 const allBrands = [
   {
-    img: "/partners/brand-1.webp",
-    name: "Perodua",
-  },
-  {
-    img: "/partners/brand-2.webp",
-    name: "BMW",
-  },
-  {
-    img: "/partners/brand-3.webp",
-    name: "Ford",
-  },
-  {
-    img: "/partners/brand-4.webp",
-    name: "Hyundai",
-  },
-  {
-    img: "/partners/brand-5.webp",
-    name: "Honda",
-  },
-  {
-    img: "/partners/brand-6.webp",
-    name: "Mercedes",
-  },
-  {
-    img: "/partners/brand-7.webp",
-    name: "Nissan",
-  },
-  {
-    img: "/partners/brand-8.webp",
-    name: "Audi",
-  },
-  {
-    img: "/partners/brand-9.webp",
-    name: "Proton",
-  },
-  {
-    img: "/partners/brand-10.webp",
-    name: "Tesla",
-  },
-  {
     img: "/partners/brand-11.webp",
     name: "Toyota",
   },
