@@ -9,12 +9,11 @@ import {
 } from "@/components/ui/drawer";
 import LoginC from "@/app/_components/LoginC";
 
-function LoginDrawer({ isDrawerOpen, setIsDrawerOpen , setActiveTab }) {
-  
+function LoginDrawer({ isDrawerOpen, setIsDrawerOpen, setActiveTab }) {
   const handleDrawer = (open) => {
-    setActiveTab("guest")
-    setIsDrawerOpen(open)
-  }  
+    setActiveTab("guest");
+    setIsDrawerOpen(open);
+  };
   return (
     <Drawer open={isDrawerOpen} onOpenChange={handleDrawer}>
       <DrawerContent className="z-90 flex flex-col h-[75vh]">
@@ -28,7 +27,7 @@ function LoginDrawer({ isDrawerOpen, setIsDrawerOpen , setActiveTab }) {
         {/* Content in cWhite */}
         <div className="flex-1 pt-4 bg-cWhite">
           <div className="w-[95%] mx-auto flex justify-center items-center">
-            <LoginC type="secondary" />
+            <LoginC type="secondary" setIsDrawerOpen={setIsDrawerOpen} />
           </div>
           <div className="text-center mt-4">
             <p className="text-[16px]">

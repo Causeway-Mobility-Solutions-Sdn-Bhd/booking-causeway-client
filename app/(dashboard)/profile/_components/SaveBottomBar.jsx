@@ -19,7 +19,7 @@ function SaveBottomBar({ onSubmit = () => {}, load = false }) {
       <div className="flex items-center justify-end gap-2 ">
         <Button
           onClick={handlePress}
-          className={`items-center bg-cPrimary basis-[20%] h-[53px] text-white ${
+          className={`items-center bg-cPrimary basis-[100%] sm:basis-[20%] h-[53px] text-white ${
             load ? "opacity-50 cursor-not-allowed" : ""
           }`}
           disabled={load}

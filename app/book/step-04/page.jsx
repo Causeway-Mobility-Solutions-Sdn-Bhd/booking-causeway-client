@@ -32,6 +32,7 @@ function Page() {
   const router = useRouter();
   const submitFormRef = useRef(null);
   const [formData, setFormData] = useState(null);
+  const loggedUser = useAppSelector((state) => state.auth.loggedUser);
 
   useEffect(() => {
     if (!reservation?.vehicle_class_id) {
@@ -79,16 +80,16 @@ function Page() {
           {}
         );
 
-        if (reservation.customer_id) {
-          const response = await hqApi.get(
-            `customers/get-customer/${reservation.customer_id}`
-          );
-          const transformData = transformCustomerData(response.data);
-          setFormData(transformData);
-        } else {
-          console.log("NOT AVAILABLE");
-        }
         if (response?.status === 200) {
+          if (response?.data?.reservation?.customer_id) {
+            const response = await hqApi.get(
+              `customers/get-customer/${response?.data?.reservation.customer_id}`
+            );
+            console.log("DATA IS THERE AND SETTINGIT", response.data);
+
+            const transformData = transformCustomerData(response.data);
+            setFormData(transformData);
+          }
           dispatch(setReservation(response?.data?.reservation));
           dispatch(setSelectedVehicle(response?.data?.selected_vehicle));
           dispatch(
@@ -109,7 +110,7 @@ function Page() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [loggedUser]);
 
   const triggerSubmit = useCallback(() => {
     if (submitFormRef.current) {
@@ -118,7 +119,7 @@ function Page() {
       console.log("Form ref missing");
     }
   }, []);
-  const loggedUser = useAppSelector((state) => state.auth.loggedUser);
+
   return (
     <div>
       <BookNavBar

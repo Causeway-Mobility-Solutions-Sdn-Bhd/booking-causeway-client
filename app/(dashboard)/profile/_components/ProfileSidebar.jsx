@@ -12,10 +12,30 @@ const ProfileSidebar = () => {
   const pathname = usePathname();
 
   const menuItems = [
-    { id: "personal", label: "Personal information", icon: FaUser },
-    { id: "license", label: "License information", icon: BiSolidIdCard },
-    { id: "security", label: "Security", icon: HiMiniShieldExclamation },
-    { id: "support", label: "Support", icon: RiQuestionnaireFill },
+    {
+      id: "personal",
+      label: "Personal information",
+      route: "/profile/personal",
+      icon: FaUser,
+    },
+    {
+      id: "license",
+      label: "License information",
+      route: "/profile/license",
+      icon: BiSolidIdCard,
+    },
+    {
+      id: "security",
+      label: "Security",
+      route: "/profile/security",
+      icon: HiMiniShieldExclamation,
+    },
+    {
+      id: "support",
+      label: "Support",
+      route: "/support",
+      icon: RiQuestionnaireFill,
+    },
   ];
 
   return (
@@ -27,7 +47,7 @@ const ProfileSidebar = () => {
           return (
             <div key={item.id}>
               <button
-                onClick={() => router.push(`/profile/${item.id}`)}
+                onClick={() => router.push(item.route)}
                 className={`w-full cursor-pointer flex items-center text-black justify-between px-2 py-2 rounded-xl transition-all hover:font-semibold
                 ${isActive ? "font-semibold" : "font-normal"}`}
               >
