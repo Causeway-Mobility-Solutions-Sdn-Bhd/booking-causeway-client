@@ -57,7 +57,7 @@ function page() {
               onClick={() => alert('Telegram support is currently unavailable. Please use WhatsApp for assistance.')}
             >
               <div className="flex items-center space-x-3">
-                <img src="/Support/Telegram.png" alt="Telegram" className="w-6 h-6" style={{width: '24px', height: '24px'}} />
+                <img src="/Support/Telegram.svg" alt="Telegram" className="w-6 h-6" style={{width: '24px', height: '24px'}} />
                 <span className="text-[14px] font-normal leading-[20px] text-black" style={{fontFamily: 'Poppins'}}>Telegram</span>
               </div>
               <ChevronRight className="w-5 h-5 text-teal-500" />

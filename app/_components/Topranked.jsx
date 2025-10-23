@@ -4,22 +4,22 @@ import Image from "next/image";
 
 const allAwards = [
   {
-    image: "/awards/Web Badges-01.png",
+    image: "/awards/Web Badges-01.webp",
   },
   {
-    image: "/awards/Web Badges-02.png",
+    image: "/awards/Web Badges-02.webp",
   },
   {
-    image: "/awards/Web Badges-03.png",
+    image: "/awards/Web Badges-03.webp",
   },
   {
-    image: "/awards/Web Badges-04.png",
+    image: "/awards/Web Badges-04.webp",
   },
   {
-    image: "/awards/Web Badges-05.png",
+    image: "/awards/Web Badges-05.webp",
   },
   {
-    image: "/awards/Web Badges-06.png",
+    image: "/awards/Web Badges-06.webp",
   },
 ];
 

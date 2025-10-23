@@ -8,7 +8,7 @@ import { useLogoutMutation } from "@/store/api/authApiSlice";
 import { showErrorToast, showSuccessToast } from "../_lib/toast";
 
 const links = [
-  { label: "Manage Booking", href: "/manage-booking" },
+  { label: "Manage Booking", href: "/manage" },
   { label: "Support", href: "/support" },
   { label: "Partnership", href: "/partnership" },
   { label: "Terms & Condition", href: "/terms-and-condition" },
