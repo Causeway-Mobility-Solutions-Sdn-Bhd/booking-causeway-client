@@ -155,7 +155,7 @@ function page() {
             {/* Dedicated Rental Agent */}
             <div className="mb-2">
               <div className="flex items-start space-x-4">
-                <img src="/Support/agent.png" alt="Dedicated Rental Agent" className="w-12 h-12 flex-shrink-0" style={{width: '48px', height: '48px'}} />
+                <img src="/Support/agent.svg" alt="Dedicated Rental Agent" className="w-12 h-12 flex-shrink-0" style={{width: '48px', height: '48px'}} />
                 <div className="flex-1">
                   <h4 className="text-[16px] font-bold leading-[22px] text-black mb-2" style={{fontFamily: 'Poppins', color: '#080206'}}>Dedicated Rental Agent</h4>
                   <p className="text-[12px] font-normal leading-[18px]" style={{fontFamily: 'Poppins', color: '#404040'}}>
