@@ -123,9 +123,9 @@ function LoginC({ type }) {
         </div>
 
         <div className="mb-3">
-          <a href="/forgot-password" className="text-cSecondary text-sm font-medium">
+          <Link href="/forgot-password" className="text-cSecondary text-sm font-medium">
             Forgot password
-          </a>
+          </Link>
         </div>
 
         <button
