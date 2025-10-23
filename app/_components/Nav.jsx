@@ -51,7 +51,7 @@ function Nav({ isMain = true, value = "" }) {
           <Image
             priority
             className="object-contain w-[150px] sm:w-[200px] absolute left-[50%] sm:left-[0%] translate-x-[-50%] sm:translate-x-[0%]  sm:relative"
-            src="/logo/logo-black.webp"
+            src="/logo/logo-black.svg"
             alt="Causeway Logo"
             width={200}
             height={70}
@@ -64,7 +64,7 @@ function Nav({ isMain = true, value = "" }) {
             <Image
               priority
               className="hidden sm:block object-contain w-[150px] sm:w-[200px] absolute left-[50%] sm:left-[0%] translate-x-[-50%] sm:translate-x-[0%] grayscale sm:grayscale-0 sm:relative"
-              src="/logo/logo-black.webp"
+              src="/logo/logo-black.svg"
               alt="Causeway Logo"
               width={200}
               height={70}
