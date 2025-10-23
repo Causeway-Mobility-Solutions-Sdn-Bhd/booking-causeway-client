@@ -8,7 +8,7 @@ import { useLogoutMutation } from "@/store/api/authApiSlice";
 import { showErrorToast, showSuccessToast } from "../_lib/toast";
 
 const links = [
-  { label: "Manage Booking", href: "/manage-booking" },
+  { label: "Manage Booking", href: "/manage" },
   { label: "Support", href: "/support" },
   { label: "Partnership", href: "/partnership" },
   { label: "Terms & Condition", href: "/terms-and-condition" },
@@ -20,6 +20,17 @@ function SideBar() {
   const dispatch = useAppDispatch();
   const pathname = usePathname();
   const router = useRouter();
+
+  const user = useLoggedUser();
+
+  const links = [
+  { label: "Manage Booking", href: user ? "/manage-booking" : 'find-booking' },
+  { label: "Support", href: "/support" },
+  { label: "Partnership", href: "/partnership" },
+  { label: "Terms & Condition", href: "/terms-and-condition" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+];
+
 
   const handleCloseSidebar = () => {
     dispatch(setOpenBg(false));
@@ -38,7 +49,7 @@ function SideBar() {
       console.error("Logout error:", error);
     }
   };
-  const user = useLoggedUser();
+  
   return (
     <div
       className={`sidebar shadow-xl px-[20px] py-[25px] block xxl:hidden custom-trans ${

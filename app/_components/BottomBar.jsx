@@ -7,26 +7,12 @@ import { FaHome } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import { BsPersonFill } from "react-icons/bs";
 import { IoChatbox } from "react-icons/io5";
-import { IoLogOut } from "react-icons/io5";
 import { useLoggedUser } from "@/store/hooks";
-import { useLogoutMutation } from "@/store/api/authApiSlice";
-import { showErrorToast, showSuccessToast } from "../_lib/toast";
 
 function BottomBar() {
   const pathname = usePathname();
   const user = useLoggedUser();
   const router = useRouter();
-  const [logout, { isLoading }] = useLogoutMutation();
-  const handleLogout = async () => {
-    try {
-      await logout().unwrap();
-      showSuccessToast("Logged out successfully");
-      router.push("/");
-    } catch (error) {
-      showErrorToast("Logout failed. Please try again.");
-      console.error("Logout error:", error);
-    }
-  };
 
   const navItems = [
     {
@@ -36,15 +22,14 @@ function BottomBar() {
     },
     {
       name: "Book",
-      href: "/manage-booking",
+      href: user ? "/manage-booking" : "/find-booking",
       icon: <IoIosSearch size={25} />,
     },
     user
       ? {
-          name: "Logout",
-          href: "#",
-          icon: <IoLogOut size={20} />,
-          onClick: handleLogout,
+          name: "Profile",
+          href: "/profile",
+          icon: <BsPersonFill size={20} />,
         }
       : {
           name: "Log in",

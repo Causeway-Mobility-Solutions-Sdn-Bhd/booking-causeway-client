@@ -35,7 +35,7 @@ function FilterDrawer({
       <DrawerTrigger asChild>
         <div>
           <Image
-            src="/icons/filter-icon.png"
+            src="/icons/filter-icon.svg"
             alt={`filter icon`}
             className="h-full w-[20px] cursor-pointer object-contain"
             width={20}
