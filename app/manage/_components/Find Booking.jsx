@@ -48,7 +48,7 @@ function FindBookingForm() {
           <div className="text-center">
             <p className="text-[15px] text-gray-700">
               Have an account?{" "}
-              <a href="/login" className="text-cSecondary font-bold hover:underline">
+              <a href="/my-booking" className="text-cSecondary font-bold hover:underline">
                 Sign in
               </a>
             </p>
