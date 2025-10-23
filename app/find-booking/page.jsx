@@ -1,9 +1,9 @@
-import BookingList from './_components/Booking List';
+import ManageBookingC from './_components/Find Booking';
 
-export default function BookingListPage() {
+export default function ManageBookingPage() {
   return (
-    <div className="relative min-h-screen bg-gray-50" style={{backgroundColor: '#f9fafb'}}>
-      <BookingList />
+    <div className="relative min-h-screen">
+      <ManageBookingC type="primary" />
     </div>
   );
 }
