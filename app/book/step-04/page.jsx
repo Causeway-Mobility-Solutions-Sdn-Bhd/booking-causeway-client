@@ -80,14 +80,18 @@ function Page() {
           {}
         );
 
-        if (response?.status === 200) {
-          if (response?.data?.reservation?.customer_id) {
-            const response = await hqApi.get(
-              `customers/get-customer/${response?.data?.reservation.customer_id}`
-            );
-            console.log("DATA IS THERE AND SETTINGIT", response.data);
+        const responseData = response.data;
+        const status = response.status;
 
-            const transformData = transformCustomerData(response.data);
+        if (status === 200) {
+          const customerId = responseData.reservation?.customer_id;
+
+          if (customerId) {
+            const customerRes = await hqApi.get(
+              `customers/get-customer/${customerId}`
+            );
+
+            const transformData = transformCustomerData(customerRes.data);
             setFormData(transformData);
           }
           dispatch(setReservation(response?.data?.reservation));
