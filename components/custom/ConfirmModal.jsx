@@ -22,8 +22,8 @@ const ConfirmModal = ({
   onConfirm,
   title = "Cancel Booking",
   modalSubTitle,
-  description = "Please review the cancellation policy and select an option.",
-  cancellationOptions,
+  description,
+  cancellationOptions = [],
   confirmButtonText = "Cancellation Options",
   cancelButtonText,
   drawerVariantRequired,
@@ -111,12 +111,20 @@ const ConfirmModal = ({
           className={`${drawerVariantRequired ? "hidden sm:block" : "block"}`}
         >
           <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent closeButtonColor="#ff748b" className="sm:max-w-sm">
-              <DialogHeader>
-                <DialogTitle className="font-extrabold">{title}</DialogTitle>
+            <DialogContent
+              closeButtonColor="#ff748b"
+              className="w-[85vw] max-w-md sm:max-w-sm"
+            >
+              <DialogHeader className={"!text-left"}>
+                <DialogTitle className="font-extrabold leading-normal pr-4">
+                  {title}
+                </DialogTitle>
               </DialogHeader>
 
               <div className="space-y-4 py-2">
+                {description && (
+                  <p className="font-normal leading-snug">{description}</p>
+                )}
                 {modalSubTitle && (
                   <h4 className="font-bold">{modalSubTitle}</h4>
                 )}
@@ -162,7 +170,7 @@ const ConfirmModal = ({
                 </Button>
                 {cancelButtonText && (
                   <Button
-                    className="cursor-pointer bg-transparent font-bold text-cPrimary !py-6"
+                    className="cursor-pointer hover:font-extrabold hover:bg-transparent bg-transparent font-bold text-cPrimary !py-6"
                     onClick={onClose}
                   >
                     {cancelButtonText}

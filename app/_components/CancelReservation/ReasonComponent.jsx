@@ -1,10 +1,29 @@
 "use client";
 import React, { useState } from "react";
 import SaveBottomBar from "../SaveBottomBar";
+import { showErrorToast } from "@/app/_lib/toast";
+import ConfirmModal from "@/components/custom/ConfirmModal";
+import { useParams, useRouter } from "next/navigation";
 
 export const ReasonComponent = () => {
   const [selectedReason, setSelectedReason] = useState(null);
+  const router = useRouter();
+  const { id } = useParams();
+  const [cancelLoader, setCancelLoader] = useState(false);
+  const [confirmCancel, setConfirmCancel] = useState(false);
+  const onSubmit = () => {
+    if (!selectedReason) {
+      showErrorToast("Select a reason of cancellation.");
+      return;
+    }
 
+    setConfirmCancel(true);
+    console.log("OK");
+  };
+
+  const onConfirm = () => {
+    router.replace(`/cancel-booking/${id}/cancelled`);
+  };
   const reasons = [
     "Unable to travel due to restrictions related to Coronavirus (COVID-19)",
     "Made bookings for the same dates, want to cancel the one I don't need",
@@ -59,7 +78,24 @@ export const ReasonComponent = () => {
         </div>
       </div>
 
-      <SaveBottomBar title="Confirm cancellation" />
+      <SaveBottomBar
+        title="Confirm cancellation"
+        onSubmit={onSubmit}
+        load={cancelLoader}
+      />
+
+      <ConfirmModal
+        isOpen={confirmCancel}
+        onClose={() => setConfirmCancel(false)}
+        onConfirm={onConfirm}
+        drawerVariantRequired={false}
+        description={
+          "Our offers and prices change quickly, so this deal might not be available again if you cancel now. Are you sure want to cancel?"
+        }
+        title="Are you sure you want to cancel this booking?"
+        confirmButtonText="Yes, cancel this booking"
+        cancelButtonText="No, keep this booking"
+      />
     </>
   );
 };
