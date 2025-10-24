@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import Spinner from "@/components/custom/Spinner";
 
-function SaveBottomBar({ onSubmit = () => {}, load = false }) {
+function SaveBottomBar({ onSubmit = () => {}, load = false, title = "Save" }) {
   const handlePress = () => {
     if (onSubmit) {
       onSubmit();
@@ -24,7 +24,7 @@ function SaveBottomBar({ onSubmit = () => {}, load = false }) {
           }`}
           disabled={load}
         >
-          {load ? <Spinner size={20} color="#fff" thickness={3} /> : "Save"}
+          {load ? <Spinner size={20} color="#fff" thickness={3} /> : title}
         </Button>
       </div>
     </div>

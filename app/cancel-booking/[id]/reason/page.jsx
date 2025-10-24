@@ -1,7 +1,12 @@
+import { ReasonComponent } from "@/app/_components/CancelReservation/ReasonComponent";
 import React from "react";
 
 const page = () => {
-  return <div>REASON</div>;
+  return (
+    <>
+      <ReasonComponent />
+    </>
+  );
 };
 
 export default page;

@@ -1,8 +1,8 @@
 "use client";
 
 import ResetPassword from "@/app/_components/CustomerFormComponents/ResetPassword";
+import SaveBottomBar from "@/app/_components/SaveBottomBar";
 import { useRef, useCallback, useState } from "react";
-import SaveBottomBar from "../_components/SaveBottomBar";
 
 export default function page() {
   const submitFormRef = useRef(null);
