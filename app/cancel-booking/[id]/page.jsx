@@ -1,10 +1,12 @@
 "use client";
 import ConfirmModal from "@/components/custom/ConfirmModal";
+import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const CancelBooking = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const router = useRouter();
+  const { id } = useParams();
   // Mock cancellation options based on your image
   const cancellationOptions = [
     {
@@ -36,15 +38,14 @@ const CancelBooking = () => {
   };
 
   const handleConfirmCancellation = () => {
-    console.log("Selected cancellation option:", selectedOptionId);
     // Add your cancellation logic here
     // You can make API calls, update state, etc.
-
+    console.log(id);
+    router.push(`/cancel-booking/${id}/reason`);
     // For demo purposes, just close the modal
     setIsModalOpen(false);
 
     // Show success message or redirect
-    alert(`Cancellation confirmed with option: ${selectedOptionId}`);
   };
 
   return (
@@ -64,7 +65,8 @@ const CancelBooking = () => {
         title="Cancel Booking"
         modalSubTitle={"Cancellation Policy"}
         description="Please review the cancellation policy and select an option."
-        confirmButtonText="Confirm Cancellation"
+        confirmButtonText="Cancellation Options"
+        drawerVariantRequired={true}
       />
     </div>
   );
