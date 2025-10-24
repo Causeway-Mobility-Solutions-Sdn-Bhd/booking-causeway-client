@@ -39,7 +39,7 @@ export default function BookLayoutClient({ children }) {
     }
 
     setSessionState("valid");
-  }, [isLoading , searchParams]);
+  }, [isLoading, searchParams]);
 
   if (sessionState === "checking" || isLoading) {
     return (

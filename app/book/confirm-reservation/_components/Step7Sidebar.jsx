@@ -4,7 +4,7 @@ import Image from "next/image";
 const Step7Sidebar = () => {
   const steps = [
     {
-      icon: "/next-steps/requireddocs.svg",
+      icon: "/next-steps/requireddocs.png",
       title: "Bring required documents",
       description:
         "Please bring your valid driver’s license, ID/Passport and security deposit.",

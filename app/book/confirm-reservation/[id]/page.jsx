@@ -33,7 +33,11 @@ export default function Page() {
           );
 
           const responseData = response?.data?.data;
+          console.log("RESPONSE", responseData);
+
           if (responseData?.reservation?.uuid !== params.id) {
+            console.log("BACKKKK");
+
             router.replace("/");
             return;
           }
@@ -64,12 +68,17 @@ export default function Page() {
       <Nav />
       <SideBar />
       <PaymentSuccessBar
+        title={"Payment successful!"}
+        msg={
+          "Your car successfully booked. You can check your booking in Manage Booking."
+        }
         reservationNumber={conformeReservation?.reservation?.prefixed_id}
       />
       <div className="pb-16 py-[20px]  sm:py-[30px] max-w-[1400px] mx-auto w-[95%]">
         <div className="mt-[10px] flex justify-start items-start gap-5 flex-col lg:flex-row">
           <div className="flex-1 w-full">
             <VehicleBookingDetails
+              reBook={false}
               customerData={customerInfo}
               reservationData={conformeReservation}
               rentalAgreement={rentalAgreement}

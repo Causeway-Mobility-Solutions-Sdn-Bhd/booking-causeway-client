@@ -4,7 +4,11 @@ import { Copy } from "lucide-react";
 import { FaCheckCircle } from "react-icons/fa";
 import { showSuccessToast } from "@/app/_lib/toast";
 
-const PaymentSuccessBar = ({ reservationNumber = "#JB04636" }) => {
+const PaymentSuccessBar = ({
+  reservationNumber = "#JB04636",
+  msg = "",
+  title = "",
+}) => {
   const handleCopyReservationNumber = () => {
     navigator.clipboard.writeText(reservationNumber);
     showSuccessToast("Reservation Number Copied!");
@@ -21,13 +25,8 @@ const PaymentSuccessBar = ({ reservationNumber = "#JB04636" }) => {
             </div>
 
             <div className="text-white text-center md:text-left">
-              <h3 className="text-lg sm:text-xl font-bold">
-                Payment successful!
-              </h3>
-              <p className="text-xs font-light sm:text-base mt-1">
-                Your car successfully booked. You can check your booking in
-                Manage Booking.
-              </p>
+              <h3 className="text-lg sm:text-xl font-bold">{title}</h3>
+              <p className="text-xs font-light sm:text-base mt-1">{msg}</p>
             </div>
           </div>
 

@@ -15,6 +15,7 @@ function VehicleBookingDetails({
   reservationData,
   customerData,
   rentalAgreement,
+  reBook = false,
 }) {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const [isAddOnOpen, setIsAddOnOpen] = useState(false);
@@ -52,6 +53,7 @@ function VehicleBookingDetails({
   return (
     <div className="mt-[-65px] sm:mt-0">
       <VehicleDetail
+        reBook={reBook}
         selectedVehicle={reservationData?.selected_vehicle_class?.vehicle_class}
       />
       <div className="mb-3">
