@@ -7,8 +7,15 @@ import CustomDatePicker from "@/components/custom/CustomDatePicker";
 import ErrorMessage from "@/components/custom/ErrorMessage";
 import hqApi from "@/lib/hqApi";
 import { showErrorToast } from "@/app/_lib/toast";
+import { useDeleteFileMutation } from "@/store/api/customerApiSlice";
 
-const DriverLicenseInfo = ({ formData, setFormData, errors, setErrors }) => {
+const DriverLicenseInfo = ({
+  formData,
+  setFormData,
+  errors,
+  setErrors,
+  customerId,
+}) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -30,9 +37,10 @@ const DriverLicenseInfo = ({ formData, setFormData, errors, setErrors }) => {
     }
   };
 
+  const [deleteFile] = useDeleteFileMutation();
   const handleDeleteFile = async (fileId) => {
     try {
-      await hqApi.delete(`file/${fileId}`);
+      await deleteFile({ fileId, customerId }).unwrap();
     } catch {
       showErrorToast("Error Deleting File.");
     }

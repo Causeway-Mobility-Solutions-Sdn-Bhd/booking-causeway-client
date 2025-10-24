@@ -70,7 +70,24 @@ export const customerApi = apiSlice.injectEndpoints({
           },
         };
       },
-      invalidatesTags: ["Files"],
+    }),
+
+    deleteFile: builder.mutation({
+      query: ({ fileId }) => ({
+        url: `file/${fileId}`,
+        method: "DELETE",
+      }),
+      async onQueryStarted(arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+        } catch (err) {
+          console.error("Delete file failed:", err);
+          throw err;
+        }
+      },
+      invalidatesTags: (result, error, { customerId }) => [
+        { type: "Customers", id: customerId },
+      ],
     }),
   }),
   overrideExisting: true,
@@ -82,4 +99,5 @@ export const {
   useUploadLicenseFileMutation,
   useLazyGetCustomerQuery,
   useGetCustomerQuery,
+  useDeleteFileMutation,
 } = customerApi;

@@ -86,10 +86,10 @@ export const ImageUpload = ({
 
   const removeExistingFile = async (fileId, fileIndex) => {
     // Check if this is the last existing file
-    if (existingFiles.length === 1) {
-      showErrorToast("All Existing Uploaded Files can't be deleted!");
-      return;
-    }
+    // if (existingFiles.length === 1) {
+    //   showErrorToast("All Existing Uploaded Files can't be deleted!");
+    //   return;
+    // }
 
     if (!onDeleteExisting) {
       console.log("onDeleteExisting function not provided");

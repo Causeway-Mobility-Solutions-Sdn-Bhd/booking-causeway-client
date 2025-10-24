@@ -22,6 +22,7 @@ const Page = () => {
     isFetching,
     isSuccess,
     isError,
+    refetch,
     error,
   } = useGetCustomerQuery(customerId, {
     skip: !customerId,
@@ -56,9 +57,11 @@ const Page = () => {
   return (
     <>
       <DriverLicenseForm
+        refetch={refetch}
         submitFormRef={submitFormRef}
         setSubmitLoader={setSubmitLoader}
         dataAvailable={dataAvailable}
+        customerId={customerId}
       />
 
       <SaveBottomBar
