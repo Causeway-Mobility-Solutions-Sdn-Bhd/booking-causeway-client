@@ -107,6 +107,7 @@ const VehicleInfo = ({
           getValues={getValues}
           name="phone"
           className="col-span-2"
+          control={control}
           firstErrorField={firstErrorField}
         />
       </div>
