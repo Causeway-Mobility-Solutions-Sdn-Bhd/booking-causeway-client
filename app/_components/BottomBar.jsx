@@ -17,7 +17,7 @@ function BottomBar() {
       icon: <FaHome size={20} />,
     },
     {
-      name: "Trips",
+      name: "My Trips",
       href: "/manage-booking",
       icon: <FaSuitcase size={20} />,
     },
