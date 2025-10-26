@@ -8,7 +8,7 @@ import { ChevronRight } from 'lucide-react'
 
 function page() {
   return (
-    <div className="relative min-h-screen bg-gray-50" style={{backgroundColor: '#f9fafb'}}>
+    <div className="min-h-screen" style={{ backgroundColor: '#F0F0F0' }}>
       <Nav isMain={false} value="Contact Us"/>
       <SideBar />
       <div className="pt-5 pb-10 px-4">
