@@ -80,7 +80,7 @@ function BookingList() {
               onClick={() => setActiveTab("upcoming")}
               className="relative transition-colors"
               style={{ 
-                color: activeTab === "upcoming" ? '#2DBDB6' : '#9ca3af',
+                color: activeTab === "upcoming" ? '#2DBDB6' : '#404040',
                 fontSize: '12px',
                 fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
                 fontWeight: activeTab === "upcoming" ? 700 : 400,
@@ -100,7 +100,7 @@ function BookingList() {
               onClick={() => setActiveTab("completed")}
               className="relative transition-colors"
               style={{ 
-                color: activeTab === "completed" ? '#2DBDB6' : '#9ca3af',
+                color: activeTab === "completed" ? '#2DBDB6' : '#404040',
                 fontSize: '12px',
                 fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
                 fontWeight: activeTab === "completed" ? 700 : 400,
@@ -120,7 +120,7 @@ function BookingList() {
               onClick={() => setActiveTab("cancelled")}
               className="relative transition-colors"
               style={{ 
-                color: activeTab === "cancelled" ? '#2DBDB6' : '#9ca3af',
+                color: activeTab === "cancelled" ? '#2DBDB6' : '#404040',
                 fontSize: '12px',
                 fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
                 fontWeight: activeTab === "cancelled" ? 700 : 400,
