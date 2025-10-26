@@ -3,8 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaHome } from "react-icons/fa";
-import { IoIosSearch } from "react-icons/io";
+import { FaHome, FaSuitcase } from "react-icons/fa";
 import { BsPersonFill } from "react-icons/bs";
 import { IoChatbox } from "react-icons/io5";
 
@@ -18,9 +17,9 @@ function BottomBar() {
       icon: <FaHome size={20} />,
     },
     {
-      name: "Book",
+      name: "Trips",
       href: "/manage-booking",
-      icon: <IoIosSearch size={25} />,
+      icon: <FaSuitcase size={20} />,
     },
     {
       name: "Log in",
