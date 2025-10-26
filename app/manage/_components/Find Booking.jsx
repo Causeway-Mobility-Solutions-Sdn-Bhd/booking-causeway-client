@@ -19,8 +19,8 @@ function FindBookingForm() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6" style={{ paddingTop: '76px' }}>
-        <h2 className="text-[20px] sm:text-2xl font-bold mb-4 px-1">
+      <div className="max-w-7xl mx-auto px-4 py-6" style={{ paddingTop: '90px' }}>
+        <h2 className="mb-4 px-1" style={{ fontSize: '16px', fontFamily: 'Poppins, sans-serif', fontWeight: 700, lineHeight: '1.2' }}>
           Find Your Booking
         </h2>
         
