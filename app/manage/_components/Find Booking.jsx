@@ -4,7 +4,7 @@ import { ChevronLeft } from "lucide-react";
 
 function FindBookingForm() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ backgroundColor: '#F0F0F0' }}>
       {/*  Header */}
       <div className="bg-white fixed top-0 left-0 right-0 z-50">
         <div className="max-w-7xl mx-auto px-4" style={{ height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', borderBottom: '1px solid #e6e6e6' }}>
