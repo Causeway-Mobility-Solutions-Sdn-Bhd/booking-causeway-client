@@ -116,10 +116,14 @@ function page() {
           <h3 className="text-[21px] font-normal leading-[100%] text-black mb-6" style={{fontFamily: 'Poppins', color: '#080206'}}>What You Can Expect</h3>
           <div className="bg-white rounded-lg shadow-sm p-4">
             
-            {/* High Speed Customer Support */}
+            {/* High Speed Customer Support - IMAGE MOVED UP MORE */}
             <div className="mb-6">
               <div className="flex items-start space-x-4">
-                <img src="/Support/customer.png" alt="High Speed Customer Support" className="w-12 h-12 flex-shrink-0" style={{width: '48px', height: '48px'}} />
+                <img 
+                  src="/Support/Customer.webp" 
+                  alt="High Speed Customer Support" 
+                  className="w-20 h-20 md:w-24 md:h-24 flex-shrink-0 object-contain mt-[-15px]" 
+                />
                 <div className="flex-1">
                   <h4 className="text-[16px] font-bold leading-[22px] text-black mb-2" style={{fontFamily: 'Poppins', color: '#080206'}}>High Speed Customer Support</h4>
                   <p className="text-[12px] font-normal leading-[18px]" style={{fontFamily: 'Poppins', color: '#404040'}}>
@@ -134,10 +138,14 @@ function page() {
               <div className="w-full h-0 border-t border-gray-200" style={{borderColor: '#E6E6E6'}}></div>
             </div>
 
-            {/* 24/7 Road Side Assistance */}
+            {/* 24/7 Road Side Assistance - IMAGE MOVED UP MORE */}
             <div className="mb-6">
               <div className="flex items-start space-x-4">
-                <img src="/Support/road.png" alt="24/7 Road Side Assistance" className="w-12 h-12 flex-shrink-0" style={{width: '48px', height: '48px'}} />
+                <img 
+                  src="/Support/Road.webp" 
+                  alt="24/7 Road Side Assistance" 
+                  className="w-20 h-20 md:w-24 md:h-24 flex-shrink-0 object-contain mt-[-15px]" 
+                />
                 <div className="flex-1">
                   <h4 className="text-[16px] font-bold leading-[22px] text-black mb-2" style={{fontFamily: 'Poppins', color: '#080206'}}>24/7 Road Side Assistance</h4>
                   <p className="text-[12px] font-normal leading-[18px]" style={{fontFamily: 'Poppins', color: '#404040'}}>
@@ -152,10 +160,14 @@ function page() {
               <div className="w-full h-0 border-t border-gray-200" style={{borderColor: '#E6E6E6'}}></div>
             </div>
 
-            {/* Dedicated Rental Agent */}
+            {/* Dedicated Rental Agent - IMAGE MOVED UP MORE */}
             <div className="mb-2">
               <div className="flex items-start space-x-4">
-                <img src="/Support/agent.svg" alt="Dedicated Rental Agent" className="w-12 h-12 flex-shrink-0" style={{width: '48px', height: '48px'}} />
+                <img 
+                  src="/Support/Agent.webp" 
+                  alt="Dedicated Rental Agent" 
+                  className="w-20 h-20 md:w-24 md:h-24 flex-shrink-0 object-contain mt-[-15px]" 
+                />
                 <div className="flex-1">
                   <h4 className="text-[16px] font-bold leading-[22px] text-black mb-2" style={{fontFamily: 'Poppins', color: '#080206'}}>Dedicated Rental Agent</h4>
                   <p className="text-[12px] font-normal leading-[18px]" style={{fontFamily: 'Poppins', color: '#404040'}}>
