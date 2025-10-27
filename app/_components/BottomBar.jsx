@@ -11,7 +11,6 @@ import { useLoggedUser } from "@/store/hooks";
 function BottomBar() {
   const pathname = usePathname();
   const user = useLoggedUser();
-  const router = useRouter();
 
   const navItems = [
     {
