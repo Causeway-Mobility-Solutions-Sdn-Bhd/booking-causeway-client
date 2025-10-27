@@ -4,19 +4,19 @@ import Image from "next/image";
 const Step7Sidebar = () => {
   const steps = [
     {
-      icon: "/next-steps/requireddocs.png",
+      icon: "/next-steps/requireddocs.webp",
       title: "Bring required documents",
       description:
         "Please bring your valid driver’s license, ID/Passport and security deposit.",
     },
     {
-      icon: "/next-steps/vehicleinspection.png",
+      icon: "/next-steps/vehicleinspection.webp",
       title: "Vehicle Inspection",
       description:
         "Together with our staff, inspect the vehicle before driving off.",
     },
     {
-      icon: "/next-steps/route.png",
+      icon: "/next-steps/route.webp",
       title: "Enjoy your rental",
       description:
         "Have a safe and pleasant journey with your Causeway rental car.",

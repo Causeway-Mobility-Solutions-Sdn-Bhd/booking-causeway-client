@@ -2,9 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { FaHome } from "react-icons/fa";
-import { IoIosSearch } from "react-icons/io";
+import { usePathname } from "next/navigation";
+import { FaHome, FaSuitcase } from "react-icons/fa";
 import { BsPersonFill } from "react-icons/bs";
 import { IoChatbox } from "react-icons/io5";
 import { useLoggedUser } from "@/store/hooks";
@@ -21,9 +20,9 @@ function BottomBar() {
       icon: <FaHome size={20} />,
     },
     {
-      name: "Book",
-      href: user ? "/manage-booking" : "/find-booking",
-      icon: <IoIosSearch size={25} />,
+      name: "My Trips",
+      href: "/manage",
+      icon: <FaSuitcase size={20} />,
     },
     user
       ? {

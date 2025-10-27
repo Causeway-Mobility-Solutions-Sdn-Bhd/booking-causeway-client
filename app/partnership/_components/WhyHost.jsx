@@ -5,27 +5,27 @@ const WhyHost = () => {
   const features = [
     {
       text: "Comprehensive Commercial Insurance",
-      image: "/whyCauseway/whyhost/insurance.svg",
+      image: "/whyCauseway/whyhost/insurance.webp",
     },
     {
       text: "Hassle Free Service & Maintenance",
-      image: "/whyCauseway/whyhost/maintenance.svg",
+      image: "/whyCauseway/whyhost/maintenance.webp",
     },
     {
       text: "24/7 Tracking Support",
-      image: "/whyCauseway/whyhost/trackingsupport.svg",
+      image: "/whyCauseway/whyhost/trackingsupport.webp",
     },
     {
       text: "Business Regulars",
-      image: "/whyCauseway/whyhost/correct.svg",
+      image: "/whyCauseway/whyhost/correct.webp",
     },
     {
       text: "Guaranteed Monthly Income",
-      image: "/whyCauseway/whyhost/guaranteed.svg",
+      image: "/whyCauseway/whyhost/guaranteed.webp",
     },
     {
       text: "Personalized Ownership",
-      image: "/whyCauseway/whyhost/ownership.svg",
+      image: "/whyCauseway/whyhost/ownership.webp",
     },
   ];
 
@@ -48,7 +48,7 @@ const WhyHost = () => {
               <img
                 src={feature.image}
                 alt={feature.text}
-                className="w-[48px] h-[48px] object-contain"
+                className="w-[90px] h-[90px] object-contain"
               />
             </div>
 
