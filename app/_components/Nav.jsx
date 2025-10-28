@@ -41,7 +41,7 @@ function Nav({ isMain = true, value = "" }) {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Manage Booking", href: "/manage"},
+    { name: "Manage Booking", href: user ? "/manage-booking" : "manage" },
     { name: "Partnership", href: "/partnership" },
     { name: "Contact Us", href: "/support" },
     { name: "Terms & Conditions", href: "/terms-and-condition" },
