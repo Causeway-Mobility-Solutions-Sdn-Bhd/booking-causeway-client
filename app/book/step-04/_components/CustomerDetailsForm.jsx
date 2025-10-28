@@ -8,7 +8,7 @@ import EmergencyContactInfo from "./EmergencyContactInfo";
 import OtherInformation from "./OtherInformation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import hqApi from "@/lib/hqApi";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { setReservation } from "@/store/slices/reservationSlice";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 
@@ -24,8 +24,10 @@ const CustomerDetailsForm = ({
   submitFormRef,
   setSubmitLoader,
   dataAvailable,
+  managing = false,
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const dispatch = useAppDispatch();
   const currentUUID = useAppSelector((state) => state.reservation.currentUUID);
 
@@ -113,7 +115,11 @@ const CustomerDetailsForm = ({
           : "Customer created successfully!"
       );
 
-      // Redirect
+      if (managing) {
+        const uuid = pathname.split("/")[2];
+        router.replace(`/manage/${uuid}?customerupdated=true`);
+        return;
+      }
       router.push(`/book/step-05?ssid=${currentUUID}`);
     } catch (error) {
       console.error("Error submitting form:", error);

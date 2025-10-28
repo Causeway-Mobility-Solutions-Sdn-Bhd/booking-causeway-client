@@ -1,13 +1,15 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { TicketPlus, X } from "lucide-react";
 import { MdEditCalendar } from "react-icons/md";
 import { FaUserEdit } from "react-icons/fa";
 
 const Step7Sidebar = ({ manage = false }) => {
   const router = useRouter();
+  const pathname = usePathname();
+
   const steps = [
     {
       icon: "/next-steps/requireddocs.webp",
@@ -42,7 +44,7 @@ const Step7Sidebar = ({ manage = false }) => {
     {
       icon: <FaUserEdit size={20} className="text-cSecondary" />,
       title: "Edit Customer Details",
-      route: "edit-customer",
+      route: "edit-customer-details",
     },
     {
       icon: <X size={20} className="text-cSecondary" />,
@@ -50,6 +52,10 @@ const Step7Sidebar = ({ manage = false }) => {
       route: "cancel",
     },
   ];
+
+  const handleClick = (route) => {
+    router.push(`${pathname}/${route}`);
+  };
   return (
     <div className="w-full lg:w-[350px]">
       {manage && (
@@ -59,7 +65,7 @@ const Step7Sidebar = ({ manage = false }) => {
             {manageOptions.map((option, index) => (
               <button
                 key={index}
-                onClick={() => router.push(`/manage/${option.route}`)}
+                onClick={() => handleClick(option.route)}
                 className="bg-white gap-3 rounded-md shadow-sm flex items-center px-3 h-[50px] hover:shadow-md transition border border-gray-100"
               >
                 <div className="flex justify-center items-center">

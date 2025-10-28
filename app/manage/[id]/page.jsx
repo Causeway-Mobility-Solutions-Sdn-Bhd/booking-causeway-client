@@ -2,9 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import hqApi from "@/lib/hqApi";
-import { useParams, useRouter } from "next/navigation";
-import { useAppSelector } from "@/store/hooks";
-
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { transformCustomerData } from "@/app/_lib/transformCustomerData";
 import Spinner from "@/components/custom/Spinner";
 import Nav from "@/app/_components/Nav";
@@ -12,14 +10,16 @@ import SideBar from "@/app/_components/SideBar";
 
 import VehicleBookingDetails from "@/app/_components/BookingComponentsGlobal/VehicleBookingDetails";
 import Step7Sidebar from "@/app/_components/BookingComponentsGlobal/Step7Sidebar";
+import PaymentSuccessBar from "@/app/_components/BookingComponentsGlobal/PaymentSuccessCard";
 
 export default function ViewBooking() {
-  const [cancelledReservation, setCancelledReservation] = useState(null);
+  const [reservation, setReservation] = useState(null);
   const [rentalAgreement, setRentalAgreement] = useState("");
   const [loading, setLoading] = useState(true);
   const [customerInfo, setCustomerInfo] = useState(null);
-  const reservation = useAppSelector((state) => state.reservation.reservation);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const customerUpdated = searchParams.get("customerupdated");
 
   const { id } = useParams();
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function ViewBooking() {
         //     router.replace("/");
         //     return;
         //   }
-        setCancelledReservation(responseData);
+        setReservation(responseData);
         setRentalAgreement(response?.data?.rental_agreement?.data?.agreement);
         const customerData = transformCustomerData(responseData?.customer);
 
@@ -63,19 +63,27 @@ export default function ViewBooking() {
     <div>
       <Nav />
       <SideBar />
-
+      {customerUpdated && (
+        <PaymentSuccessBar
+          title={"Changes successful!"}
+          msg={
+            "Your car successfully booked. You can check your booking in Manage Booking."
+          }
+          reservationNumber={reservation?.reservation?.prefixed_id}
+        />
+      )}
       <div className="pb-16 py-[20px]  sm:py-[30px] max-w-[1400px] mx-auto w-[95%]">
         <div className="mt-[10px] flex justify-start items-start gap-5 flex-col lg:flex-row">
           <div className="flex-1 w-full">
             <VehicleBookingDetails
-              upperSuccess={false}
+              upperSuccess={!customerUpdated ? false : true}
               reBook={false}
               customerData={customerInfo}
-              reservationData={cancelledReservation}
+              reservationData={reservation}
               rentalAgreement={rentalAgreement}
             />
           </div>
-          <Step7Sidebar manage={true} />
+          <Step7Sidebar manage={!customerUpdated ? true : false} />
         </div>
       </div>
     </div>
