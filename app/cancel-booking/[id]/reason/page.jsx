@@ -1,5 +1,5 @@
-import { ReasonComponent } from "@/app/_components/CancelReservation/ReasonComponent";
 import React from "react";
+import { ReasonComponent } from "./_components/ReasonComponent";
 
 const page = () => {
   return (
