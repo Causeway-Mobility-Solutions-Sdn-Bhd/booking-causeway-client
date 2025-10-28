@@ -4,13 +4,14 @@ import React, { useEffect, useState } from "react";
 import hqApi from "@/lib/hqApi";
 import { useParams, useRouter } from "next/navigation";
 import { useAppSelector } from "@/store/hooks";
-import PaymentSuccessBar from "../_components/PaymentSuccessCard";
-import VehicleBookingDetails from "../_components/VehicleBookingDetails";
-import Step7Sidebar from "../_components/Step7Sidebar";
+
 import { transformCustomerData } from "@/app/_lib/transformCustomerData";
 import Spinner from "@/components/custom/Spinner";
 import Nav from "@/app/_components/Nav";
 import SideBar from "@/app/_components/SideBar";
+import PaymentSuccessBar from "@/app/_components/BookingComponentsGlobal/PaymentSuccessCard";
+import VehicleBookingDetails from "@/app/_components/BookingComponentsGlobal/VehicleBookingDetails";
+import Step7Sidebar from "@/app/_components/BookingComponentsGlobal/Step7Sidebar";
 
 export default function Page() {
   const [conformeReservation, setConformReservation] = useState(null);

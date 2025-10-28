@@ -1,7 +1,13 @@
+"use client";
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { TicketPlus, X } from "lucide-react";
+import { MdEditCalendar } from "react-icons/md";
+import { FaUserEdit } from "react-icons/fa";
 
 const Step7Sidebar = ({ manage = false }) => {
+  const router = useRouter();
   const steps = [
     {
       icon: "/next-steps/requireddocs.webp",
@@ -22,9 +28,51 @@ const Step7Sidebar = ({ manage = false }) => {
         "Have a safe and pleasant journey with your Causeway rental car.",
     },
   ];
-
+  const manageOptions = [
+    {
+      icon: <TicketPlus size={20} className="text-cSecondary" />,
+      title: "Add-On Services",
+      route: "add-ons",
+    },
+    {
+      icon: <MdEditCalendar size={20} className="text-cSecondary" />,
+      title: "Edit Pickup & Return Details",
+      route: "edit-pickup",
+    },
+    {
+      icon: <FaUserEdit size={20} className="text-cSecondary" />,
+      title: "Edit Customer Details",
+      route: "edit-customer",
+    },
+    {
+      icon: <X size={20} className="text-cSecondary" />,
+      title: "Cancel Booking",
+      route: "cancel",
+    },
+  ];
   return (
     <div className="w-full lg:w-[350px]">
+      {manage && (
+        <>
+          <h2 className="text-[18px] font-bold mb-4">Manage Booking</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3 mb-6">
+            {manageOptions.map((option, index) => (
+              <button
+                key={index}
+                onClick={() => router.push(`/manage/${option.route}`)}
+                className="bg-white gap-3 rounded-md shadow-sm flex items-center px-3 h-[50px] hover:shadow-md transition border border-gray-100"
+              >
+                <div className="flex justify-center items-center">
+                  {option.icon}
+                </div>
+                <h3 className="text-black text-left font-normal text-[12px] leading-tight">
+                  {option.title}
+                </h3>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
       <h2 className="text-[18px] font-bold mb-4">What's Next</h2>
 
       <div className="bg-white rounded-lg shadow-sm px-4 py-2">
