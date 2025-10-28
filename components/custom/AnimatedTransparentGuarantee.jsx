@@ -1,26 +1,30 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { Shield, HeadphonesIcon, Lock, UserCheck } from 'lucide-react';
+import { Headset, BadgeCheck } from 'lucide-react';
 
 const AnimatedTransparentGuarantee = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
- const guaranteeItems = [
+  const guaranteeItems = [
     {
-      icon: Shield,
-      text: "Transparent booking guarantee"
+      icon: "/icons/file-validation.svg",
+      text: "Transport booking guarantee",
+      isImage: true
     },
     {
-      icon: HeadphonesIcon,
-      text: "24/7 Customer support"
+      icon: Headset,
+      text: "Rapid customer support",
+      isImage: false
     },
     {
-      icon: Lock,
-      text: "Secure payment protection"
+      icon: BadgeCheck,
+      text: "Instant confirmation",
+      isImage: false
     },
     {
-      icon: UserCheck,
-      text: "Professional drivers only"
+      icon: "/icons/security.svg",
+      text: "Comprehensive Insurance",
+      isImage: true
     }
   ];
 
@@ -29,7 +33,7 @@ const AnimatedTransparentGuarantee = () => {
       setCurrentIndex((prevIndex) => 
         (prevIndex + 1) % guaranteeItems.length
       );
-    }, 3000); // Change every 3 seconds
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -54,7 +58,6 @@ const AnimatedTransparentGuarantee = () => {
       `}</style>
       
       {guaranteeItems.map((item, index) => {
-        const Icon = item.icon;
         const isActive = index === currentIndex;
         const isPrevious = index === (currentIndex - 1 + guaranteeItems.length) % guaranteeItems.length;
         
@@ -69,25 +72,19 @@ const AnimatedTransparentGuarantee = () => {
                 : 'translate-y-full opacity-0'
             }`}
           >
-            <Icon className="w-[18px] xl:w-[20px]" />
+            {item.isImage ? (
+              <img 
+                src={item.icon} 
+                alt="" 
+                className="w-[18px] xl:w-[20px]"
+              />
+            ) : (
+              <item.icon className="w-[18px] xl:w-[20px]" />
+            )}
             <span>{item.text}</span>
           </div>
         );
       })}
-    </div>
-  );
-};
-
-// Alternative simpler version with pure Tailwind CSS
-export const SimpleTailwindVersion = () => {
-  return (
-    <div className="w-full text-center mt-2 h-8 overflow-hidden">
-      <div className="animate-pulse">
-        <div className="flex justify-center items-center gap-1 text-[14px] lg:text-[12px] animate-bounce">
-          <LiaCertificateSolid className="text-[25px] xl:text-[20px]" />
-          <span>Transport booking guarantee</span>
-        </div>
-      </div>
     </div>
   );
 };

@@ -106,7 +106,7 @@ export const transformCustomerData = (data) => {
     // emergencyEmail: data.f278 || "",
 
     // File arrays (extract from API response)
-    driverLicense: data.f254 || "",
+    driverLicense: data.driver_license || "",
     licenseExpiry: reverseTransformDate(data.f256) || "",
     licenseFiles: data.f252
       ? data.f252.map((file) => ({

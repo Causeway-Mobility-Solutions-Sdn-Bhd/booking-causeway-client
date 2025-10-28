@@ -3,10 +3,11 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useAppSelector } from "@/store/hooks";
 
 import ProfileUpdateForm from "../_components/ProfileUpdateForm";
-import SaveBottomBar from "../_components/SaveBottomBar";
+
 import { useGetCustomerQuery } from "@/store/api/customerApiSlice";
 import { transformCustomerData } from "@/app/_lib/transformCustomerData";
 import DriverLicenseForm from "../_components/DriverLicenseForm";
+import SaveBottomBar from "@/app/_components/SaveBottomBar";
 
 const Page = () => {
   const [dataAvailable, setDataAvailable] = useState(null);
@@ -21,6 +22,7 @@ const Page = () => {
     isFetching,
     isSuccess,
     isError,
+    refetch,
     error,
   } = useGetCustomerQuery(customerId, {
     skip: !customerId,
@@ -55,9 +57,11 @@ const Page = () => {
   return (
     <>
       <DriverLicenseForm
+        refetch={refetch}
         submitFormRef={submitFormRef}
         setSubmitLoader={setSubmitLoader}
         dataAvailable={dataAvailable}
+        customerId={customerId}
       />
 
       <SaveBottomBar

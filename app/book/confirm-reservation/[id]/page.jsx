@@ -4,13 +4,14 @@ import React, { useEffect, useState } from "react";
 import hqApi from "@/lib/hqApi";
 import { useParams, useRouter } from "next/navigation";
 import { useAppSelector } from "@/store/hooks";
-import PaymentSuccessBar from "../_components/PaymentSuccessCard";
-import VehicleBookingDetails from "../_components/VehicleBookingDetails";
-import Step7Sidebar from "../_components/Step7Sidebar";
+
 import { transformCustomerData } from "@/app/_lib/transformCustomerData";
 import Spinner from "@/components/custom/Spinner";
 import Nav from "@/app/_components/Nav";
 import SideBar from "@/app/_components/SideBar";
+import PaymentSuccessBar from "@/app/_components/BookingComponentsGlobal/PaymentSuccessCard";
+import VehicleBookingDetails from "@/app/_components/BookingComponentsGlobal/VehicleBookingDetails";
+import Step7Sidebar from "@/app/_components/BookingComponentsGlobal/Step7Sidebar";
 
 export default function Page() {
   const [conformeReservation, setConformReservation] = useState(null);
@@ -33,7 +34,11 @@ export default function Page() {
           );
 
           const responseData = response?.data?.data;
+          console.log("RESPONSE", responseData);
+
           if (responseData?.reservation?.uuid !== params.id) {
+            console.log("BACKKKK");
+
             router.replace("/");
             return;
           }
@@ -64,12 +69,17 @@ export default function Page() {
       <Nav />
       <SideBar />
       <PaymentSuccessBar
+        title={"Payment successful!"}
+        msg={
+          "Your car successfully booked. You can check your booking in Manage Booking."
+        }
         reservationNumber={conformeReservation?.reservation?.prefixed_id}
       />
       <div className="pb-16 py-[20px]  sm:py-[30px] max-w-[1400px] mx-auto w-[95%]">
         <div className="mt-[10px] flex justify-start items-start gap-5 flex-col lg:flex-row">
           <div className="flex-1 w-full">
             <VehicleBookingDetails
+              reBook={false}
               customerData={customerInfo}
               reservationData={conformeReservation}
               rentalAgreement={rentalAgreement}

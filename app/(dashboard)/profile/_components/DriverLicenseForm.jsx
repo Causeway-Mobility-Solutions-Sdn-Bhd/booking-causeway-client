@@ -12,6 +12,8 @@ const DriverLicenseForm = ({
   submitFormRef,
   dataAvailable,
   setSubmitLoader,
+  refetch,
+  customerId,
 }) => {
   const [formData, setFormData] = useState({
     driverLicense: "",
@@ -42,32 +44,18 @@ const DriverLicenseForm = ({
     try {
       const newErrors = {};
 
-      if (
-        formData.driverLicense &&
-        !/^[A-Z0-9]{5,20}$/i.test(formData.driverLicense)
-      ) {
+      if (!formData.driverLicense) {
+        newErrors.driverLicense = "Driver license number is required";
+      } else if (!/^[A-Z0-9]{5,20}$/i.test(formData.driverLicense)) {
         newErrors.driverLicense = "Please enter a valid license number";
       }
 
-      if (
-        formData.licenseExpiry &&
-        !/^\d{2}\/\d{2}\/\d{2}$/.test(formData.licenseExpiry)
-      ) {
+      if (!formData.licenseExpiry) {
+        newErrors.licenseExpiry = "License expiry date is required";
+      } else if (!/^\d{2}\/\d{2}\/\d{2}$/.test(formData.licenseExpiry)) {
         newErrors.licenseExpiry = "Please enter a valid expiry date (DD/MM/YY)";
       }
 
-      // if (formData.licenseFiles && formData.licenseFiles.length > 0) {
-      //   const invalidFiles = formData.licenseFiles.filter(
-      //     (file) =>
-      //       file instanceof File &&
-      //       !["image/jpeg", "image/png", "image/jpg"].includes(file.type)
-      //   );
-      //   if (invalidFiles.length > 0) {
-      //     newErrors.licenseFiles = "Only JPG and PNG files are allowed";
-      //   }
-      // }
-
-      // If validation fails, stop submission
       if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors);
         showErrorToast("Please fix the highlighted fields.");
@@ -75,31 +63,35 @@ const DriverLicenseForm = ({
         return;
       }
 
-      console.log(formData);
-
       const transformedData = transformCustomerFormData(formData);
-      let customerId;
-      let response;
 
-      response = await updateCustomer({
+      if (Object.values(transformedData).length === 0) {
+        showErrorToast("All fields can't be empty.");
+        setSubmitLoader(false);
+        return;
+      }
+
+      await updateCustomer({
         id: dataAvailable.id,
         data: transformedData,
       }).unwrap();
-      customerId = dataAvailable.id;
 
-      if (formData.licenseFiles && formData.licenseFiles.length > 0) {
-        const newLicenseFiles = formData.licenseFiles.filter(
-          (file) => file instanceof File
+      const newLicenseFiles = formData.licenseFiles?.filter(
+        (file) => file instanceof File
+      );
+
+      if (newLicenseFiles?.length > 0) {
+        await Promise.all(
+          newLicenseFiles.map((file) =>
+            uploadLicenseFile({
+              file,
+              item_id: dataAvailable.id,
+              item_type: "contacts.3",
+              field_id: 252,
+            }).unwrap()
+          )
         );
-
-        for (const file of newLicenseFiles) {
-          await uploadLicenseFile({
-            file,
-            item_id: customerId,
-            item_type: "contacts.3",
-            field_id: 252,
-          }).unwrap();
-        }
+        if (refetch) await refetch();
       }
 
       showSuccessToast("License Information updated successfully!");
@@ -128,6 +120,7 @@ const DriverLicenseForm = ({
         setFormData={setFormData}
         errors={errors}
         setErrors={setErrors}
+        customerId={customerId}
       />
     </form>
   );
