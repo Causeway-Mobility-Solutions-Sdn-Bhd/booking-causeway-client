@@ -20,6 +20,7 @@ export default function ViewBooking() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const customerUpdated = searchParams.get("customerupdated");
+  const cancelled = searchParams.get("cancelled");
 
   const { id } = useParams();
   useEffect(() => {
@@ -65,10 +66,19 @@ export default function ViewBooking() {
       <SideBar />
       {customerUpdated && (
         <PaymentSuccessBar
-          title={"Changes successful!"}
-          msg={
-            "Your car successfully booked. You can check your booking in Manage Booking."
+          title="Changes successful!"
+          msg="Your car successfully booked. You can check your booking in Manage Booking."
+          reservationNumber={reservation?.reservation?.prefixed_id}
+        />
+      )}
+
+      {cancelled && (
+        <PaymentSuccessBar
+          title="Your booking has been cancelled!"
+          msg={`We'll send you an email confirming your cancellation to ${
+            customerInfo.email || "No Email"
           }
+lf you already made a prepayment, your refund typically takes 5-10 Days calendar days to complete.`}
           reservationNumber={reservation?.reservation?.prefixed_id}
         />
       )}
@@ -76,14 +86,14 @@ export default function ViewBooking() {
         <div className="mt-[10px] flex justify-start items-start gap-5 flex-col lg:flex-row">
           <div className="flex-1 w-full">
             <VehicleBookingDetails
-              upperSuccess={!customerUpdated ? false : true}
-              reBook={false}
+              upperSuccess={!!(customerUpdated || cancelled)}
+              reBook={cancelled ? true : false}
               customerData={customerInfo}
               reservationData={reservation}
               rentalAgreement={rentalAgreement}
             />
           </div>
-          <Step7Sidebar manage={!customerUpdated ? true : false} />
+          <Step7Sidebar manage={!customerUpdated && !cancelled} />
         </div>
       </div>
     </div>

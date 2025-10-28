@@ -3,11 +3,12 @@ import React, { useState } from "react";
 import SaveBottomBar from "../SaveBottomBar";
 import { showErrorToast } from "@/app/_lib/toast";
 import ConfirmModal from "@/components/custom/ConfirmModal";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 export const ReasonComponent = () => {
   const [selectedReason, setSelectedReason] = useState(null);
   const router = useRouter();
+  const pathname = usePathname();
   const { id } = useParams();
   const [cancelLoader, setCancelLoader] = useState(false);
   const [confirmCancel, setConfirmCancel] = useState(false);
@@ -22,7 +23,8 @@ export const ReasonComponent = () => {
   };
 
   const onConfirm = () => {
-    router.replace(`/cancel-booking/${id}/cancelled`);
+    const basePath = pathname.split("/cancel-booking")[0];
+    router.replace(`${basePath}?cancelled=true`);
   };
   const reasons = [
     "Unable to travel due to restrictions related to Coronavirus (COVID-19)",
