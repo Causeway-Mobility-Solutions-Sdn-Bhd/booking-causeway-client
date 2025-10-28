@@ -1,6 +1,11 @@
+import { useRouter } from "next/navigation";
 import React from "react";
 
 function BookingCard({ booking, activeTab, index }) {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push(`/manage/${booking.id}`);
+  };
   return (
     <div
       className="bg-white mb-4"
@@ -149,6 +154,7 @@ function BookingCard({ booking, activeTab, index }) {
       {/* Action Buttons */}
       {activeTab === "upcoming" && (
         <button
+          onClick={handleClick}
           className="w-full text-white transition-all"
           style={{
             backgroundColor: "#FF748B",
