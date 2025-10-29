@@ -49,11 +49,11 @@ function Nav({ isMain = true, value = "" }) {
 
   return (
     <div className="w-full py-5 sm:py-4 bg-white z-100">
-      <div className="flex justify-between items-center w-[95%] max-w-[1400px] mx-auto relative">
+      <div className="flex justify-between items-center w-[95%] max-w-[1400px] mx-auto">
         {isMain ? (
           <Image
             priority
-            className="object-contain w-[150px] sm:w-[200px] absolute left-[50%] sm:left-[0%] translate-x-[-50%] sm:translate-x-[0%]  sm:relative"
+            className="object-contain w-[150px] sm:w-[200px]"
             src="/logo/logo.svg"
             alt="Causeway Logo"
             width={200}
@@ -61,12 +61,12 @@ function Nav({ isMain = true, value = "" }) {
           />
         ) : (
           <>
-            <h3 className="block sm:hidden absolute left-[50%] translate-x-[-50%] font-semibold text-[17px]">
+            <h3 className="block sm:hidden font-semibold text-[17px]">
               {value}
             </h3>
             <Image
               priority
-              className="hidden sm:block object-contain w-[150px] sm:w-[200px] absolute left-[50%] sm:left-[0%] translate-x-[-50%] sm:translate-x-[0%] grayscale sm:grayscale-0 sm:relative"
+              className="hidden sm:block object-contain w-[150px] sm:w-[200px] grayscale sm:grayscale-0"
               src="/logo/logo-black.svg"
               alt="Causeway Logo"
               width={200}
@@ -79,7 +79,7 @@ function Nav({ isMain = true, value = "" }) {
           onClick={handleOpenSidebar}
           color="#2DBDB6"
           size={35}
-          className="block sm:hidden cursor-pointer ml-auto"
+          className="block sm:hidden cursor-pointer"
         />
 
         <div className="basis-[90%] hidden justify-end items-center w-full text-cGr sm:flex">
