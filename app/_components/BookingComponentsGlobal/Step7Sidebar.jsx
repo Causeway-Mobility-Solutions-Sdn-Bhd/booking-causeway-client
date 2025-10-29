@@ -6,12 +6,13 @@ import { TicketPlus, X } from "lucide-react";
 import { MdEditCalendar } from "react-icons/md";
 import { FaUserEdit } from "react-icons/fa";
 import ConfirmModal from "@/components/custom/ConfirmModal";
+import EditLocationDateDrawer from "@/app/manage/_components/EditLocationDateDrawer";
 
-const Step7Sidebar = ({ manage = false }) => {
+const Step7Sidebar = ({ manage = false, reservation = null }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [pickupDrawer, setPickupDrawer] = useState(false);
   const steps = [
     {
       icon: "/next-steps/requireddocs.webp",
@@ -61,7 +62,11 @@ const Step7Sidebar = ({ manage = false }) => {
     if (route === "cancel-booking") {
       setIsModalOpen(true);
       return;
+    } else if (route === "edit-pickup") {
+      setPickupDrawer(true);
+      return;
     }
+
     router.push(`${pathname}/${route}`);
   };
   const cancellationOptions = [
@@ -85,13 +90,8 @@ const Step7Sidebar = ({ manage = false }) => {
     },
   ];
   const handleConfirmCancellation = () => {
-    // Add your cancellation logic here
-    // You can make API calls, update state, etc.
     router.push(`${pathname}/cancel-reason`);
-    // For demo purposes, just close the modal
     setIsModalOpen(false);
-
-    // Show success message or redirect
   };
   return (
     <>
@@ -160,6 +160,12 @@ const Step7Sidebar = ({ manage = false }) => {
         description="Please review the cancellation policy and select an option."
         confirmButtonText="Cancellation Options"
         drawerVariantRequired={true}
+      />
+      <EditLocationDateDrawer
+        reservation={reservation?.reservation}
+        isDrawerOpen={pickupDrawer}
+        setIsDrawerOpen={setPickupDrawer}
+        isMid={true}
       />
     </>
   );
