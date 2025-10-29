@@ -4,7 +4,7 @@ import React from "react";
 const Banner = ({
   imageSrc = "/banner/banner.webp",
   altText = "Banner",
-  height = "h-84 md:h-[430px] lg:h-[430px]",
+  height = "h-64 md:h-80 lg:h-96",
 }) => {
   return (
     <div className={`relative w-full ${height} overflow-hidden`}>
