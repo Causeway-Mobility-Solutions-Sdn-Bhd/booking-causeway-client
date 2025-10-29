@@ -5,6 +5,7 @@ import Nav from "@/app/_components/Nav";
 import ProfileSidebar from "./_components/ProfileSidebar";
 import BookNavBar from "@/app/book/_components/BookNavBar";
 import BottomBar from "@/app/_components/BottomBar";
+import SideBar from "@/app/_components/SideBar";
 
 export default function ProfileLayout({ children }) {
   const pathname = usePathname();
@@ -65,6 +66,7 @@ export default function ProfileLayout({ children }) {
       </div>
 
       {!isInnerProfile && <BottomBar />}
+      <SideBar />
     </>
   );
 }
