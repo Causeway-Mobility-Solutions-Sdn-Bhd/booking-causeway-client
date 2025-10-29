@@ -166,6 +166,24 @@ export const reservationApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    getAllReservations: builder.query({
+      query: () => ({
+        url: "/car-rental/manage-reservations",
+        method: "GET",
+      }),
+      providesTags: ["Reservation"],
+
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log("Fetched reservations:", data);
+          // You can dispatch to store here if needed, e.g.:
+          // dispatch(setAllReservations(data));
+        } catch (err) {
+          console.error("Failed to fetch all reservations:", err);
+        }
+      },
+    }),
   }),
   overrideExisting: true,
 });
@@ -177,4 +195,5 @@ export const {
   useConfirmReservationMutation,
   useProcessPaymentMutation,
   useGetReservationAttemptQuery,
+  useGetAllReservationsQuery,
 } = reservationApi;

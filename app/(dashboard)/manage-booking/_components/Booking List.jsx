@@ -3,10 +3,18 @@ import React, { useState } from "react";
 
 import Header from "./MicroComponents/Header";
 import BookingContent from "./MicroComponents/BookingContent";
-
+import { useGetAllReservationsQuery } from "@/store/api/reservationApiSlice";
 function BookingList() {
   const [activeTab, setActiveTab] = useState("upcoming");
+  const {
+    data: reservations,
+    isLoading,
+    isError,
+  } = useGetAllReservationsQuery();
+  console.log(reservations);
 
+  if (isLoading) return <p>Loading reservations...</p>;
+  if (isError) return <p>Failed to load reservations</p>;
   const bookings = {
     upcoming: [
       {
