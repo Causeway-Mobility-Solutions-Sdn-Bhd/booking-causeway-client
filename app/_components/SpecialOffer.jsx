@@ -32,6 +32,17 @@ function SpecialOffer() {
     };
   }, [api]);
 
+  // Auto-slide effect
+  useEffect(() => {
+    if (!api) return;
+
+    const intervalId = setInterval(() => {
+      api.scrollNext();
+    }, 3000); // Change slide every 3 seconds
+
+    return () => clearInterval(intervalId);
+  }, [api]);
+
   const scrollToSlide = (index) => {
     if (api) {
       api.scrollTo(index);

@@ -32,7 +32,7 @@ const WhyHost = () => {
   return (
     <div className="max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[30px]">
       {/* Heading */}
-      <h2 className="text-2xl xsm:text-center font-bold text-black mb-8">
+      <h2 className="text-2xl text-center font-bold text-black mb-8">
         Why host with Causeway
       </h2>
 
@@ -44,11 +44,11 @@ const WhyHost = () => {
             className="flex flex-col items-center text-center w-full max-w-[250px] sm:max-w-[350px]"
           >
             {/* Image */}
-            <div className="mb-4 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
+            <div className="mb-4 w-24 h-24 md:w-28 md:h-28 flex items-center justify-center">
               <img
                 src={feature.image}
                 alt={feature.text}
-                className="w-[90px] h-[90px] object-contain"
+                className="w-[120px] h-[120px] md:w-[140px] md:h-[140px] object-contain"
               />
             </div>
 

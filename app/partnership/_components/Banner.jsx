@@ -4,7 +4,7 @@ import React from "react";
 const Banner = ({
   imageSrc = "/banner/banner.webp",
   altText = "Banner",
-  height = "h-84 md:h-[430px] lg:h-[430px]",
+  height = "h-64 md:h-80 lg:h-96",
 }) => {
   return (
     <div className={`relative w-full ${height} overflow-hidden`}>
@@ -28,7 +28,7 @@ const Banner = ({
       />
 
       <div className="relative max-w-[1400px] mx-auto mt-6 w-[90%] sm:w-[95%] h-full flex items-start xsm:justify-center pb-8">
-        <h1 className="text-3xl  xsm:text-center font-bold text-black">
+        <h1 className="text-2xl xsm:text-center font-bold text-black">
           Earn an extra{" "}
           <span className="xsm:hidden">
             <br />

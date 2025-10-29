@@ -251,10 +251,7 @@ function SearchFillter({
             {loader ? (
               <Spinner size={20} color="#fff" thickness={3} />
             ) : (
-              <>
-                <span className="-mt-1">Search vehicles</span>
-                <IoIosSearch size={30} />
-              </>
+              <span>Search</span>
             )}
           </Button>
           {type !== "secondadry" && <AnimatedTransparentGuarantee />}
