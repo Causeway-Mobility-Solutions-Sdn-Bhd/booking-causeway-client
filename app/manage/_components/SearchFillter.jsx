@@ -96,7 +96,7 @@ function SearchFillter({
       };
 
       const response = await hqApi.post(
-        "car-rental/update-reservation-pickup",
+        "car-rental/manage-reservations/update-reservation-pickup",
         requestData
       );
 
