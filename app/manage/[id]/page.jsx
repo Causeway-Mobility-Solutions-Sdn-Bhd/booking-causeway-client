@@ -93,7 +93,10 @@ lf you already made a prepayment, your refund typically takes 5-10 Days calendar
               rentalAgreement={rentalAgreement}
             />
           </div>
-          <Step7Sidebar manage={!customerUpdated && !cancelled} />
+          <Step7Sidebar
+            reservation={reservation}
+            manage={!customerUpdated && !cancelled}
+          />
         </div>
       </div>
     </div>

@@ -134,7 +134,7 @@ function PickupReturnDateDrawer({ booking, setBooking }) {
   };
 
   const handleConfirmBooking = () => {
-    if(getTotalBoookingTime() !== 0){
+    if (getTotalBoookingTime() !== 0) {
       if (!tempBooking?.returnDate) {
         showErrorToast("Please Select Return Date and Time");
       } else {
@@ -142,7 +142,7 @@ function PickupReturnDateDrawer({ booking, setBooking }) {
         setBooking(tempBooking);
         setTimeout(() => setCurrentStep("pickupDate"), 300);
       }
-    }else{
+    } else {
       showErrorToast("Please Select Valid Pickup Date and Time");
     }
   };
@@ -326,7 +326,9 @@ function PickupReturnDateDrawer({ booking, setBooking }) {
                   <div className="flex items-center gap-1 my-4">
                     <div className="flex-grow h-[2px] w-10 bg-slate-100"></div>
                     <div className="bg-slate-100 rounded-full px-3 py-2 text-sm font-medium">
-                      {getTotalBoookingTime() <= 1 ? `${getTotalBoookingTime()} Days` :   `${getTotalBoookingTime()} Days`}
+                      {getTotalBoookingTime() <= 1
+                        ? `${getTotalBoookingTime()} Days`
+                        : `${getTotalBoookingTime()} Days`}
                     </div>
                     <div className="flex-grow h-[2px] w-10 bg-slate-100"></div>
                   </div>
