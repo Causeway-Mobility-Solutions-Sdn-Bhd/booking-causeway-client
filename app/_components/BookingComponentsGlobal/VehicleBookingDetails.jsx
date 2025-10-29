@@ -1,7 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import { FaLocationDot } from "react-icons/fa6";
-import { formatDate, formatTime } from "@/app/_lib/formattingDateTime";
+import {
+  formatDate,
+  formatTime,
+  formatTimeFromDate,
+  formatTimeWithAmPm,
+} from "@/app/_lib/formattingDateTime";
 import { useAppSelector } from "@/store/hooks";
 import { RiMapPin2Line } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
@@ -79,7 +84,9 @@ function VehicleBookingDetails({
                   </p>
                   <p className="text-gray-900 text-[14px]">
                     {formatDate(reservationData?.reservation?.pick_up_date)}{" "}
-                    {formatTime(reservationData?.reservation?.pick_up_time)}
+                    {formatTimeWithAmPm(
+                      reservationData?.reservation?.pick_up_date
+                    )}
                   </p>
                 </div>
               </div>
@@ -105,7 +112,9 @@ function VehicleBookingDetails({
                   </p>
                   <p className="text-gray-900 text-[14px]">
                     {formatDate(reservationData?.reservation?.return_date)}{" "}
-                    {formatTime(reservationData?.reservation?.return_time)}
+                    {formatTimeWithAmPm(
+                      reservationData?.reservation?.return_date
+                    )}
                   </p>
                 </div>
               </div>

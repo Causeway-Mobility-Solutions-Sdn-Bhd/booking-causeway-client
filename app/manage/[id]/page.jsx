@@ -21,6 +21,7 @@ export default function ViewBooking() {
   const searchParams = useSearchParams();
   const customerUpdated = searchParams.get("customerupdated");
   const cancelled = searchParams.get("cancelled");
+  const pickupreturnupdated = searchParams.get("pickupreturnupdated");
 
   const { id } = useParams();
   useEffect(() => {
@@ -51,7 +52,7 @@ export default function ViewBooking() {
       }
     };
     fetchData();
-  }, []);
+  }, [id, searchParams]);
 
   if (loading) {
     return (
@@ -71,7 +72,13 @@ export default function ViewBooking() {
           reservationNumber={reservation?.reservation?.prefixed_id}
         />
       )}
-
+      {pickupreturnupdated && (
+        <PaymentSuccessBar
+          title="Changes successful!"
+          msg="Your Pickup & Return succesfully changed."
+          reservationNumber={reservation?.reservation?.prefixed_id}
+        />
+      )}
       {cancelled && (
         <PaymentSuccessBar
           title="Your booking has been cancelled!"
@@ -86,7 +93,9 @@ lf you already made a prepayment, your refund typically takes 5-10 Days calendar
         <div className="mt-[10px] flex justify-start items-start gap-5 flex-col lg:flex-row">
           <div className="flex-1 w-full">
             <VehicleBookingDetails
-              upperSuccess={!!(customerUpdated || cancelled)}
+              upperSuccess={
+                !!(customerUpdated || cancelled || pickupreturnupdated)
+              }
               reBook={cancelled ? true : false}
               customerData={customerInfo}
               reservationData={reservation}
@@ -95,7 +104,7 @@ lf you already made a prepayment, your refund typically takes 5-10 Days calendar
           </div>
           <Step7Sidebar
             reservation={reservation}
-            manage={!customerUpdated && !cancelled}
+            manage={!customerUpdated && !cancelled && !pickupreturnupdated}
           />
         </div>
       </div>
