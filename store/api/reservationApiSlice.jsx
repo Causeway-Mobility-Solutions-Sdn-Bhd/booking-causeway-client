@@ -184,6 +184,22 @@ export const reservationApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    cancelBooking: builder.mutation({
+      query: (body) => ({
+        url: "/car-rental/manage-reservations/cancel-reservation",
+        method: "POST",
+        data: body,
+      }),
+      invalidatesTags: ["Reservation"],
+    }),
+    reBook: builder.mutation({
+      query: (body) => ({
+        url: "/car-rental/manage-reservations/rebook",
+        method: "POST",
+        data: body,
+      }),
+      invalidatesTags: ["Reservation"],
+    }),
   }),
   overrideExisting: true,
 });
@@ -196,4 +212,6 @@ export const {
   useProcessPaymentMutation,
   useGetReservationAttemptQuery,
   useGetAllReservationsQuery,
+  useCancelBookingMutation,
+  useReBookMutation,
 } = reservationApi;

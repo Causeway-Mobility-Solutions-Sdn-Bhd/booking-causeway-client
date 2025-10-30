@@ -1,9 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import { showErrorToast } from "@/app/_lib/toast";
+import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 import ConfirmModal from "@/components/custom/ConfirmModal";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import SaveBottomBar from "@/app/_components/SaveBottomBar";
+import { useCancelBookingMutation } from "@/store/api/reservationApiSlice";
 
 export const ReasonComponent = () => {
   const [selectedReason, setSelectedReason] = useState(null);
@@ -23,8 +24,25 @@ export const ReasonComponent = () => {
     console.log("OK");
   };
 
-  const onConfirm = () => {
+  const [cancelBooking] = useCancelBookingMutation();
+
+  const onConfirm = async () => {
+    const pathParts = pathname.split("/");
+    const id = pathParts[2];
     const basePath = pathname.split("/cancel-reason")[0];
+    try {
+      await cancelBooking({ id }).unwrap();
+      showSuccessToast("Booking Cancelled Successfully!");
+      router.replace(`${basePath}?cancelled=true`);
+    } catch (error) {
+      const errorMessage =
+        error?.data?.message ||
+        error?.error ||
+        "Failed to cancel booking. Please try again.";
+
+      showErrorToast(errorMessage);
+      console.error("Error cancelling booking:", error);
+    }
 
     router.replace(`${basePath}?cancelled=true`);
   };
@@ -40,7 +58,7 @@ export const ReasonComponent = () => {
 
   return (
     <>
-      <div className="flex justify-center w-full">
+      <div className="pt-16 sm:pt-24 flex justify-center w-full">
         <div className="pt-4 w-full max-w-3xl sm:px-6 px-0">
           <h2 className="text-lg font-bold mb-4 sm:px-0 px-4">Reason</h2>
 
