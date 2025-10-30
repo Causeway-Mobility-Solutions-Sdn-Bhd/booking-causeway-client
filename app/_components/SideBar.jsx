@@ -26,7 +26,7 @@ function SideBar() {
   const links = [
     {
       label: "Manage Booking",
-      href: user ? "/manage-booking" : "find-booking",
+      href: user ? "/manage-booking" : "manage",
     },
     { label: "Support", href: "/support" },
     { label: "Partnership", href: "/partnership" },
