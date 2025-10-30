@@ -68,7 +68,7 @@ function BookingContent({ activeTab, bookings }) {
       {/* Booking Cards */}
       {bookings[activeTab].map((booking, index) => (
         <BookingCard
-          key={booking.id}
+          key={booking.reservation_id}
           booking={booking}
           activeTab={activeTab}
           index={index}

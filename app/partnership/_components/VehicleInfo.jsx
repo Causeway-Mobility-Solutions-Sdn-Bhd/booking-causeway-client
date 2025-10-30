@@ -34,28 +34,6 @@ const VehicleInfo = ({
     });
   }
 
-  const vehicleMakes = [
-    { value: "toyota", label: "Toyota" },
-    { value: "honda", label: "Honda" },
-    { value: "ford", label: "Ford" },
-    { value: "bmw", label: "BMW" },
-    { value: "mercedes", label: "Mercedes-Benz" },
-    { value: "audi", label: "Audi" },
-    { value: "hyundai", label: "Hyundai" },
-    { value: "nissan", label: "Nissan" },
-  ];
-
-  const vehicleModels = [
-    { value: "camry", label: "Camry" },
-    { value: "civic", label: "Civic" },
-    { value: "corolla", label: "Corolla" },
-    { value: "accord", label: "Accord" },
-    { value: "mustang", label: "Mustang" },
-    { value: "3-series", label: "3 Series" },
-    { value: "c-class", label: "C-Class" },
-    { value: "a4", label: "A4" },
-  ];
-
   return (
     <div className="col-span-4 bg-white p-6 rounded-lg shadow-lg">
       {/* Personal Information Section */}
@@ -116,38 +94,38 @@ const VehicleInfo = ({
 
       <div className="grid grid-cols-2 gap-4 mt-4">
         {/* Vehicle Make */}
-        <DropdownInput
-          data={vehicleMakes}
-          label="Vehicle Make"
-          name="vehicleMake"
-          register={register}
-          errors={errors}
-          setValue={setValue}
-          watch={watch}
-          hasError={hasVehicleMakeError}
-          firstErrorField={firstErrorField}
-          placeholder="Select Make"
-          getValues={getValues}
-          control={control}
-          customWidth={0}
-        />
+        <div>
+          <Input
+            {...register("vehicleMake", {
+              required: "Vehicle make is required",
+            })}
+            type="text"
+            placeholder="Vehicle Make"
+            className={`border-gray-200 !h-11 placeholder:font-light placeholder:text-sm placeholder-gray-500 focus-visible:ring-teal-500 focus-visible:ring-2 hover:border-teal-500 transition-colors ${
+              hasVehicleMakeError ? "border-red-500" : ""
+            }`}
+          />
+          {hasVehicleMakeError && firstErrorField === "vehicleMake" && (
+            <ErrorMessage message={errors.vehicleMake.message} />
+          )}
+        </div>
 
         {/* Vehicle Model */}
-        <DropdownInput
-          data={vehicleModels}
-          label="Vehicle Model"
-          name="vehicleModel"
-          register={register}
-          errors={errors}
-          setValue={setValue}
-          control={control}
-          watch={watch}
-          getValues={getValues}
-          hasError={hasVehicleModelError}
-          firstErrorField={firstErrorField}
-          placeholder="Select Model"
-          customWidth={0}
-        />
+        <div>
+          <Input
+            {...register("vehicleModel", {
+              required: "Vehicle model is required",
+            })}
+            type="text"
+            placeholder="Vehicle Model"
+            className={`border-gray-200 !h-11 placeholder:font-light placeholder:text-sm placeholder-gray-500 focus-visible:ring-teal-500 focus-visible:ring-2 hover:border-teal-500 transition-colors ${
+              hasVehicleModelError ? "border-red-500" : ""
+            }`}
+          />
+          {hasVehicleModelError && firstErrorField === "vehicleModel" && (
+            <ErrorMessage message={errors.vehicleModel.message} />
+          )}
+        </div>
 
         {/* Vehicle Year */}
         <DropdownInput

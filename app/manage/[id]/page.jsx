@@ -2,7 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import hqApi from "@/lib/hqApi";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { transformCustomerData } from "@/app/_lib/transformCustomerData";
 import Spinner from "@/components/custom/Spinner";
 import Nav from "@/app/_components/Nav";
@@ -18,9 +23,11 @@ export default function ViewBooking() {
   const [loading, setLoading] = useState(true);
   const [customerInfo, setCustomerInfo] = useState(null);
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const customerUpdated = searchParams.get("customerupdated");
   const cancelled = searchParams.get("cancelled");
+  const pickupreturnupdated = searchParams.get("pickupreturnupdated");
 
   const { id } = useParams();
   useEffect(() => {
@@ -38,6 +45,14 @@ export default function ViewBooking() {
         //     router.replace("/");
         //     return;
         //   }
+        if (responseData?.reservation?.status === "cancelled") {
+          const params = new URLSearchParams(searchParams.toString());
+          if (!params.get("cancelled")) {
+            params.set("cancelled", "true");
+            router.replace(`${pathname}?${params.toString()}`);
+          }
+        }
+
         setReservation(responseData);
         setRentalAgreement(response?.data?.rental_agreement?.data?.agreement);
         const customerData = transformCustomerData(responseData?.customer);
@@ -51,7 +66,7 @@ export default function ViewBooking() {
       }
     };
     fetchData();
-  }, []);
+  }, [id, searchParams]);
 
   if (loading) {
     return (
@@ -71,7 +86,13 @@ export default function ViewBooking() {
           reservationNumber={reservation?.reservation?.prefixed_id}
         />
       )}
-
+      {pickupreturnupdated && (
+        <PaymentSuccessBar
+          title="Changes successful!"
+          msg="Your Pickup & Return succesfully changed."
+          reservationNumber={reservation?.reservation?.prefixed_id}
+        />
+      )}
       {cancelled && (
         <PaymentSuccessBar
           title="Your booking has been cancelled!"
@@ -86,7 +107,9 @@ lf you already made a prepayment, your refund typically takes 5-10 Days calendar
         <div className="mt-[10px] flex justify-start items-start gap-5 flex-col lg:flex-row">
           <div className="flex-1 w-full">
             <VehicleBookingDetails
-              upperSuccess={!!(customerUpdated || cancelled)}
+              upperSuccess={
+                !!(customerUpdated || cancelled || pickupreturnupdated)
+              }
               reBook={cancelled ? true : false}
               customerData={customerInfo}
               reservationData={reservation}
@@ -95,7 +118,7 @@ lf you already made a prepayment, your refund typically takes 5-10 Days calendar
           </div>
           <Step7Sidebar
             reservation={reservation}
-            manage={!customerUpdated && !cancelled}
+            manage={!customerUpdated && !cancelled && !pickupreturnupdated}
           />
         </div>
       </div>

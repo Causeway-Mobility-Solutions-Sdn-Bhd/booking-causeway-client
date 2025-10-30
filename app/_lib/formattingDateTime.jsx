@@ -38,3 +38,25 @@ export const formatTime = (timeString) => {
     return timeString;
   }
 };
+
+export const formatTimeFromDate = (dateString) => {
+  if (!dateString) return "";
+  try {
+    const date = new Date(dateString);
+    return format(date, "HH:mm"); // 24-hour format, e.g. "14:30"
+  } catch (error) {
+    console.log("Time formatting error:", error);
+    return "";
+  }
+};
+
+export const formatTimeWithAmPm = (dateString) => {
+  if (!dateString) return "";
+  try {
+    const date = new Date(dateString);
+    return format(date, "hh:mm a");
+  } catch (error) {
+    console.log("Time formatting error:", error);
+    return "";
+  }
+};

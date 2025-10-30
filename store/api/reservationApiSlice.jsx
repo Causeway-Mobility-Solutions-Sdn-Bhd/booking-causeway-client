@@ -166,6 +166,47 @@ export const reservationApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    getAllReservations: builder.query({
+      query: () => ({
+        url: "/car-rental/manage-reservations",
+        method: "GET",
+      }),
+      providesTags: ["Reservation"],
+
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log("Fetched reservations:", data);
+          // You can dispatch to store here if needed, e.g.:
+          // dispatch(setAllReservations(data));
+        } catch (err) {
+          console.error("Failed to fetch all reservations:", err);
+        }
+      },
+    }),
+    cancelBooking: builder.mutation({
+      query: (body) => ({
+        url: "/car-rental/manage-reservations/cancel-reservation",
+        method: "POST",
+        data: body,
+      }),
+      invalidatesTags: ["Reservation"],
+    }),
+    findBooking: builder.mutation({
+      query: (body) => ({
+        url: "/car-rental/manage-reservations/find-booking",
+        method: "POST",
+        data: body,
+      }),
+    }),
+    // reBook: builder.mutation({
+    //   query: (body) => ({
+    //     url: "/car-rental/manage-reservations/rebook",
+    //     method: "POST",
+    //     data: body,
+    //   }),
+    //   invalidatesTags: ["Reservation"],
+    // }),
   }),
   overrideExisting: true,
 });
@@ -177,4 +218,8 @@ export const {
   useConfirmReservationMutation,
   useProcessPaymentMutation,
   useGetReservationAttemptQuery,
+  useGetAllReservationsQuery,
+  useCancelBookingMutation,
+  // useReBookMutation,
+  useFindBookingMutation,
 } = reservationApi;

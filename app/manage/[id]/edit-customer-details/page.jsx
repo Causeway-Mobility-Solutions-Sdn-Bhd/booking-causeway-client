@@ -24,9 +24,17 @@ const page = () => {
 
         const responseData = response?.data?.data;
 
-        const customerData = transformCustomerData(responseData?.customer);
+        const customerId = responseData?.customer.id;
 
-        setFormData(customerData);
+        if (customerId) {
+          const customerRes = await hqApi.get(
+            `customers/get-customer/${customerId}`
+          );
+          const customerData = transformCustomerData(customerRes.data);
+
+          setFormData(customerData);
+        }
+
         setLoading(false);
       } catch (error) {
         console.log("Error fetching reservation:", error);
@@ -59,6 +67,7 @@ const page = () => {
             Customer details
           </h3>
         }
+        currencyDrawer={false}
         topBar={true}
       />
 

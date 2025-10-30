@@ -18,6 +18,7 @@ import PickupReturnLocationDrawer from "@/app/_components/PickupReturnLocationDr
 import PickupReturnDateDrawer from "@/app/_components/PickupReturnDateDrawer";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 import SaveBottomBar from "@/app/_components/SaveBottomBar";
+import { formatTimeFromDate } from "@/app/_lib/formattingDateTime";
 
 function SearchFillter({
   setIsDrawerOpenSecondary = () => {},
@@ -34,11 +35,11 @@ function SearchFillter({
     returnDate: reservation?.return_date
       ? new Date(reservation?.return_date)
       : addDays(new Date(), 2),
-    returnTime: reservation?.return_time
-      ? reservation?.return_time
+    returnTime: reservation?.return_date
+      ? formatTimeFromDate(reservation?.return_date)
       : format(new Date(0, 0, 0, 10, 0), "HH:mm"),
-    pickupTime: reservation?.pick_up_time
-      ? reservation?.pick_up_time
+    pickupTime: reservation?.pick_up_date
+      ? formatTimeFromDate(reservation?.pick_up_date)
       : format(new Date(0, 0, 0, 10, 0), "HH:mm"),
   });
 
@@ -66,7 +67,6 @@ function SearchFillter({
   const [loader, setLoader] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-  console.log(reservation);
 
   const handleBookingSearch = async () => {
     console.log("CLICK");
