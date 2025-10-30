@@ -1,5 +1,4 @@
 import FindBookingForm from "./_components/Find Booking";
-
 export default function ManageBookingPage() {
   return (
     <div
