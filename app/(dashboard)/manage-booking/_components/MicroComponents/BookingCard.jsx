@@ -1,3 +1,4 @@
+import SmartImage from "@/components/custom/SmartImage";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -6,6 +7,8 @@ function BookingCard({ booking, activeTab, index }) {
   const handleClick = () => {
     router.push(`/manage/${booking.id}`);
   };
+  console.log(booking);
+
   return (
     <div
       className="bg-white mb-4"
@@ -25,10 +28,11 @@ function BookingCard({ booking, activeTab, index }) {
         className="bg-white rounded-lg mb-4 flex items-center justify-center"
         style={{ height: "200px", overflow: "hidden" }}
       >
-        <img
-          src={booking.carImage}
-          alt={booking.carName}
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        <SmartImage
+          src={booking?.vehicle_class_image}
+          width={230}
+          height={100}
+          alt={`${booking?.vehicle_class.name}`}
         />
       </div>
 
@@ -42,7 +46,7 @@ function BookingCard({ booking, activeTab, index }) {
           width: "311px",
         }}
       >
-        {booking.carName}
+        {booking.vehicle_class.name}
       </h3>
 
       {/* Car Specs */}
@@ -53,62 +57,28 @@ function BookingCard({ booking, activeTab, index }) {
           borderBottom: "1px solid #f3f4f6",
         }}
       >
-        <div
-          className="flex flex-col items-center"
-          style={{ width: "77.75px", height: "30px" }}
-        >
-          <img
-            src="booking/Type.svg"
-            alt="Economy"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-            }}
-          />
-        </div>
-        <div
-          className="flex flex-col items-center"
-          style={{ width: "77.75px", height: "30px" }}
-        >
-          <img
-            src="booking/Seat.svg"
-            alt="Seats"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-            }}
-          />
-        </div>
-        <div
-          className="flex flex-col items-center"
-          style={{ width: "77.75px", height: "30px" }}
-        >
-          <img
-            src="booking/Fuel.svg"
-            alt="Petrol"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-            }}
-          />
-        </div>
-        <div
-          className="flex flex-col items-center"
-          style={{ width: "77.75px", height: "30px" }}
-        >
-          <img
-            src="booking/Gear.svg"
-            alt="Auto"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-            }}
-          />
-        </div>
+        {booking?.vehicle_class?.features?.map((feature) => {
+          return (
+            <div
+              key={feature.id}
+              className="flex flex-col items-center"
+              style={{ width: "77.75px", height: "30px" }}
+            >
+              <img
+                src={feature?.images[0]?.public_link}
+                alt="Economy"
+                style={{
+                  width: "13px",
+                  height: "100%",
+                  objectFit: "contain",
+                }}
+              />
+              <span className="text-xs mt-1 text-muted-foreground">
+                {feature?.label_for_website?.en || feature?.label}
+              </span>
+            </div>
+          );
+        })}
       </div>
 
       {/* Location and Date */}
@@ -135,7 +105,7 @@ function BookingCard({ booking, activeTab, index }) {
                 "Poppins, -apple-system, BlinkMacSystemFont, sans-serif",
             }}
           >
-            {booking.date}
+            {booking.dateWithDays || ""}
           </p>
           <p
             className="text-gray-600"
@@ -146,8 +116,21 @@ function BookingCard({ booking, activeTab, index }) {
                 "Poppins, -apple-system, BlinkMacSystemFont, sans-serif",
             }}
           >
-            {booking.location}
+            {booking.pick_up_location}
           </p>
+          {booking.return_location !== booking.pick_up_location && (
+            <p
+              className="text-gray-600"
+              style={{
+                fontSize: "14px",
+                fontWeight: 400,
+                fontFamily:
+                  "Poppins, -apple-system, BlinkMacSystemFont, sans-serif",
+              }}
+            >
+              {booking.return_location}
+            </p>
+          )}
         </div>
       </div>
 
