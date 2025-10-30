@@ -69,7 +69,7 @@ function VehicleBookingDetails({
       <div className="bg-white shadow-sm rounded-lg overflow-hidden p-4">
         <div className="flex border rounded-lg border-gray-200 flex-col md:flex-row">
           <div className="flex-1 p-4">
-            <div className="flex items-start gap-1">
+            <div className="flex items-start gap-3">
               <div>
                 <RiMapPin2Line className="text-lg mt-[3px]" />
               </div>
