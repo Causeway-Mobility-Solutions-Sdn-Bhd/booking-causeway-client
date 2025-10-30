@@ -2,8 +2,6 @@ import React from "react";
 import { CategoryBadgeLoader } from "@/components/custom/Skeleton";
 
 function CarType({ vehicleType, filterVehicle, activeType }) {
-  console.log(vehicleType);
-
   return (
     <div className="overflow-x-auto scrollbar-hide mb-2 sm:mb-4">
       {vehicleType?.length === 0 ? (

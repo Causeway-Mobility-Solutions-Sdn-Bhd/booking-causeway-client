@@ -1,4 +1,6 @@
+import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 import SmartImage from "@/components/custom/SmartImage";
+import { useReBookMutation } from "@/store/api/reservationApiSlice";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -7,8 +9,20 @@ function BookingCard({ booking, activeTab, index }) {
   const handleClick = () => {
     router.push(`/manage/${booking.id}`);
   };
-  console.log(booking);
+  const [reBook, { isLoading }] = useReBookMutation();
+  const onRebook = async () => {
+    console.log("Rebooking...");
 
+    // try {
+    //   await reBook({ id: booking.id }).unwrap();
+    //   showSuccessToast("Booking Rebooked successfully!");
+    // } catch (error) {
+    //   const errorMessage =
+    //     error?.data?.message || "Failed to Rebook. Please try again.";
+    //   showErrorToast(errorMessage);
+    //   console.error("Error reopening booking:", error);
+    // }
+  };
   return (
     <div
       className="bg-white mb-4"
@@ -177,6 +191,7 @@ function BookingCard({ booking, activeTab, index }) {
                 Add Review
               </button>
               <button
+                onClick={onRebook}
                 className="flex-1 text-white transition-all"
                 style={{
                   backgroundColor: "#FF748B",
@@ -194,6 +209,7 @@ function BookingCard({ booking, activeTab, index }) {
             </>
           ) : (
             <button
+              onClick={onRebook}
               className="w-full text-white transition-all"
               style={{
                 backgroundColor: "#FF748B",
@@ -215,6 +231,7 @@ function BookingCard({ booking, activeTab, index }) {
 
       {activeTab === "cancelled" && (
         <button
+          onClick={onRebook}
           className="w-full text-white transition-all"
           style={{
             backgroundColor: "#FF748B",

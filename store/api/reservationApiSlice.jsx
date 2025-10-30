@@ -192,14 +192,14 @@ export const reservationApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Reservation"],
     }),
-    reBook: builder.mutation({
-      query: (body) => ({
-        url: "/car-rental/manage-reservations/rebook",
-        method: "POST",
-        data: body,
-      }),
-      invalidatesTags: ["Reservation"],
-    }),
+    // reBook: builder.mutation({
+    //   query: (body) => ({
+    //     url: "/car-rental/manage-reservations/rebook",
+    //     method: "POST",
+    //     data: body,
+    //   }),
+    //   invalidatesTags: ["Reservation"],
+    // }),
   }),
   overrideExisting: true,
 });

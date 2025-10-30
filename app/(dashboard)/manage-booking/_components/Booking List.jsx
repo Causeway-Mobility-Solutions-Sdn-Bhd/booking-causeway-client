@@ -12,7 +12,6 @@ function BookingList() {
     isLoading,
     isError,
   } = useGetAllReservationsQuery();
-  console.log(reservations);
 
   if (isLoading) {
     return (

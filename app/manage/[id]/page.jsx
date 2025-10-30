@@ -2,7 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import hqApi from "@/lib/hqApi";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { transformCustomerData } from "@/app/_lib/transformCustomerData";
 import Spinner from "@/components/custom/Spinner";
 import Nav from "@/app/_components/Nav";
@@ -18,6 +23,7 @@ export default function ViewBooking() {
   const [loading, setLoading] = useState(true);
   const [customerInfo, setCustomerInfo] = useState(null);
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const customerUpdated = searchParams.get("customerupdated");
   const cancelled = searchParams.get("cancelled");
@@ -39,6 +45,14 @@ export default function ViewBooking() {
         //     router.replace("/");
         //     return;
         //   }
+        if (responseData?.reservation?.status === "cancelled") {
+          const params = new URLSearchParams(searchParams.toString());
+          if (!params.get("cancelled")) {
+            params.set("cancelled", "true");
+            router.replace(`${pathname}?${params.toString()}`);
+          }
+        }
+
         setReservation(responseData);
         setRentalAgreement(response?.data?.rental_agreement?.data?.agreement);
         const customerData = transformCustomerData(responseData?.customer);
