@@ -7,6 +7,8 @@ import { IoIosArrowDown } from "react-icons/io";
 import { FaCheckCircle } from "react-icons/fa";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAppSelector } from "@/store/hooks";
+import SubHead from "@/components/custom/SubHead";
+import InsuranceComparison from "./InsuranceComparison";
 
 const currentLanguage = "en";
 
@@ -16,7 +18,9 @@ function AdditionalCharges({
   fetchData = () => {},
   fetchLoader = false,
 }) {
-  const additionalCharges = useAppSelector((state) => state?.reservation?.additionalCharges);
+  const additionalCharges = useAppSelector(
+    (state) => state?.reservation?.additionalCharges
+  );
 
   const formatPrice = useFormatPrice();
   const [shouldFetch, setShouldFetch] = useState(false);
@@ -24,7 +28,7 @@ function AdditionalCharges({
   useEffect(() => {
     if (shouldFetch) {
       const ac = transformSelectedCharges();
-      console.log(ac)
+      console.log(ac);
       fetchData(ac, false);
       setShouldFetch(false);
     }
@@ -32,7 +36,6 @@ function AdditionalCharges({
 
   const handleAddSingle = (charge, ac) => {
     const protectionIds = [9, 10, 11, 20];
-    const categoryId = ac?.category?.id;
 
     setSelectedCharges((prev) => {
       const updated = { ...prev };
@@ -95,31 +98,33 @@ function AdditionalCharges({
     });
   };
 
-  const moveIdsToTop = (chargesArray, targetIds = [20, 11, 10, 9]) => {
-    if (!Array.isArray(chargesArray)) return [];
-    const prioritized = targetIds
-      .map((id) => chargesArray.find((item) => item.id === id))
-      .filter(Boolean);
-
-    const rest = chargesArray.filter((item) => !targetIds.includes(item.id));
-
-    return [...prioritized, ...rest];
-  };
 
   if (fetchLoader) {
     return <AdditionalChargesSkeleton />;
   }
 
+  const getUpdatedAdditionalCharges = (additionalCharges) => {
+    const desiredOrder = [2, 4];
+
+    return additionalCharges
+      .filter((item) => desiredOrder.includes(item.category.id))
+      .sort(
+        (a, b) =>
+          desiredOrder.indexOf(a.category.id) -
+          desiredOrder.indexOf(b.category.id)
+      );
+  }
+  console.log(additionalCharges)
+
   return (
     <div className="pb-[70px]">
-      {additionalCharges.map((ac) => (
+      <InsuranceComparison selectedCharges={selectedCharges} setSelectedCharges={setSelectedCharges} fetchData={fetchData} />
+      {getUpdatedAdditionalCharges(additionalCharges).map((ac) => (
         <div key={ac?.category?.id} className="mb-5">
-          <h3 className="text-[18px] font-semibold">
-            {ac?.category?.label?.[currentLanguage] ?? "No label"}
-          </h3>
+          <SubHead text={ac?.category?.label?.[currentLanguage] ?? "No label"} />
 
           <div className="flex justify-start items-baseline gap-4 sm:gap-4 mt-4 flex-wrap">
-            {moveIdsToTop(ac?.charges)?.map((acc, index) => {
+            {ac?.charges?.map((acc, index) => {
               const isSelected = selectedCharges[acc.id];
               const quantity = selectedCharges[acc.id]?.quantity || 0;
 
