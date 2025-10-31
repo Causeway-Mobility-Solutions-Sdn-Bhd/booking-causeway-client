@@ -1,46 +1,86 @@
-import React from "react";
+import React , {useEffect , useState} from "react";
 
 export default function InsuranceComparison({
   selectedCharges = {},
   setSelectedCharges = () => {},
   fetchData = () => {},
 }) {
-  console.log(selectedCharges)
+  const [shouldFetch, setShouldFetch] = useState(false);
+
+  useEffect(() => {
+    if (shouldFetch) {
+      const ac = transformSelectedCharges();
+      console.log(ac);
+      fetchData(ac, false);
+      setShouldFetch(false);
+    }
+  }, [shouldFetch]);
+
+  const transformSelectedCharges = () => {
+    return Object.entries(selectedCharges).map(([id, { quantity }]) => {
+      const parsedId = parseInt(id, 10);
+      return quantity === 0 ? `${parsedId}` : `${parsedId}_${quantity}`;
+    });
+  };
+
+  console.log(selectedCharges);
   const plans = [
     {
+      id: 20,
       name: "Standard",
       excess: "RM 2,500",
       thirdParty: false,
       towing: false,
       theft: false,
       exterior: false,
-      price: "Currently Included",
-      color: "border-green-400",
+      price: "RM 0.00 /Day",
+      color: "border-[#05C7194D]",
       icon: <ProgressBar colors={["#05C7194D", "#05C71999", "#05C719"]} />,
     },
     {
+      id: 10,
       name: "Premium",
       excess: "RM 2,500",
       thirdParty: false,
       towing: false,
       theft: false,
       exterior: true,
-      price: "+RM 25.31 /Day",
-      color: "border-yellow-400",
-      icon: <ProgressBar colors={["#E69720", "#E28800", "#E0E0E0"]} />
+      price: "+RM 40.00 /Day",
+      color: "border-[#E69720]",
+      icon: <ProgressBar colors={["#E69720", "#E28800", "#E0E0E0"]} />,
     },
     {
+      id: 11,
       name: "Platinum",
       excess: "RM 1,500",
       thirdParty: true,
       towing: true,
       theft: true,
       exterior: true,
-      price: "+RM 25.31 /Day",
-      color: "border-pink-400",
-      icon: <ProgressBar colors={["#FF002A", "#E0E0E0", "#E0E0E0"]} />
+      price: "+RM 80.00 /Day",
+      color: "border-[#FF002A]",
+      icon: <ProgressBar colors={["#FF002A", "#E0E0E0", "#E0E0E0"]} />,
     },
   ];
+
+  const handleAdditionalCharges = (id) => {
+    const protectionIds = [9, 10, 11, 20];
+
+    setSelectedCharges((prev) => {
+      const updated = { ...prev };
+
+      for (const key of Object.keys(updated)) {
+        if (protectionIds.includes(Number(key))) {
+          delete updated[key];
+        }
+      }
+
+      updated[id] = { quantity: 0 };
+
+      return updated;
+    });
+    setShouldFetch(true)
+  };
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-md w-full max-w-md mx-auto border border-gray-200 mb-4">
@@ -81,12 +121,18 @@ export default function InsuranceComparison({
         <Row
           label="Price"
           values={plans.map((p) =>
-            p.price === "Currently Included" ? (
-              <span className="text-gray-400">{p.price}</span>
+            selectedCharges.hasOwnProperty(p.id) ? (
+              <div>
+                <p className="font-semibold" >{p.price}</p>
+                <p className="text-gray-400 mt-2">Currently Included</p>
+              </div>
             ) : (
               <>
-                <span className="text-cPrimary font-semibold">{p.price}</span>
-                <button className="ml-2 text-sm border-cPrimary text-cPrimary font-medium px-3 py-1 rounded-lg">
+                <p className="font-semibold">{p.price}</p>
+                <button
+                  onClick={() => handleAdditionalCharges(p.id)}
+                  className="ml-2 text-sm border-cPrimary border-1 text-cPrimary font-medium px-4 py-2 mt-2 rounded-lg"
+                >
                   Add
                 </button>
               </>
@@ -94,8 +140,6 @@ export default function InsuranceComparison({
           )}
         />
       </div>
-
-
     </div>
   );
 }
