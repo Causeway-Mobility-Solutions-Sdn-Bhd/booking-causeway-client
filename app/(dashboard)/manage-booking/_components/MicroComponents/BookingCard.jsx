@@ -1,6 +1,6 @@
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 import SmartImage from "@/components/custom/SmartImage";
-import { useReBookMutation } from "@/store/api/reservationApiSlice";
+
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -9,7 +9,7 @@ function BookingCard({ booking, activeTab, index }) {
   const handleClick = () => {
     router.push(`/manage/${booking.id}`);
   };
-  const [reBook, { isLoading }] = useReBookMutation();
+
   const onRebook = async () => {
     console.log("Rebooking...");
 
