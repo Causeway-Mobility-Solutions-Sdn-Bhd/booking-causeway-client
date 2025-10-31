@@ -11,7 +11,8 @@ function Banner() {
           src="/banner/IMAGE MOBILE.webp"
           alt="Banner"
           fill
-          className="object-cover object-center block sm:hidden"
+          className="object-cover block sm:hidden"
+          style={{ objectPosition: "center 2%" }}
           priority
         />
         
@@ -23,14 +24,7 @@ function Banner() {
           className="object-cover object-top hidden sm:block"
           priority
         />
-      
-        {/* Gradient overlay */}
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-[#f0f0f0] via-transparent to-transparent opacity-100"
-          style={{
-            background: "linear-gradient(to top, #f0f0f0 0%, transparent 50%)",
-          }}
-        />
+    
       </div>
       <SearchFillter />
     </div>
