@@ -38,7 +38,7 @@ function SpecialOffer() {
 
     const intervalId = setInterval(() => {
       api.scrollNext();
-    }, 3000); // Change slide every 3 seconds
+    }, 6000); // Change slide every 3 seconds
 
     return () => clearInterval(intervalId);
   }, [api]);
