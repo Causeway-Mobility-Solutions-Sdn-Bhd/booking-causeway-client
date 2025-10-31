@@ -153,7 +153,7 @@ function FindBookingForm() {
             <p className="text-[15px] text-gray-700">
               Have an account?{" "}
               <a
-                href="/my-booking"
+                href="/login"
                 className="text-cSecondary font-bold hover:underline"
               >
                 Sign in
