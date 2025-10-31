@@ -244,7 +244,7 @@ function SearchFillter({
         >
           <Button
             onClick={handleBookingSearch}
-            className={`w-full flex justify-center gap-1 items-center bg-cPrimary py-6 text-white ${
+            className={`w-full flex justify-center gap-1 items-center bg-cPrimary py-6 text-white font-semibold text-[16px] md:text-[18px] ${
               type !== "secondadry" && "h-10 md:h-[58px]"
             }`}
           >
