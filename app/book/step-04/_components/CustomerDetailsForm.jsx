@@ -9,7 +9,7 @@ import OtherInformation from "./OtherInformation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import hqApi from "@/lib/hqApi";
 import { usePathname, useRouter } from "next/navigation";
-import { setReservation } from "@/store/slices/reservationSlice";
+import { setFinalPayment, setReservation } from "@/store/slices/reservationSlice";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 
 import { useMemo } from "react";
@@ -19,6 +19,7 @@ import {
   useUpdateCustomerMutation,
   useUploadLicenseFileMutation,
 } from "@/store/api/customerApiSlice";
+import { useConfirmReservationMutation, useProcessPaymentMutation } from "@/store/api/reservationApiSlice";
 
 const CustomerDetailsForm = ({
   submitFormRef,
@@ -37,6 +38,9 @@ const CustomerDetailsForm = ({
     useUpdateCustomerMutation();
   const [uploadLicenseFile] = useUploadLicenseFileMutation();
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [confirmReservation, { isLoading: isConfirming }] =
+    useConfirmReservationMutation();
+  const [processPayment, { isLoading: isPaying }] = useProcessPaymentMutation();
 
   const {
     register,
@@ -117,10 +121,12 @@ const CustomerDetailsForm = ({
 
       if (managing) {
         const uuid = pathname.split("/")[2];
+        setSubmitLoader(false);
         router.replace(`/manage/${uuid}?customerupdated=true`);
         return;
       }
-      router.push(`/book/step-05?ssid=${currentUUID}`);
+      // router.push(`/book/step-05?ssid=${currentUUID}`);
+      handleConfirmReservation()
     } catch (error) {
       console.error("Error submitting form:", error);
       showErrorToast(
@@ -128,7 +134,44 @@ const CustomerDetailsForm = ({
           ? "Failed to update customer. Please try again."
           : "Failed to create customer. Please try again."
       );
-    } finally {
+    } 
+  };
+
+  const handleConfirmReservation = async () => {
+    try {
+      const response = await confirmReservation().unwrap();
+
+      if (response?.status_code === 200) {
+        const reservedReservationDetail = response.data;
+        const reservationData = reservedReservationDetail?.reservation || {};
+        const outstandingBalance =
+          reservedReservationDetail?.total?.outstanding_balance?.amount ||
+          "0.00";
+        const reservationId = reservationData?.id || "N/A";
+        const paymentDue = parseFloat(outstandingBalance).toFixed(2);
+        const reservationUid = reservationData?.uuid;
+        const domain = window.location.origin;
+
+        const paymentRes = await processPayment({
+          amount: paymentDue,
+          reservationId,
+          reservationUid,
+          domain,
+        }).unwrap();
+
+        const paymentLink =
+          paymentRes?.payment_gateways_transaction?.external_url;
+
+        if (paymentLink) {
+          dispatch(
+            setFinalPayment({ link: paymentLink, price: outstandingBalance })
+          );
+          router.push(`/book/step-06?ssid=${currentUUID}`);
+        }
+      }
+    } catch (error) {
+      console.log("Error confirming reservation:", error);
+    } finally{
       setSubmitLoader(false);
     }
   };
