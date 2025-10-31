@@ -9,15 +9,9 @@ import { ChevronRight } from 'lucide-react'
 function page() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F0F0F0' }}>
-      <Nav isMain={false} value="Contact Us"/>
+      <Nav isMain={false} value="Support"/>
       <SideBar />
       <div className="pt-5 pb-10 px-4">
-      
-        <div className="mt-1 mb-6">
-          <h2 className="text-[21px] font-normal leading-[100%] tracking-[0%] text-black" style={{fontFamily: 'Poppins'}}>
-            Support
-          </h2>
-        </div>
 
         {/* Booking Enquiry Section */}
         <div className="mb-6">
@@ -113,10 +107,10 @@ function page() {
 
         {/* What You Can Expect Section */}
         <div className="mb-8">
-          <h3 className="text-[21px] font-normal leading-[100%] text-black mb-6" style={{fontFamily: 'Poppins', color: '#080206'}}>What You Can Expect</h3>
+          <h3 className="text-[18px] font-bold leading-[28px] tracking-[2%] text-black mb-3" style={{fontFamily: 'Poppins'}}>What You Can Expect</h3>
           <div className="bg-white rounded-lg shadow-sm p-4">
             
-            {/* High Speed Customer Support - IMAGE MOVED UP MORE */}
+            {/* High Speed Customer Support -  */}
             <div className="mb-6">
               <div className="flex items-start space-x-4">
                 <img 
@@ -138,7 +132,7 @@ function page() {
               <div className="w-full h-0 border-t border-gray-200" style={{borderColor: '#E6E6E6'}}></div>
             </div>
 
-            {/* 24/7 Road Side Assistance - IMAGE MOVED UP MORE */}
+            {/* 24/7 Road Side Assistance */}
             <div className="mb-6">
               <div className="flex items-start space-x-4">
                 <img 
@@ -160,7 +154,7 @@ function page() {
               <div className="w-full h-0 border-t border-gray-200" style={{borderColor: '#E6E6E6'}}></div>
             </div>
 
-            {/* Dedicated Rental Agent - IMAGE MOVED UP MORE */}
+            {/* Dedicated Rental Agent */}
             <div className="mb-2">
               <div className="flex items-start space-x-4">
                 <img 
