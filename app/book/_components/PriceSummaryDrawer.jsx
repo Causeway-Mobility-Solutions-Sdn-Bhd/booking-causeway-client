@@ -15,6 +15,7 @@ import { ChevronUp, ShoppingCart } from "lucide-react";
 import ShowPickDrop from "./ShowPickDrop";
 import VehicleDetail from "./VehicleDetail";
 import PriceSummary from "./PriceSummary";
+import PaymentType from "./PaymentType";
 
 function PriceSummaryDrawer({ selectedVehicle, currency }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -60,6 +61,7 @@ function PriceSummaryDrawer({ selectedVehicle, currency }) {
         <div className="bg-cWhite h-[620px] overflow-y-auto">
           <div className="py-[15px] w-[95%] mx-auto">
             <VehicleDetail />
+            <PaymentType />
             <PriceSummary />
             <ShowPickDrop />
           </div>
