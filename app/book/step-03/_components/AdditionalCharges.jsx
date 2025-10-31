@@ -9,6 +9,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAppSelector } from "@/store/hooks";
 import SubHead from "@/components/custom/SubHead";
 import InsuranceComparison from "./InsuranceComparison";
+import InfoTabs from "./InfoTabs";
+import PolicyLeftContent from "./PolicyLeftContent";
 
 const currentLanguage = "en";
 
@@ -119,6 +121,7 @@ function AdditionalCharges({
   return (
     <div className="pb-[70px]">
       <InsuranceComparison selectedCharges={selectedCharges} setSelectedCharges={setSelectedCharges} fetchData={fetchData} />
+      <InfoTabs /> 
       {getUpdatedAdditionalCharges(additionalCharges).map((ac) => (
         <div key={ac?.category?.id} className="mb-5">
           <SubHead text={ac?.category?.label?.[currentLanguage] ?? "No label"} />
@@ -247,6 +250,7 @@ function AdditionalCharges({
           </div>
         </div>
       ))}
+      <PolicyLeftContent />
     </div>
   );
 }
