@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Spinner from "@/components/custom/Spinner";
 import { useGetReservationAttemptQuery } from "@/store/api/reservationApiSlice";
+import { useGetCurrenciesQuery } from "@/store/api/fleetApiSlice";
 
 export default function BookLayoutClient({ children }) {
   const router = useRouter();
@@ -11,6 +12,9 @@ export default function BookLayoutClient({ children }) {
   const ssidFromUrl = searchParams.get("ssid");
 
   const [sessionState, setSessionState] = useState("checking");
+  const { data: allCurrencies} = useGetCurrenciesQuery();
+ 
+  console.log("allCurrencies", allCurrencies);
 
   const {
     data: reservation,
