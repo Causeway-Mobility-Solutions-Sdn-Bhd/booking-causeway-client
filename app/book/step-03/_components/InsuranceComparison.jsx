@@ -23,7 +23,6 @@ export default function InsuranceComparison({
     });
   };
 
-  console.log(selectedCharges);
   const plans = [
     {
       id: 20,
@@ -89,7 +88,6 @@ export default function InsuranceComparison({
         {plans.map((plan) => (
           <div
             key={plan.name}
-            className={`border-t-4 ${plan.color} rounded-t-lg pt-2`}
           >
             <div className="text-xs flex flex-col items-center">
               {plan.icon}
