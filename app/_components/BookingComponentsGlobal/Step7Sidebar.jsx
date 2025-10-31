@@ -18,7 +18,7 @@ const Step7Sidebar = ({ manage = false, reservation = null }) => {
       icon: "/next-steps/requireddocs.webp",
       title: "Bring required documents",
       description:
-        "Please bring your valid driver’s license, ID/Passport and security deposit.",
+        "Please bring your valid driver's license, ID/Passport and security deposit.",
     },
     {
       icon: "/next-steps/vehicleinspection.webp",
@@ -127,9 +127,9 @@ const Step7Sidebar = ({ manage = false, reservation = null }) => {
                   <Image
                     src={step.icon}
                     alt={step.title}
-                    width={33}
-                    height={33}
-                    className="w-auto h-auto"
+                    width={80}
+                    height={80}
+                    className="w-20 h-20 md:w-24 md:h-24 object-contain"
                   />
                 </div>
                 <div className="flex-1">
@@ -142,7 +142,7 @@ const Step7Sidebar = ({ manage = false, reservation = null }) => {
                 </div>
               </div>
 
-              {/* Divider - don't show after last item */}
+              {/* Divider*/}
               {index < steps.length - 1 && (
                 <div className="border-t border-gray-200"></div>
               )}
