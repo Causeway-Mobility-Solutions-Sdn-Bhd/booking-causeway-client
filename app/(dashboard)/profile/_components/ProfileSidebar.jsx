@@ -7,9 +7,16 @@ import { FaUser } from "react-icons/fa6";
 import { BiSolidIdCard } from "react-icons/bi";
 import { HiMiniShieldExclamation } from "react-icons/hi2";
 import { RiQuestionnaireFill } from "react-icons/ri";
+
+import { useLogoutMutation } from "@/store/api/authApiSlice";
+import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
+import { IoLogOut } from "react-icons/io5";
+
 const ProfileSidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
+
+  const [logout, { isLoading }] = useLogoutMutation();
 
   const menuItems = [
     {
@@ -36,8 +43,28 @@ const ProfileSidebar = () => {
       route: "/support",
       icon: RiQuestionnaireFill,
     },
+    {
+      id: "logout",
+      label: "Logout",
+      route: "/",
+      icon: IoLogOut,
+    },
   ];
 
+  const onClick = async (item) => {
+    if (item.id === "logout") {
+      try {
+        await logout().unwrap();
+        showSuccessToast("Logged out successfully");
+        router.push("/");
+      } catch (error) {
+        showErrorToast("Logout failed. Please try again.");
+        console.error("Logout error:", error);
+      }
+      return;
+    }
+    router.push(item.route);
+  };
   return (
     <div className="bg-white rounded-lg shadow-sm p-4 w-full lg:w-[381px]">
       <nav className="space-y-0">
@@ -47,7 +74,7 @@ const ProfileSidebar = () => {
           return (
             <div key={item.id}>
               <button
-                onClick={() => router.push(item.route)}
+                onClick={() => onClick(item)}
                 className={`w-full cursor-pointer flex items-center text-black justify-between px-2 py-2 rounded-xl transition-all hover:font-semibold
                 ${isActive ? "font-semibold" : "font-normal"}`}
               >
