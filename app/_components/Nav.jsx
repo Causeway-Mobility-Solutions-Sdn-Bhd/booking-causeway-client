@@ -43,13 +43,13 @@ function Nav({ isMain = true, value = "" }) {
     { name: "Home", href: "/" },
     { name: "Manage Booking", href: user ? "/manage-booking" : "manage" },
     { name: "Partnership", href: "/partnership" },
-    { name: "Contact Us", href: "/support" },
+    { name: "Support", href: "/support" },
     { name: "Terms & Conditions", href: "/terms-and-condition" },
   ];
 
   return (
     <div className="w-full py-5 sm:py-4 bg-white z-100">
-      <div className="flex justify-between items-center w-[95%] max-w-[1400px] mx-auto">
+      <div className="flex justify-between items-center w-[95%] max-w-[1400px] mx-auto relative">
         {isMain ? (
           <Image
             priority
@@ -61,7 +61,8 @@ function Nav({ isMain = true, value = "" }) {
           />
         ) : (
           <>
-            <h3 className="block sm:hidden font-semibold text-[17px]">
+            <div className="block sm:hidden w-[35px]"></div>
+            <h3 className="block sm:hidden font-semibold text-[17px] absolute left-1/2 -translate-x-1/2">
               {value}
             </h3>
             <Image
