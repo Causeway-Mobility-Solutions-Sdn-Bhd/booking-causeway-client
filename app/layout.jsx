@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <link rel="preload" as="image" href="/banner/banner.webp" />
+        <link rel="preload" as="image" href="/banner/Banner.webp" />
       </head>
       <body className={`${poppins.variable} antialiased`}>
         <Providers>
