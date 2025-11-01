@@ -19,7 +19,7 @@ function BookNavBar({ topBar = null, child = null,currencyDrawer=true }) {
           <Image
             priority
             className="object-contain w-[150px] sm:w-[200px] hidden sm:block"
-            src="/logo/Logo.svg"
+            src="/logo/logo-black.svg"
             alt="Causeway Logo"
             width={200}
             height={70}
