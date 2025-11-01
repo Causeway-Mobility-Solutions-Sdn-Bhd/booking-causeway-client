@@ -6,7 +6,6 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import TitleHead from "@/components/custom/TitleHead";
-import Autoplay from "embla-carousel-autoplay";
 import { CarCardSkeleton } from "@/components/custom/Skeleton";
 import Car from "@/components/custom/Car";
 import CarType from "./CarType";
@@ -42,13 +41,6 @@ function CarList() {
       />
 
       <Carousel
-        plugins={[
-          Autoplay({
-            delay: 2000,
-            stopOnInteraction: false,
-            stopOnMouseEnter: true,
-          }),
-        ]}
         className="w-full py-1 sm:py-3"
         opts={{ align: "start", loop: true }}
       >

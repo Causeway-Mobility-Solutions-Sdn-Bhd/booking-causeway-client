@@ -54,7 +54,7 @@ function Nav({ isMain = true, value = "" }) {
           <Image
             priority
             className="object-contain w-[150px] sm:w-[200px]"
-            src="/logo/Logo.svg"
+            src="/logo/logo-black.svg"
             alt="Causeway Logo"
             width={200}
             height={70}
@@ -68,7 +68,7 @@ function Nav({ isMain = true, value = "" }) {
             <Image
               priority
               className="hidden sm:block object-contain w-[150px] sm:w-[200px] grayscale sm:grayscale-0"
-              src="/logo/Logo.svg"
+              src="/logo/logo-black.svg"
               alt="Causeway Logo"
               width={200}
               height={70}
