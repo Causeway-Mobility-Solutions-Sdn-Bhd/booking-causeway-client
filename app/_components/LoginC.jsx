@@ -5,13 +5,19 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { showErrorToast, showSuccessToast } from "../_lib/toast";
 import Spinner from "@/components/custom/Spinner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useLoginMutation } from "@/store/api/authApiSlice";
 
 function LoginC({ type, setIsDrawerOpen }) {
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
+
   const [login, { isLoading }] = useLoginMutation();
+
+  const searchParams = useSearchParams();
+  const ssid = searchParams.get("ssid");
+  const router = useRouter();
+
+  console.log("LoginC ssid:", ssid);
 
   const {
     register,
@@ -30,10 +36,12 @@ function LoginC({ type, setIsDrawerOpen }) {
       console.log({
         email: data.email,
         password: data.password,
+        ssid:ssid
       });
       const res = await login({
         email: data.email,
         password: data.password,
+        ssid:ssid
       }).unwrap();
 
       showSuccessToast("Logged in successfully!");

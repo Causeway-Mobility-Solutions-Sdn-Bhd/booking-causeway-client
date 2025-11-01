@@ -13,8 +13,6 @@ export default function BookLayoutClient({ children }) {
 
   const [sessionState, setSessionState] = useState("checking");
   const { data: allCurrencies} = useGetCurrenciesQuery();
- 
-  console.log("allCurrencies", allCurrencies);
 
   const {
     data: reservation,
