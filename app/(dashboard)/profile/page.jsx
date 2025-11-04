@@ -3,12 +3,25 @@
 import { useAppSelector } from "@/store/hooks";
 import React from "react";
 import { TicketPlus } from "lucide-react";
-import { FaUser } from "react-icons/fa6";
+import { FaUser, FaRegCalendar } from "react-icons/fa6";
 import { MdBookmark } from "react-icons/md";
-import { FaRegCalendar } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
 
 function Page() {
   const loggedUser = useAppSelector((state) => state.auth.loggedUser);
+  const router = useRouter();
+
+  const handleAllBookings = () => {
+    router.push("/manage-booking?completed");
+  };
+
+  const handleUpcoming = () => {
+    router.push("/manage-booking?upcoming");
+  };
+
+  const handleSaved = () => {
+    console.log("Saved clicked");
+  };
 
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -39,18 +52,30 @@ function Page() {
       </div>
 
       {/* Second Card — Stats */}
-      <div className="bg-white rounded-md shadow-lg p-5 xsm:px-8 sm:px-16 md:px-32 flex  items-center justify-between gap-5">
-        <div className="flex flex-col items-center gap-2">
+      <div className="bg-white rounded-md shadow-lg p-5 xsm:px-8 sm:px-16 md:px-32 flex items-center justify-between gap-5">
+        {/* All Bookings */}
+        <div
+          onClick={handleAllBookings}
+          className="flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition"
+        >
           <TicketPlus className="text-teal-500 w-6 h-6" />
           <p className="text-xs font-medium text-black">All bookings</p>
         </div>
 
-        <div className="flex flex-col items-center gap-2">
+        {/* Upcoming */}
+        <div
+          onClick={handleUpcoming}
+          className="flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition"
+        >
           <FaRegCalendar strokeWidth={2.5} className="text-teal-500 w-6 h-6" />
           <p className="text-xs font-medium text-black">Upcoming</p>
         </div>
 
-        <div className="flex flex-col items-center gap-2">
+        {/* Saved */}
+        <div
+          onClick={handleSaved}
+          className="flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition"
+        >
           <MdBookmark className="text-teal-500 w-6 h-6" />
           <p className="text-xs font-medium text-black">Saved</p>
         </div>
