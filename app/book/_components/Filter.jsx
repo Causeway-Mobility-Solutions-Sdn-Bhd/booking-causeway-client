@@ -12,7 +12,10 @@ import { IoIosSearch } from "react-icons/io";
 import { format } from "date-fns";
 import hqApi from "@/lib/hqApi";
 import { showErrorToast } from "@/app/_lib/toast";
-import { setSelectedVehicleClasses, setVehicleLoader } from "@/store/slices/reservationSlice";
+import {
+  setSelectedVehicleClasses,
+  setVehicleLoader,
+} from "@/store/slices/reservationSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 const features = [
@@ -177,8 +180,8 @@ function Filter({
     if (!reservation) return;
 
     if (variant === "secondary") {
-      dispatch(setSelectedVehicleClasses([]))
-      dispatch(setVehicleLoader(true))
+      dispatch(setSelectedVehicleClasses([]));
+      dispatch(setVehicleLoader(true));
       setIsDrawerOpen(false);
     }
 
@@ -187,8 +190,8 @@ function Filter({
       let requestData = {};
       if (isReload) {
         setIsDrawerOpen(false);
-        dispatch(setSelectedVehicleClasses([]))
-        dispatch(setVehicleLoader(true))
+        dispatch(setSelectedVehicleClasses([]));
+        dispatch(setVehicleLoader(true));
         setReLoader(true);
         requestData = {
           pick_up_date: reservation?.pick_up_date
@@ -202,7 +205,7 @@ function Filter({
           pick_up_location: reservation?.pick_up_location?.id || null,
           return_location: reservation?.return_location?.id || null,
           brand_id: reservation?.brand_id ?? null,
-          isCreate : false,
+          isCreate: false,
         };
       } else {
         setLoader(true);
@@ -218,7 +221,7 @@ function Filter({
           pick_up_location: reservation?.pick_up_location?.id || null,
           return_location: reservation?.return_location?.id || null,
           brand_id: reservation?.brand_id ?? null,
-          isCreate : false,
+          isCreate: false,
           min_price: tempTopBarFilter?.priceRange?.[0],
           max_price: tempTopBarFilter?.priceRange?.[1],
           ...(carTypeIds ? { car_type: carTypeIds } : {}),
@@ -249,7 +252,7 @@ function Filter({
       if (response?.status === 200) {
         const vehicles = response.data?.VehicleClasses || [];
         if (vehicles?.length > 0) {
-          dispatch(setSelectedVehicleClasses(vehicles))
+          dispatch(setSelectedVehicleClasses(vehicles));
           if (!isReload) {
             setTobBarFilter(tempTopBarFilter);
           } else {
@@ -279,13 +282,13 @@ function Filter({
           setIsDrawerOpen(false);
         }
         setReLoader(false);
-        dispatch(setVehicleLoader(false))
+        dispatch(setVehicleLoader(false));
       }
       setLoader(false);
     } catch (error) {
       setLoader(false);
       setReLoader(false);
-      dispatch(setVehicleLoader(false))
+      dispatch(setVehicleLoader(false));
       console.log("Error fetching vehicle classes:", error);
     }
   };
@@ -335,6 +338,8 @@ function Filter({
     </div>
   );
 
+  console.log(tempTopBarFilter.carType);
+
   // Render Car Type Filter
   const renderCarTypeFilter = () => (
     <div>
@@ -345,13 +350,13 @@ function Filter({
       )}
       {vehiTypes && (
         <div>
-          <div className="flex gap-2 pt-[10px] pb-[17px] overflow-x-auto scrollbar-hide">
+          <div className="flex gap-2 pt-[10px] pb-[17px] flex-wrap">
             {vehiTypes
               ?.filter((cf) => cf?.id !== 1)
               .map((category) => (
                 <div
                   key={category.id}
-                  className={`rounded-full cursor-pointer py-[10px] px-6 font-semibold whitespace-nowrap bg-white flex-shrink-0 ${
+                  className={`flex items-center gap-2  rounded-full cursor-pointer py-[10px] px-6 font-semibold whitespace-nowrap bg-white flex-shrink-0 ${
                     tempTopBarFilter?.carType?.filter(
                       (fv) => fv?.id === category?.id
                     ).length > 0
@@ -360,6 +365,19 @@ function Filter({
                   }`}
                   onClick={() => handleSelectVehicleType(category)}
                 >
+                  <img
+                    style={{
+                      width: "35px",
+                      height: "100%",
+                      filter:
+                        tempTopBarFilter?.carType?.filter(
+                          (fv) => fv?.id === category?.id
+                        ).length > 0
+                          ? "brightness(0) saturate(100%) invert(70%) sepia(31%) saturate(1026%) hue-rotate(128deg) brightness(91%) contrast(86%)"
+                          : "grayscale(100%) opacity(0.4)",
+                    }}
+                    src={category.images[0].public_link}
+                  />
                   <p
                     className={`text-center ${
                       tempTopBarFilter?.carType?.filter(

@@ -56,6 +56,7 @@ function page() {
   return (
     <div>
       <BookNavBar
+        type="booking"
         topBar={
           <TopBarFillter
             topBarFilter={topBarFilter}

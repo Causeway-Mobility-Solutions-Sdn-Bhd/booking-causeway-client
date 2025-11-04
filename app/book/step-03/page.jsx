@@ -187,6 +187,7 @@ function page() {
   return (
     <div>
       <BookNavBar
+        type="booking"
         child={
           <h3 className="text-center text-[17px] w-full  font-semibold">
             Add-Ons

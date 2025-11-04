@@ -1,5 +1,6 @@
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 import SmartImage from "@/components/custom/SmartImage";
+import { useReBookMutation } from "@/store/api/reservationApiSlice";
 
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -10,18 +11,29 @@ function BookingCard({ booking, activeTab, index }) {
     router.push(`/manage/${booking.id}`);
   };
 
+  const [reBook, { isLoading }] = useReBookMutation();
+
   const onRebook = async () => {
     console.log("Rebooking...");
+    console.log(booking.id);
 
-    // try {
-    //   await reBook({ id: booking.id }).unwrap();
-    //   showSuccessToast("Booking Rebooked successfully!");
-    // } catch (error) {
-    //   const errorMessage =
-    //     error?.data?.message || "Failed to Rebook. Please try again.";
-    //   showErrorToast(errorMessage);
-    //   console.error("Error reopening booking:", error);
-    // }
+    try {
+      const response = await reBook({ id: booking.id }).unwrap();
+      const { reservation } = response;
+
+      showSuccessToast("Booking rebooked successfully!");
+      console.log(reservation);
+
+      // Redirect user to the booking step with new ssid
+      if (reservation?._id) {
+        router.push(`/book/step-02?ssid=${reservation._id}`);
+      }
+    } catch (error) {
+      const errorMessage =
+        error?.data?.message || "Failed to rebook. Please try again.";
+      showErrorToast(errorMessage);
+      console.error("Error rebooking:", error);
+    }
   };
   return (
     <div
