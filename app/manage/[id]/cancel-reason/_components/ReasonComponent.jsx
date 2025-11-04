@@ -15,13 +15,12 @@ export const ReasonComponent = () => {
   const [cancelLoader, setCancelLoader] = useState(false);
   const [confirmCancel, setConfirmCancel] = useState(false);
   const onSubmit = () => {
-    if (!selectedReason) {
+    if (selectedReason === null) {
       showErrorToast("Select a reason of cancellation.");
       return;
     }
 
     setConfirmCancel(true);
-    console.log("OK");
   };
 
   const [cancelBooking] = useCancelBookingMutation();
@@ -55,7 +54,11 @@ export const ReasonComponent = () => {
     "I found an alternative accommodation option",
     "None of the above",
   ];
+  const handleChangeReason = (index) => {
+    console.log(index);
 
+    setSelectedReason(index);
+  };
   return (
     <>
       <div className="pt-16 sm:pt-24 flex justify-center w-full">
@@ -66,7 +69,7 @@ export const ReasonComponent = () => {
             {reasons.map((reason, index) => (
               <React.Fragment key={index}>
                 <button
-                  onClick={() => setSelectedReason(index)}
+                  onClick={() => handleChangeReason(index)}
                   className="w-full flex items-center gap-4 py-3 px-4 hover:bg-gray-50 transition-colors text-left"
                 >
                   <div className="flex-shrink-0">
