@@ -11,7 +11,25 @@ function PriceSummary() {
   const selectedAdditionalCharges = useAppSelector(
     (state) => state.reservation.selectedAdditionalCharges
   );
+  const selectedPayment = useAppSelector(
+    (state) => state.reservation.selectedPayment
+  );
   const formatPrice = useFormatPrice();
+  const currency = useAppSelector((state) => state.reservation.currency);
+  const allCurrencies = useAppSelector(
+    (state) => state.reservation.allCurrencies
+  );
+
+  const finalPrice = (price) => {
+    const rate =
+      allCurrencies?.find((cur) => cur?.code === currency)?.exchange_rate || 1;
+    const amount = (rate * price?.usd_amount) / 2;
+
+    if (currency === "myr") {
+      return `RM ${price?.amount / 2}`;
+    }
+    return `${currency?.toUpperCase()} ${amount.toFixed(2)}`;
+  };
 
   return (
     <div className="mt-3">
@@ -81,13 +99,35 @@ function PriceSummary() {
           </div>
 
           <div className="pt-4">
-            <div className="flex justify-end gap-2.5 items-center">
-              <span className="text-lg font-bold text-gray-900">Total</span>
-              <span className="text-lg font-bold text-gray-900">
-                {formatPrice(
-                  selectedVehicle?.total_price_with_mandatory_charges_and_taxes
-                )}{" "}
-              </span>
+            <div className="flex flex-col items-end gap-1">
+              <div className="flex justify-end gap-2.5 items-center">
+                <span className="text-lg font-bold text-gray-900">Total</span>
+                <span
+                  className={`text-lg font-bold text-gray-900 ${
+                    selectedPayment === "partial"
+                      ? "line-through text-gray-500"
+                      : ""
+                  }`}
+                >
+                  {formatPrice(
+                    selectedVehicle?.total_price_with_mandatory_charges_and_taxes
+                  )}
+                </span>
+              </div>
+
+              {selectedPayment === "partial" && (
+                <div className="text-right text-sm text-gray-600">
+                  <p>
+                    Pay now{" "}
+                    <span className="font-semibold text-gray-900">
+                      {finalPrice(
+                        selectedVehicle?.total_price_with_mandatory_charges_and_taxes
+                      )}
+                    </span>
+                  </p>
+                  <p>Remaining pay at pickup</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

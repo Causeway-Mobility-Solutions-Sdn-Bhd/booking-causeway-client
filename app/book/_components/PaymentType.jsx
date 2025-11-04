@@ -18,8 +18,21 @@ function PaymentType() {
   const handlePaymentChange = (value = "") => {
     dispatch(setSelectedPayment(value));
   };
-  const formatPrice = useFormatPrice();
-  console.log("selectedVehicle",  selectedVehicle?.total_price_with_mandatory_charges_and_taxes);
+  const currency = useAppSelector((state) => state.reservation.currency);
+  const allCurrencies = useAppSelector(
+    (state) => state.reservation.allCurrencies
+  );
+
+  const finalPrice = (price) => {
+    const rate =
+      allCurrencies?.find((cur) => cur?.code === currency)?.exchange_rate || 1;
+    const amount = (rate * price?.usd_amount) / 2;
+
+    if(currency === "myr"){
+      return `RM ${price?.amount / 2}`;
+    }
+    return `${currency?.toUpperCase()} ${amount.toFixed(2)}`;
+  };
 
   return (
     <div className="bg-white p-4 rounded-lg mt-4">
@@ -55,7 +68,7 @@ function PaymentType() {
             <h3 className="text-sm font-semibold text-gray-900 mb-0.5">
               Pay{" "}
               <span>
-                {selectedVehicle?.total_price_with_mandatory_charges_and_taxes?.amount / 2}
+                {finalPrice(selectedVehicle?.total_price_with_mandatory_charges_and_taxes)}
               </span>{" "}
               now
             </h3>
