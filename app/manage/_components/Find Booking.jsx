@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useFindBookingMutation } from "@/store/api/reservationApiSlice";
 import { showErrorToast } from "@/app/_lib/toast";
 import Spinner from "@/components/custom/Spinner";
+import SubNavBar from "@/components/custom/SubNavBar";
 
 function FindBookingForm() {
   const router = useRouter();
@@ -48,53 +49,7 @@ function FindBookingForm() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F0F0F0" }}>
-      {/* Header */}
-      <div className="bg-white fixed top-0 left-0 right-0 z-50">
-        <div
-          className="max-w-7xl mx-auto px-4"
-          style={{
-            height: "64px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "relative",
-            borderBottom: "1px solid #e6e6e6",
-          }}
-        >
-          <button
-            onClick={() => window.history.back()}
-            className="hover:bg-gray-100 rounded-lg transition-colors"
-            style={{
-              position: "absolute",
-              left: "0",
-              padding: "8px",
-              width: "40px",
-              height: "40px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <ChevronLeft
-              style={{ width: "28px", height: "28px", color: "#2DBDB6" }}
-              strokeWidth={3}
-            />
-          </button>
-          <h1
-            className="text-gray-900"
-            style={{
-              fontSize: "16px",
-              fontFamily: "Poppins, sans-serif",
-              fontWeight: 400,
-              lineHeight: "18px",
-              letterSpacing: "0",
-              textTransform: "none",
-            }}
-          >
-            My Booking
-          </h1>
-        </div>
-      </div>
+      <SubNavBar name="Find Bookings" />
 
       {/* Main content */}
       <div

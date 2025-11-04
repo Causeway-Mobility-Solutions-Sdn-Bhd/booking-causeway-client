@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useState } from "react";
+import React, {  useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Bookmark } from "lucide-react";
@@ -10,24 +10,35 @@ import hqApi from "@/lib/hqApi";
 import { useDispatch } from "react-redux";
 import {
   setAdditionalCharges,
+  setFavorites,
   setReservation,
   setSelectedVehicle,
   setSelectedVehicleClasses,
 } from "@/store/slices/reservationSlice";
 import { useRouter } from "next/navigation";
 import Spinner from "./Spinner";
+import { useAppSelector } from "@/store/hooks";
+import { showSuccessToast } from "@/app/_lib/toast";
 
 function Car({ car }) {
-  const [favorites, setFavorites] = useState([]);
   const [loader, setLoader] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
+  const favorites = useAppSelector((state) => state.reservation.favorites);
 
-  const toggleFavorite = (carId) => {
-    setFavorites((prev) =>
-      prev.includes(carId)
-        ? prev.filter((id) => id !== carId)
-        : [...prev, carId]
+  const toggleFavorite = (vc) => {
+    const prev = Array.isArray(favorites) ? favorites : [];
+
+    const updated = prev.includes(vc?.id)
+      ? prev.filter((id) => id !== vc?.id)
+      : [...prev, vc?.id];
+
+    localStorage.setItem("favorites", JSON.stringify(updated));
+    dispatch(setFavorites(updated));
+    showSuccessToast(
+      `${vc?.name} has been ${
+        updated.includes(vc?.id) ? "added to" : "removed from"
+      } favorites.`
     );
   };
 
@@ -96,23 +107,22 @@ function Car({ car }) {
   return (
     <Card className="h-full relative">
       <CardContent className="px-4">
-        {/* Favorite Button */}
         <div className="absolute top-4 right-4 mb-2">
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => toggleFavorite(car?.id)}
+            onClick={() => toggleFavorite(car?.vehicle_class)}
             className="h-7 w-7 border border-cGray rounded-md"
             aria-label={
               favorites.includes(car.id)
                 ? "Remove from favorites"
                 : "Add to favorites"
             }
-            aria-pressed={favorites.includes(car?.id)}
+            aria-pressed={favorites.includes(car?.vehicle_class?.i)}
           >
             <Bookmark
               className={`h-6 w-6 ${
-                favorites.includes(car?.id)
+                favorites.includes(car?.vehicle_class?.id)
                   ? "fill-cSecondary text-cSecondary"
                   : "text-muted-foreground"
               }`}

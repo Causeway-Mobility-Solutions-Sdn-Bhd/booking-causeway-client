@@ -10,11 +10,21 @@ import Partners from "./_components/Partners";
 import SpecialOffer from "./_components/SpecialOffer";
 import Feauters from "./_components/Feauters";
 import TopRanked from "./_components/Topranked";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { setFavorites } from "@/store/slices/reservationSlice";
 
 export default function Home() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    dispatch(setFavorites(storedFavorites));
+  }, []);
+
   return (
     <div>
-      <Nav isMain={true} value="Home"/>
+      <Nav isMain={true} value="Home" />
       <Banner />
       <Feauters />
       <SpecialOffer />
@@ -27,5 +37,3 @@ export default function Home() {
     </div>
   );
 }
-
-
