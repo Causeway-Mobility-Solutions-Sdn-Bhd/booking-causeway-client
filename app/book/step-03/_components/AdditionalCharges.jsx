@@ -24,6 +24,7 @@ function AdditionalCharges({
     (state) => state?.reservation?.additionalCharges
   );
 
+
   const formatPrice = useFormatPrice();
   const [shouldFetch, setShouldFetch] = useState(false);
 

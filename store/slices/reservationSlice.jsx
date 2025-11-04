@@ -13,6 +13,7 @@ const initialState = {
   selectedAdditionalCharges: [],
   finalPayment : {},
   selectedPayment : "full",
+  voucherCode : "",
   favorites : []
 };
 
@@ -59,6 +60,9 @@ const reservationSlice = createSlice({
     },
     setFavorites(state, action) {
       state.favorites = action.payload;
+    },
+    setVoucherCode(state, action) {
+      state.voucherCode = action.payload;
     }
   },
 });
@@ -76,7 +80,8 @@ export const {
   setFinalPayment,
   setAllCurrencies,
   setSelectedPayment,
-  setFavorites
+  setFavorites,
+  setVoucherCode
 } = reservationSlice.actions;
 
 export default reservationSlice.reducer;

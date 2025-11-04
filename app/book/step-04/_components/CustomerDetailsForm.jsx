@@ -51,6 +51,9 @@ const CustomerDetailsForm = ({
   const selectedPayment = useAppSelector(
     (state) => state.reservation.selectedPayment
   );
+  const voucherCode = useAppSelector(
+      (state) => state.reservation.voucherCode
+    );
 
   const {
     register,
@@ -149,7 +152,9 @@ const CustomerDetailsForm = ({
 
   const handleConfirmReservation = async () => {
     try {
-      const response = await confirmReservation().unwrap();
+      const response = await confirmReservation({
+        couponCode: voucherCode,
+      }).unwrap();
 
       if (response?.status_code === 200) {
         const reservedReservationDetail = response.data;

@@ -6,16 +6,16 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useAppSelector } from "@/store/hooks";
 import { showErrorToast } from "@/app/_lib/toast";
 import { useDispatch } from "react-redux";
-import { setSelectedPayment } from "@/store/slices/reservationSlice";
+import { setSelectedPayment, setVoucherCode } from "@/store/slices/reservationSlice";
 
 const PaymentOptionCard = ({
-  voucherCode = "",
-  setVoucherCode = () => {},
   discount = false,
   handleConfirmReservation = () => {},
 }) => {
-  // const [selectedPayment, setSelectedPayment] = useState("full");
   const selectedPayment = useAppSelector((state) => state.reservation.selectedPayment);
+   const voucherCode = useAppSelector(
+      (state) => state.reservation.voucherCode
+    );
 
   const dispatch = useDispatch();
 
@@ -66,7 +66,7 @@ const PaymentOptionCard = ({
           type="text"
           placeholder="Discount/Voucher code"
           value={voucherCode}
-          onChange={(e) => setVoucherCode(e.target.value)}
+          onChange={(e) => dispatch(setVoucherCode(e.target.value))}
           disabled={discount}
           className="flex-1 h-12 px-4 text-[13PX] border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2dbdb6] focus:border-transparent"
         />
