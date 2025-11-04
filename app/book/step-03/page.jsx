@@ -128,6 +128,7 @@ function page() {
         brand_id: reservation?.brand_id ?? null,
         vehicle_class_id: reservation?.vehicle_class_id,
         isFinal: isFinal,
+        coupon_code: voucherCode,
       };
 
       const params = new URLSearchParams();

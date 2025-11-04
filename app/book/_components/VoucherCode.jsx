@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useDispatch } from "react-redux";
@@ -11,6 +11,7 @@ import { useAppSelector } from "@/store/hooks";
 import { format } from "date-fns";
 import hqApi from "@/lib/hqApi";
 import Spinner from "@/components/custom/Spinner";
+import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 
 function VoucherCode() {
   const dispatch = useDispatch();
@@ -23,7 +24,14 @@ function VoucherCode() {
     (state) => state.reservation.selectedAdditionalCharges
   );
 
-  // ✅ Extract selected charge IDs
+  useEffect(() => {
+    if(voucherCode) {
+      setDiscount(true);
+    }else{
+      setDiscount(false);
+    }
+  },[])
+
   function getSelectedChargeIds() {
     const result = [];
     selectedAdditionalCharges?.forEach((categoryItem) => {
@@ -89,12 +97,15 @@ function VoucherCode() {
         if (isRemove) {
           dispatch(setVoucherCode(""));
           setDiscount(false);
+          showSuccessToast("Voucher removed successfully!");
         } else {
           setDiscount(true);
+          showSuccessToast("Voucher applied successfully!");
         }
       }
     } catch (error) {
       console.error("Voucher action failed:", error);
+      showErrorToast("Invalid voucher code. Please try again.");
     } finally {
       setLoader(false);
     }

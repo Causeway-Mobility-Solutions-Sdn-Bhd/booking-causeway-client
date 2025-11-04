@@ -22,11 +22,18 @@ function PaymentIframe() {
   const [loadingState, setLoadingState] = useState("loading");
   const [showIframe, setShowIframe] = useState(false);
   const [discount , setDiscount] = useState(false)
+  
 
   const [confirmReservation, { isLoading: isConfirming }] =
     useConfirmReservationMutation();
   const [processPayment, { isLoading: isPaying }] = useProcessPaymentMutation();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if(voucherCode) {
+      setDiscount(true);
+    } 
+  },[])
 
   useEffect(() => {
     if (!finalPayment?.link) {
