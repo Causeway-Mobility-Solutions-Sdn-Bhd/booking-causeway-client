@@ -125,8 +125,8 @@ const CustomerDetailsForm = ({
       // Show success message
       showSuccessToast(
         dataAvailable
-          ? "Customer updated successfully!"
-          : "Customer created successfully!"
+          ? "Your details have been updated successfully!"
+          : "Your details have been added successfully!"
       );
 
       if (managing) {
@@ -141,8 +141,8 @@ const CustomerDetailsForm = ({
       console.error("Error submitting form:", error);
       showErrorToast(
         dataAvailable
-          ? "Failed to update customer. Please try again."
-          : "Failed to create customer. Please try again."
+          ? "Something went wrong while updating your information. Please try again."
+          : "Something went wrong while saving your information. Please try again."
       );
     }
   };
