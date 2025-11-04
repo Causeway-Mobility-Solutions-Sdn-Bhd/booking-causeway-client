@@ -8,23 +8,32 @@ import {
 } from "@/store/api/reservationApiSlice";
 import { PaymentLoader } from "@/components/custom/Skeleton";
 import { useDispatch } from "react-redux";
-import { setFinalPayment } from "@/store/slices/reservationSlice";
+import { setFinalPayment, setVoucherCode } from "@/store/slices/reservationSlice";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 
 function PaymentIframe() {
   const finalPayment = useAppSelector(
     (state) => state.reservation.finalPayment
   );
+  const voucherCode = useAppSelector(
+    (state) => state.reservation.voucherCode
+  );
 
   const [loadingState, setLoadingState] = useState("loading");
   const [showIframe, setShowIframe] = useState(false);
   const [discount , setDiscount] = useState(false)
-  const [voucherCode, setVoucherCode] = useState("");
+  
 
   const [confirmReservation, { isLoading: isConfirming }] =
     useConfirmReservationMutation();
   const [processPayment, { isLoading: isPaying }] = useProcessPaymentMutation();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if(voucherCode) {
+      setDiscount(true);
+    } 
+  },[])
 
   useEffect(() => {
     if (!finalPayment?.link) {
@@ -93,7 +102,7 @@ function PaymentIframe() {
           setDiscount(true)
         }else{
           setDiscount(false)
-          setVoucherCode("")
+          dispatch(setVoucherCode(""));
         }
 
         const paymentRes = await processPayment({

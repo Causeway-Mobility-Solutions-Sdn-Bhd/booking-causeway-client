@@ -14,26 +14,37 @@ import { useAppSelector } from "@/store/hooks";
 import { useDispatch } from "react-redux";
 import {
   setAdditionalCharges,
+  setFavorites,
   setReservation,
   setSelectedVehicle,
 } from "@/store/slices/reservationSlice";
+import { showSuccessToast } from "@/app/_lib/toast";
 
 function Car({ car }) {
   const reservation = useAppSelector((state) => state.reservation.reservation);
   const currentUUID = useAppSelector((state) => state.reservation.currentUUID);
   const dispatch = useDispatch();
 
-  const [favorites, setFavorites] = useState([]);
   const [loader, setLoader] = useState(false);
-  const [booked, setBooked] = useState(false); 
+  const [booked, setBooked] = useState(false);
   const router = useRouter();
   const formatPrice = useFormatPrice();
 
-  const toggleFavorite = (carId) => {
-    setFavorites((prev) =>
-      prev.includes(carId)
-        ? prev.filter((id) => id !== carId)
-        : [...prev, carId]
+  const favorites = useAppSelector((state) => state.reservation.favorites);
+
+  const toggleFavorite = (vc) => {
+    const prev = Array.isArray(favorites) ? favorites : [];
+
+    const updated = prev.includes(vc?.id)
+      ? prev.filter((id) => id !== vc?.id)
+      : [...prev, vc?.id];
+
+    localStorage.setItem("favorites", JSON.stringify(updated));
+    dispatch(setFavorites(updated));
+    showSuccessToast(
+      `${vc?.name} has been ${
+        updated.includes(vc?.id) ? "added to" : "removed from"
+      } favorites.`
     );
   };
 
@@ -74,17 +85,17 @@ function Car({ car }) {
     }
   };
 
-  const isThisCarBooked = Number(reservation?.vehicle_class_id) === car?.id || booked;
+  const isThisCarBooked =
+    Number(reservation?.vehicle_class_id) === car?.id || booked;
 
   return (
     <Card className="h-full relative py-3">
       <CardContent className="px-4">
-        {/* Favorite Button */}
         <div className="absolute top-4 right-4 mb-2">
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => toggleFavorite(car?.id)}
+            onClick={() => toggleFavorite(car)}
             className="h-7 w-7 border border-cGray rounded-md"
             aria-label={
               favorites.includes(car.id)
@@ -151,7 +162,9 @@ function Car({ car }) {
             <p className="text-[18px] lg:text-[22px] font-bold text-foreground">
               {formatPrice(car?.price?.daily_price)}
             </p>
-            <p className="text-xs sm:text-[12px] text-muted-foreground">/ Day</p>
+            <p className="text-xs sm:text-[12px] text-muted-foreground">
+              / Day
+            </p>
           </div>
 
           <div className="flex flex-col w-full items-end">

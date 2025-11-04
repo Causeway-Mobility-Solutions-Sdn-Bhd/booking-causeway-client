@@ -4,6 +4,8 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Spinner from "@/components/custom/Spinner";
 import { useGetReservationAttemptQuery } from "@/store/api/reservationApiSlice";
 import { useGetCurrenciesQuery } from "@/store/api/fleetApiSlice";
+import { useDispatch } from "react-redux";
+import { setFavorites } from "@/store/slices/reservationSlice";
 
 export default function BookLayoutClient({ children }) {
   const router = useRouter();
@@ -12,13 +14,20 @@ export default function BookLayoutClient({ children }) {
   const ssidFromUrl = searchParams.get("ssid");
 
   const [sessionState, setSessionState] = useState("checking");
-  const { data: allCurrencies} = useGetCurrenciesQuery();
 
+  const { data: allCurrencies } = useGetCurrenciesQuery();
   const {
     data: reservation,
     isLoading,
     isError,
   } = useGetReservationAttemptQuery();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    dispatch(setFavorites(storedFavorites));
+  }, []);
 
   useEffect(() => {
     if (isLoading) return;

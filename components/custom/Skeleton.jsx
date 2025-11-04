@@ -199,3 +199,45 @@ export const OtpFormSkeleton = () => {
     </div>
   );
 };
+
+export const SavedCarSkeleton = () => {
+  return (
+    <Card className="h-full relative py-3">
+      <CardContent className="px-4">
+        {/* Top Choice Badge Placeholder */}
+        <div className="absolute top-3 left-3">
+          <Skeleton className="h-4 w-16 rounded-md" />
+        </div>
+
+        {/* Image Placeholder */}
+        <div className="flex justify-center py-6">
+          <Skeleton className="w-[230px] h-[100px] rounded-md" />
+        </div>
+
+        {/* Title & Brand */}
+        <div className="text-center mb-4">
+          <Skeleton className="h-5 w-3/4 mx-auto mb-2" />
+          <Skeleton className="h-4 w-1/2 mx-auto" />
+        </div>
+
+        {/* Features Grid */}
+        <div className="grid grid-cols-4 gap-2 mb-6">
+          {[...Array(4)].map((_, i) => (
+            <div
+              key={i}
+              className="flex flex-col items-center text-center space-y-1"
+            >
+              <Skeleton className="h-5 w-5 rounded-full" />
+              <Skeleton className="h-3 w-10" />
+            </div>
+          ))}
+        </div>
+
+        {/* Button */}
+        <div className="flex justify-end">
+          <Skeleton className="h-10 sm:h-12 w-full rounded-md" />
+        </div>
+      </CardContent>
+    </Card>
+  );
+}

@@ -6,6 +6,7 @@ import { TicketPlus } from "lucide-react";
 import { FaUser, FaRegCalendar } from "react-icons/fa6";
 import { MdBookmark } from "react-icons/md";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 function Page() {
   const loggedUser = useAppSelector((state) => state.auth.loggedUser);
@@ -71,14 +72,13 @@ function Page() {
           <p className="text-xs font-medium text-black">Upcoming</p>
         </div>
 
-        {/* Saved */}
-        <div
-          onClick={handleSaved}
-          className="flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition"
+        <Link
+          href="/favorite-vehicles"
+          className="flex flex-col items-center gap-2"
         >
           <MdBookmark className="text-teal-500 w-6 h-6" />
           <p className="text-xs font-medium text-black">Saved</p>
-        </div>
+        </Link>
       </div>
     </div>
   );
