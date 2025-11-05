@@ -350,7 +350,7 @@ function Filter({
       )}
       {vehiTypes && (
         <div>
-          <div className="flex gap-2 pt-[10px] pb-[17px] flex-wrap">
+          <div className="flex gap-2 pt-[10px] pb-[17px] overflow-x-auto scrollbar-hide">
             {vehiTypes
               ?.filter((cf) => cf?.id !== 1)
               .map((category) => (
