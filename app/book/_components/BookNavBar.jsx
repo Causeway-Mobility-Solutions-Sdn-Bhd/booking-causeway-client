@@ -3,6 +3,7 @@ import Image from "next/image";
 import React from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import CurrencyDrawer from "@/app/_components/CurrencyDrawer";
 import StepBar from "./StepBar";
 import { TruckElectric } from "lucide-react";
@@ -48,14 +49,16 @@ function BookNavBar({
     <div className="w-full fixed top-0 z-[50] bg-white">
       <div className={`${topBar ? "py-5" : "py-0"} sm:py-7`}>
         <div className="flex gap-4 relative justify-between items-center w-[95%] max-w-[1400px] mx-auto">
-          <Image
-            priority
-            className="object-contain w-[150px] sm:w-[200px] hidden sm:block"
-            src="/logo/logo-black.svg"
-            alt="Causeway Logo"
-            width={200}
-            height={70}
-          />
+          <Link href="/" className="hidden sm:block cursor-pointer">
+            <Image
+              priority
+              className="object-contain w-[150px] sm:w-[200px]"
+              src="/logo/logo-black.svg"
+              alt="Causeway Logo"
+              width={200}
+              height={70}
+            />
+          </Link>
           <FaChevronLeft
             color="#2DBDB6"
             size={20}
