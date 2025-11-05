@@ -240,7 +240,7 @@ const CustomerDetailsForm = ({
       firstName: errors.firstName,
       lastName: errors.lastName,
       country: errors.country,
-      birthDate: errors.birthDate,
+      birthDate: errors.birthDate,fetchLoader
     }),
     [errors.firstName, errors.lastName, errors.country, errors.birthDate]
   );

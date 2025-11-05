@@ -37,7 +37,7 @@ const Step7Sidebar = ({ manage = false, reservation = null }) => {
     {
       icon: <TicketPlus size={20} className="text-cSecondary" />,
       title: "Add-On Services",
-      route: "add-ons",
+      route: "edit-add-ons",
     },
     {
       icon: <MdEditCalendar size={20} className="text-cSecondary" />,

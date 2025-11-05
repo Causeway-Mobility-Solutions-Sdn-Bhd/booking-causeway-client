@@ -53,7 +53,7 @@ function RefreshTokenLoader({ children }) {
 
   if (isChecking) {
     return (
-      <div className="flex justify-center items-center fixed inset-0 bg-white z-[1000]">
+      <div className="flex justify-center items-center fixed inset-0  z-[1000]">
         <Spinner size={30} color={"#2dbdb6"} thickness={4} />
       </div>
     );
