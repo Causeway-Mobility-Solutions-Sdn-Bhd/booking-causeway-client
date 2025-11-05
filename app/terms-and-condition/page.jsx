@@ -3,15 +3,41 @@ import React from "react";
 import BottomBar from "../_components/BottomBar";
 import SideBar from "../_components/SideBar";
 import TermsConditions from "./_components/TermsConditions";
-import Nav from "@/app/_components/Nav";
+import Nav from "../_components/Nav";
+import { FaChevronLeft } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
-export default function TermsConditionsPage() {
+export default function TermsAndConditionPage() {
+  const router = useRouter();
+
+  const handleBack = () => {
+    router.back();
+  };
 
   return (
-    <div className="relative">
-      <Nav isMain={false} value="Terms & Condition" />
+    <div className="relative min-h-screen">
+      {/* Back Button */}
+      <div className="fixed top-7 left-4 z-[110] sm:hidden">
+        <FaChevronLeft
+          color="#2DBDB6"
+          size={20}
+          className="cursor-pointer"
+          onClick={handleBack}
+        />
+      </div>
+
+      {/* Nav Bar */}
+      <div className="fixed top-0 left-0 right-0 z-[100]">
+        <Nav isMain={false} value="Terms & Conditions" />
+      </div>
+
       <SideBar />
-      <TermsConditions />
+      
+      {/**/}
+      <div className="pt-[80px] pb-24 sm:pb-8">
+        <TermsConditions />
+      </div>
+      
       <BottomBar />
     </div>
   );

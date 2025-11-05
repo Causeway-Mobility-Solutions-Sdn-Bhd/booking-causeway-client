@@ -4,16 +4,9 @@ import { useAppSelector, useAppDispatch, useLoggedUser } from "@/store/hooks";
 import { setOpenBg, setSidebarOpen } from "@/store/slices/generalSlice";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useLogoutMutation } from "@/store/api/authApiSlice";
 import { showErrorToast, showSuccessToast } from "../_lib/toast";
-
-const links = [
-  { label: "Manage Booking", href: "/manage" },
-  { label: "Support", href: "/support" },
-  { label: "Partnership", href: "/partnership" },
-  { label: "Terms & Condition", href: "/terms-and-condition" },
-  { label: "Privacy Policy", href: "/privacy-policy" },
-];
 
 function SideBar() {
   const sidebarOpen = useAppSelector((state) => state.general.sidebarOpen);
@@ -58,6 +51,20 @@ function SideBar() {
         sidebarOpen && "sidebar-active"
       }`}
     >
+      {/* Logo Section */}
+      <div className="flex justify-center items-center mb-8">
+        <Link href="/" onClick={handleCloseSidebar}>
+          <Image
+            priority
+            className="object-contain w-[150px]"
+            src="/logo/logo-black.svg"
+            alt="Causeway Logo"
+            width={150}
+            height={50}
+          />
+        </Link>
+      </div>
+
       <div>
         {links.map((link) => (
           <Link key={link.href} href={link.href} onClick={handleCloseSidebar}>

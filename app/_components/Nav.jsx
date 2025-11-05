@@ -51,28 +51,32 @@ function Nav({ isMain = true, value = "" }) {
     <div className="w-full py-5 sm:py-4 bg-white z-100">
       <div className="flex justify-between items-center w-[95%] max-w-[1400px] mx-auto relative">
         {isMain ? (
-          <Image
-            priority
-            className="object-contain w-[150px] sm:w-[200px]"
-            src="/logo/logo-black.svg"
-            alt="Causeway Logo"
-            width={200}
-            height={70}
-          />
+          <Link href="/" className="cursor-pointer">
+            <Image
+              priority
+              className="object-contain w-[150px] sm:w-[200px] mt-1"
+              src="/logo/logo-black.svg"
+              alt="Causeway Logo"
+              width={200}
+              height={70}
+            />
+          </Link>
         ) : (
           <>
             <div className="block sm:hidden w-[35px]"></div>
             <h3 className="block sm:hidden font-semibold text-[17px] absolute left-1/2 -translate-x-1/2">
               {value}
             </h3>
-            <Image
-              priority
-              className="hidden sm:block object-contain w-[150px] sm:w-[200px] grayscale sm:grayscale-0"
-              src="/logo/logo-black.svg"
-              alt="Causeway Logo"
-              width={200}
-              height={70}
-            />
+            <Link href="/" className="hidden sm:block cursor-pointer">
+              <Image
+                priority
+                className="object-contain w-[150px] sm:w-[200px] mt-1 grayscale sm:grayscale-0"
+                src="/logo/logo-black.svg"
+                alt="Causeway Logo"
+                width={200}
+                height={70}
+              />
+            </Link>
           </>
         )}
 
