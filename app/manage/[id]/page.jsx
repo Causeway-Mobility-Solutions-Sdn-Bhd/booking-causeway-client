@@ -26,6 +26,7 @@ export default function ViewBooking() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const customerUpdated = searchParams.get("customerupdated");
+  const addonsUpdated = searchParams.get("addonsupdated");
   const cancelled = searchParams.get("cancelled");
   const pickupreturnupdated = searchParams.get("pickupreturnupdated");
 
@@ -79,7 +80,7 @@ export default function ViewBooking() {
     <div>
       <Nav />
       <SideBar />
-      {customerUpdated && (
+      {customerUpdated || addonsUpdated && (
         <PaymentSuccessBar
           title="Changes successful!"
           msg="Your car successfully booked. You can check your booking in Manage Booking."

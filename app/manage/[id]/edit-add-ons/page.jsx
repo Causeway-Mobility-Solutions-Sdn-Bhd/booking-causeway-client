@@ -114,7 +114,7 @@ const page = () => {
       );
 
       if(response?.status === 200){
-        router.replace(`/manage/${reservation?._id}`);
+        router.replace(`/manage/${reservation?._id}/?addonsupdated=true`);
       }
       showSuccessToast("Add-ons updated successfully!");
     } catch (error) {
