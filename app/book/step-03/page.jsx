@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/store/hooks";
 import {
   setAdditionalCharges,
+  setDiscountAmount,
   setReservation,
   setSelectedAdditionalCharges,
   setSelectedVehicle,
@@ -155,6 +156,10 @@ function page() {
             response?.data?.selected_additional_charges
           )
         );
+        console.log(response?.data?.discount, "response discount");
+        if (response?.data?.discount?.length > 0) {
+          dispatch(setDiscountAmount(response?.data?.discount[0]));
+        }
 
         if (isFinal) {
           dispatch(setReservation(response?.data?.reservation));

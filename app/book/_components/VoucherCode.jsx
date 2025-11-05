@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useDispatch } from "react-redux";
 import {
+  setDiscountAmount,
   setSelectedAdditionalCharges,
   setSelectedVehicle,
   setVoucherCode,
@@ -13,7 +14,7 @@ import hqApi from "@/lib/hqApi";
 import Spinner from "@/components/custom/Spinner";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 
-function VoucherCode() {
+function VoucherCode({isDrawerOpen}) {
   const dispatch = useDispatch();
   const [discount, setDiscount] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -23,14 +24,26 @@ function VoucherCode() {
   const selectedAdditionalCharges = useAppSelector(
     (state) => state.reservation.selectedAdditionalCharges
   );
+   const discountAmount = useAppSelector(
+      (state) => state.reservation.discountAmount
+    );
 
   useEffect(() => {
-    if(voucherCode) {
+    if (voucherCode) {
       setDiscount(true);
-    }else{
+    } else {
       setDiscount(false);
     }
-  },[])
+  }, []);
+
+  useEffect(() => {
+    if(!isDrawerOpen){
+      if(Object.keys(discountAmount || {}).length === 0 ){
+        dispatch(setVoucherCode(""))
+      }
+    }
+  },[isDrawerOpen])
+  console.log(isDrawerOpen, "isDrawerOpen");
 
   function getSelectedChargeIds() {
     const result = [];
@@ -46,7 +59,6 @@ function VoucherCode() {
     return result;
   }
 
-  // ✅ Shared API call for both apply & remove
   const handleVoucherAction = async (isRemove = false) => {
     setLoader(true);
 
@@ -65,7 +77,7 @@ function VoucherCode() {
         brand_id: reservation?.brand_id ?? null,
         vehicle_class_id: reservation?.vehicle_class_id,
         isFinal: reservation?.isFinal ?? false,
-        coupon_code: isRemove ? "" : voucherCode, 
+        coupon_code: isRemove ? "" : voucherCode,
       };
 
       const params = new URLSearchParams();
@@ -93,6 +105,9 @@ function VoucherCode() {
             response?.data?.selected_additional_charges
           )
         );
+        if (response?.data?.discount?.length > 0) {
+          dispatch(setDiscountAmount(response?.data?.discount[0]));
+        }
 
         if (isRemove) {
           dispatch(setVoucherCode(""));

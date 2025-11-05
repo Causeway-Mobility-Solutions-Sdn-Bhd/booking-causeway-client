@@ -14,7 +14,8 @@ const initialState = {
   finalPayment : {},
   selectedPayment : "full",
   voucherCode : "",
-  favorites : []
+  favorites : [],
+  discountAmount : {}
 };
 
 const reservationSlice = createSlice({
@@ -63,6 +64,9 @@ const reservationSlice = createSlice({
     },
     setVoucherCode(state, action) {
       state.voucherCode = action.payload;
+    },
+    setDiscountAmount(state, action) {
+      state.discountAmount = action.payload;
     }
   },
 });
@@ -81,7 +85,8 @@ export const {
   setAllCurrencies,
   setSelectedPayment,
   setFavorites,
-  setVoucherCode
+  setVoucherCode,
+  setDiscountAmount
 } = reservationSlice.actions;
 
 export default reservationSlice.reducer;

@@ -62,7 +62,7 @@ function PriceSummaryDrawer({ selectedVehicle, currency }) {
         <div className="bg-cWhite h-[620px] overflow-y-auto">
           <div className="py-[15px] w-[95%] mx-auto">
             <VehicleDetail />
-            <VoucherCode />
+            <VoucherCode isDrawerOpen={isDrawerOpen} />
             <PaymentType />
             <PriceSummary />
             <ShowPickDrop />

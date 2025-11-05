@@ -14,11 +14,16 @@ function PriceSummary() {
   const selectedPayment = useAppSelector(
     (state) => state.reservation.selectedPayment
   );
+  const discountAmount = useAppSelector(
+    (state) => state.reservation.discountAmount
+  );
   const formatPrice = useFormatPrice();
   const currency = useAppSelector((state) => state.reservation.currency);
   const allCurrencies = useAppSelector(
     (state) => state.reservation.allCurrencies
   );
+
+  console.log(discountAmount, "discountttt");
 
   const finalPrice = (price) => {
     const rate =
@@ -97,6 +102,17 @@ function PriceSummary() {
               {formatPrice(selectedVehicle?.total_tax?.total_amount)}{" "}
             </span>
           </div>
+
+          {Object.keys(discountAmount || {}).length !== 0 && (
+            <div className="flex justify-between items-center border-b border-[#E6E6E6] py-3">
+              <span className="text-[#808080] font-medium">
+                Discount
+              </span>
+              <span className="text-[#808080] font-medium">
+                {formatPrice(discountAmount?.discounted_amount)}{" "}
+              </span>
+            </div>
+          )}
 
           <div className="pt-4">
             <div className="flex flex-col items-end gap-1">
