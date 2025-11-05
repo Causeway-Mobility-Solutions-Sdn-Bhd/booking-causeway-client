@@ -24,13 +24,13 @@ function AdditionalCharges({
     (state) => state?.reservation?.additionalCharges
   );
 
+
   const formatPrice = useFormatPrice();
   const [shouldFetch, setShouldFetch] = useState(false);
 
   useEffect(() => {
     if (shouldFetch) {
       const ac = transformSelectedCharges();
-      console.log(ac);
       fetchData(ac, false);
       setShouldFetch(false);
     }
@@ -116,7 +116,6 @@ function AdditionalCharges({
           desiredOrder.indexOf(b.category.id)
       );
   }
-  console.log(additionalCharges)
 
   return (
     <div className="pb-[70px]">

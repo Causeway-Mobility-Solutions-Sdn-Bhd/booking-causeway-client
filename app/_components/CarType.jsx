@@ -29,7 +29,7 @@ function CarType({ vehicleType, filterVehicle, activeType }) {
                         ? "brightness(0) saturate(100%) invert(70%) sepia(31%) saturate(1026%) hue-rotate(128deg) brightness(91%) contrast(86%)"
                         : "brightness(0) saturate(100%)",
                   }}
-                  src={`/vehicleicons/${category.label}.svg`}
+                  src={category.images[0].public_link}
                 />
                 <p className="text-center text-[12px]">{category.label}</p>
               </div>

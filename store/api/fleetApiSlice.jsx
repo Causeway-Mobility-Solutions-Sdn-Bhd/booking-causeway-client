@@ -41,6 +41,17 @@ export const fleetApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    getFavoriteVehicles: builder.query({
+      query: (ids = []) => {
+        const queryString = ids.length ? `?ids=${ids.join(",")}` : "";
+        return {
+          url: `fleets/favorite-vehicles${queryString}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["Fleet"],
+      transformResponse: (response) => response?.vehicles ?? [],
+    }),
   }),
   overrideExisting: false,
 });
@@ -51,4 +62,5 @@ export const {
   useGetVehicleTypesQuery,
   useGetVehiclesByCategoryQuery,
   useGetCurrenciesQuery,
+  useGetFavoriteVehiclesQuery
 } = fleetApi;

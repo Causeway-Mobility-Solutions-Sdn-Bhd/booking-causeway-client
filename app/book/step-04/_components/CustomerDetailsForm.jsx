@@ -51,6 +51,9 @@ const CustomerDetailsForm = ({
   const selectedPayment = useAppSelector(
     (state) => state.reservation.selectedPayment
   );
+  const voucherCode = useAppSelector(
+      (state) => state.reservation.voucherCode
+    );
 
   const {
     register,
@@ -125,8 +128,8 @@ const CustomerDetailsForm = ({
       // Show success message
       showSuccessToast(
         dataAvailable
-          ? "Customer updated successfully!"
-          : "Customer created successfully!"
+          ? "Your details have been updated successfully!"
+          : "Your details have been added successfully!"
       );
 
       if (managing) {
@@ -141,15 +144,17 @@ const CustomerDetailsForm = ({
       console.error("Error submitting form:", error);
       showErrorToast(
         dataAvailable
-          ? "Failed to update customer. Please try again."
-          : "Failed to create customer. Please try again."
+          ? "Something went wrong while updating your information. Please try again."
+          : "Something went wrong while saving your information. Please try again."
       );
     }
   };
 
   const handleConfirmReservation = async () => {
     try {
-      const response = await confirmReservation().unwrap();
+      const response = await confirmReservation({
+        couponCode: voucherCode,
+      }).unwrap();
 
       if (response?.status_code === 200) {
         const reservedReservationDetail = response.data;
@@ -235,7 +240,7 @@ const CustomerDetailsForm = ({
       firstName: errors.firstName,
       lastName: errors.lastName,
       country: errors.country,
-      birthDate: errors.birthDate,
+      birthDate: errors.birthDate
     }),
     [errors.firstName, errors.lastName, errors.country, errors.birthDate]
   );

@@ -1,12 +1,36 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
 import Header from "./MicroComponents/Header";
 import BookingContent from "./MicroComponents/BookingContent";
 import { useGetAllReservationsQuery } from "@/store/api/reservationApiSlice";
 import Spinner from "@/components/custom/Spinner";
+
 function BookingList() {
-  const [activeTab, setActiveTab] = useState("upcoming");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const queryTab =
+    searchParams.get("upcoming") !== null
+      ? "upcoming"
+      : searchParams.get("completed") !== null
+      ? "completed"
+      : null;
+
+  const [activeTab, setActiveTab] = useState(queryTab || "upcoming");
+
+  useEffect(() => {
+    if (queryTab && queryTab !== activeTab) {
+      setActiveTab(queryTab);
+    }
+  }, [queryTab]);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    router.push(`/manage-booking?${tab}`);
+  };
+
   const {
     data: reservations,
     isLoading,
@@ -20,12 +44,15 @@ function BookingList() {
       </div>
     );
   }
+
   if (isError) return <p>Failed to load reservations</p>;
+
   const bookings = reservations?.data;
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F0F0F0" }}>
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+      {/* Header receives handler that updates both state & URL */}
+      <Header activeTab={activeTab} setActiveTab={handleTabChange} />
       <BookingContent activeTab={activeTab} bookings={bookings} />
     </div>
   );

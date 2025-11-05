@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/store/hooks";
 import {
   setAdditionalCharges,
+  setDiscountAmount,
   setReservation,
   setSelectedAdditionalCharges,
   setSelectedVehicle,
@@ -19,6 +20,8 @@ import {
 function page() {
   const reservation = useAppSelector((state) => state.reservation.reservation);
   const currentUUID = useAppSelector((state) => state.reservation.currentUUID);
+  const voucherCode = useAppSelector((state) => state.reservation.voucherCode);
+
   const selectedAdditionalCharges = useAppSelector(
     (state) => state.reservation.selectedAdditionalCharges
   );
@@ -63,6 +66,7 @@ function page() {
           return_location: reservation?.return_location?.id || null,
           brand_id: reservation?.brand_id ?? null,
           vehicle_class_id: reservation?.vehicle_class_id,
+          coupon_code: voucherCode,
         };
 
         const response = await hqApi.get(
@@ -125,6 +129,7 @@ function page() {
         brand_id: reservation?.brand_id ?? null,
         vehicle_class_id: reservation?.vehicle_class_id,
         isFinal: isFinal,
+        coupon_code: voucherCode,
       };
 
       const params = new URLSearchParams();
@@ -151,6 +156,10 @@ function page() {
             response?.data?.selected_additional_charges
           )
         );
+        console.log(response?.data?.discount, "response discount");
+        if (response?.data?.discount?.length > 0) {
+          dispatch(setDiscountAmount(response?.data?.discount[0]));
+        }
 
         if (isFinal) {
           dispatch(setReservation(response?.data?.reservation));
@@ -183,6 +192,7 @@ function page() {
   return (
     <div>
       <BookNavBar
+        type="booking"
         child={
           <h3 className="text-center text-[17px] w-full  font-semibold">
             Add-Ons

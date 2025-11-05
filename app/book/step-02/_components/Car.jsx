@@ -12,35 +12,43 @@ import SmartImage from "@/components/custom/SmartImage";
 import { useFormatPrice } from "@/app/_lib/formatPrice";
 import { useAppSelector } from "@/store/hooks";
 import { useDispatch } from "react-redux";
-import { setAdditionalCharges, setReservation, setSelectedVehicle } from "@/store/slices/reservationSlice";
+import {
+  setAdditionalCharges,
+  setFavorites,
+  setReservation,
+  setSelectedVehicle,
+} from "@/store/slices/reservationSlice";
+import { showSuccessToast } from "@/app/_lib/toast";
 
 function Car({ car }) {
-  const reservation= useAppSelector(
-    (state) => state.reservation.reservation
-  );
-  const currentUUID = useAppSelector(
-    (state) => state.reservation.currentUUID
-  );
-  const dispatch = useDispatch()
+  const reservation = useAppSelector((state) => state.reservation.reservation);
+  const currentUUID = useAppSelector((state) => state.reservation.currentUUID);
+  const dispatch = useDispatch();
 
-  const [favorites, setFavorites] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [booked, setBooked] = useState(false);
   const router = useRouter();
   const formatPrice = useFormatPrice();
 
-  const toggleFavorite = (carId) => {
-    setFavorites((prev) =>
-      prev.includes(carId)
-        ? prev.filter((id) => id !== carId)
-        : [...prev, carId]
+  const favorites = useAppSelector((state) => state.reservation.favorites);
+
+  const toggleFavorite = (vc) => {
+    const prev = Array.isArray(favorites) ? favorites : [];
+
+    const updated = prev.includes(vc?.id)
+      ? prev.filter((id) => id !== vc?.id)
+      : [...prev, vc?.id];
+
+    localStorage.setItem("favorites", JSON.stringify(updated));
+    dispatch(setFavorites(updated));
+    showSuccessToast(
+      `${vc?.name} has been ${
+        updated.includes(vc?.id) ? "added to" : "removed from"
+      } favorites.`
     );
   };
 
-  const handleBooking = () => {
-    fetchData();
-  };
-
-  const fetchData = async () => {
+  const handleBooking = async () => {
     setLoader(true);
     try {
       const requestData = {
@@ -64,32 +72,30 @@ function Car({ car }) {
       );
 
       if (response?.status === 200) {
-        dispatch(setReservation(response?.data?.reservation))
-        dispatch(setAdditionalCharges(response?.data?.additional_charges))
-        dispatch(setSelectedVehicle(response?.data?.selected_vehicle))
-        setTimeout(() => {
-          setLoader(false);
-        }, 1500);
-
+        dispatch(setReservation(response?.data?.reservation));
+        dispatch(setAdditionalCharges(response?.data?.additional_charges));
+        dispatch(setSelectedVehicle(response?.data?.selected_vehicle));
+        setBooked(true); // ✅ Mark as booked
         router.push(`/book/step-03?ssid=${currentUUID}`);
-      } else {
-        setLoader(false);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+    } finally {
       setLoader(false);
     }
   };
 
+  const isThisCarBooked =
+    Number(reservation?.vehicle_class_id) === car?.id || booked;
+
   return (
     <Card className="h-full relative py-3">
       <CardContent className="px-4">
-        {/* Favorite Button */}
         <div className="absolute top-4 right-4 mb-2">
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => toggleFavorite(car?.id)}
+            onClick={() => toggleFavorite(car)}
             className="h-7 w-7 border border-cGray rounded-md"
             aria-label={
               favorites.includes(car.id)
@@ -156,48 +162,54 @@ function Car({ car }) {
             <p className="text-[18px] lg:text-[22px] font-bold text-foreground">
               {formatPrice(car?.price?.daily_price)}
             </p>
-            <p className="text-xs  sm:text-[12px] text-muted-foreground">
+            <p className="text-xs sm:text-[12px] text-muted-foreground">
               / Day
             </p>
           </div>
-          {/* Book Button */}
 
-          {Number(reservation?.vehicle_class_id) === car?.id ? (
-            <>
-              <SecondaryButton
-                style={
-                  "h-12 lg:h-[47px] border-cSecondary text-cSecondary w-full hidden md:block"
-                }
-                content={"Book Now"}
-              />
-              <Button
-                onClick={handleBooking}
-                className={
-                  "py-6  w-[160px] bg-cSecondary flex justify-center items-center md:hidden"
-                }
-              >
-                <span className="-mt-1">Book Now</span>
-              </Button>
-            </>
-          ) : (
-            <>
-              <SecondaryButton
-                style={"h-12 lg:h-[47px] w-full hidden md:block"}
-                content={`${loader ? "Booking..." : "Book Now"}`}
-                onClick={handleBooking}
-              />
-              <Button
-                onClick={handleBooking}
-                className={
-                  "py-6  w-[160px] bg-cPrimary flex justify-center items-center md:hidden"
-                }
-              >
-                <span className="-mt-1">
-                  {loader ? "Booking..." : "Book Now"}
-                </span>
-              </Button>
-            </>
-          )}
+          <div className="flex flex-col w-full items-end">
+            {loader ? (
+              <>
+                <SecondaryButton
+                  style="h-12 lg:h-[47px] border-cSecondary text-cSecondary w-full hidden md:block opacity-70 cursor-not-allowed"
+                  content="Booking..."
+                />
+                <Button
+                  disabled
+                  className="py-6 w-[160px] bg-cSecondary flex justify-center items-center md:hidden opacity-70 cursor-not-allowed"
+                >
+                  <span className="-mt-1">Booking...</span>
+                </Button>
+              </>
+            ) : isThisCarBooked ? (
+              <>
+                <SecondaryButton
+                  style="h-12 lg:h-[47px] border-cSecondary text-cSecondary w-full hidden md:block"
+                  content="Booked"
+                />
+                <Button
+                  disabled
+                  className="py-6 w-[160px] bg-cSecondary flex justify-center items-center md:hidden"
+                >
+                  <span className="-mt-1">Booked</span>
+                </Button>
+              </>
+            ) : (
+              <>
+                <SecondaryButton
+                  style="h-12 lg:h-[47px] w-full hidden md:block"
+                  content="Book Now"
+                  onClick={handleBooking}
+                />
+                <Button
+                  onClick={handleBooking}
+                  className="py-6 w-[160px] bg-cPrimary flex justify-center items-center md:hidden"
+                >
+                  <span className="-mt-1">Book Now</span>
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </CardContent>
     </Card>

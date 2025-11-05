@@ -50,7 +50,7 @@ function Page() {
       setLoader(true);
       const ac = reservation?.selected_additional_charges;
       const result = await postAdditionalCharges({ ac }).unwrap();
-     setLoader(false);
+      setLoader(false);
     } catch (error) {
       setLoader(false);
       console.log("Error submitting additional charges:", error);
@@ -101,6 +101,7 @@ function Page() {
   return (
     <div>
       <BookNavBar
+        type="booking"
         child={
           <h3 className="text-center text-[17px] w-full font-semibold">
             Policies

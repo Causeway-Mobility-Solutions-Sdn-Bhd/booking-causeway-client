@@ -8,20 +8,24 @@ function Banner() {
       <div className="relative w-full h-full">
         {/* Mobile Image */}
         <Image
-          src="/banner/IMAGE MOBILE.webp"
+          src="/banner/MOBILE.webp"
           alt="Banner"
           fill
           className="object-cover block sm:hidden"
           style={{ objectPosition: "center 2%" }}
+          quality={100}
+          sizes="100vw"
           priority
         />
         
         {/* Desktop Image */}
         <Image
-          src="/banner/IMAGE LAP.webp"
+          src="/banner/WEB.webp"
           alt="Banner"
           fill
           className="object-cover object-top hidden sm:block"
+          quality={100}
+          sizes="100vw"
           priority
         />
     

@@ -12,6 +12,7 @@ import CustomerDetailsForm from "./_components/CustomerDetailsForm";
 import { useAppSelector } from "@/store/hooks";
 import { useDispatch } from "react-redux";
 import {
+  setDiscountAmount,
   setReservation,
   setSelectedAdditionalCharges,
   setSelectedVehicle,
@@ -33,6 +34,7 @@ function Page() {
   const submitFormRef = useRef(null);
   const [formData, setFormData] = useState(null);
   const loggedUser = useAppSelector((state) => state.auth.loggedUser);
+  const voucherCode = useAppSelector((state) => state.reservation.voucherCode);
 
   useEffect(() => {
     if (!reservation?.vehicle_class_id) {
@@ -57,6 +59,7 @@ function Page() {
           return_location: reservation?.return_location?.id || null,
           brand_id: reservation?.brand_id ?? null,
           vehicle_class_id: reservation?.vehicle_class_id,
+          coupon_code: voucherCode,
         };
 
         const params = new URLSearchParams();
@@ -101,6 +104,9 @@ function Page() {
               response?.data?.selected_additional_charges
             )
           );
+          if (response?.data?.discount?.length > 0) {
+            dispatch(setDiscountAmount(response?.data?.discount[0]));
+          }
           setLoader(false);
         } else {
           setLoader(false);
@@ -127,6 +133,7 @@ function Page() {
   return (
     <div>
       <BookNavBar
+        type="booking"
         child={
           <h3 className="text-center text-[17px] w-full font-semibold">
             Customer details
