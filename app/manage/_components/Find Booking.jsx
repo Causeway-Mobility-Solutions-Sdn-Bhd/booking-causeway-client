@@ -54,7 +54,7 @@ function FindBookingForm() {
       {/* Main content */}
       <div
         className="max-w-7xl mx-auto px-4 py-6"
-        style={{ paddingTop: "90px" }}
+        style={{ paddingTop: "20px" }}
       >
         <h2
           className="mb-4 px-1"
