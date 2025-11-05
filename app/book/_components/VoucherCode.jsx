@@ -107,6 +107,8 @@ function VoucherCode({isDrawerOpen}) {
         );
         if (response?.data?.discount?.length > 0) {
           dispatch(setDiscountAmount(response?.data?.discount[0]));
+        }else{
+          dispatch(setDiscountAmount({}));
         }
 
         if (isRemove) {

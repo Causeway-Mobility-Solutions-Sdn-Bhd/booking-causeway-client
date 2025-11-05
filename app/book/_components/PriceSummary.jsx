@@ -23,8 +23,6 @@ function PriceSummary() {
     (state) => state.reservation.allCurrencies
   );
 
-  console.log(discountAmount, "discountttt");
-
   const finalPrice = (price) => {
     const rate =
       allCurrencies?.find((cur) => cur?.code === currency)?.exchange_rate || 1;
