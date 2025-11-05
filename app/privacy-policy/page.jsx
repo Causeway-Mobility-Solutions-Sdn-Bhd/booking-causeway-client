@@ -15,8 +15,8 @@ export default function PrivacyPolicyPage() {
   };
 
   return (
-    <div className="relative">
-      {/* Back Button - Positioned on top of Nav */}
+    <div className="relative min-h-screen">
+      {/* Back Button */}
       <div className="fixed top-7 left-4 z-[110] sm:hidden">
         <FaChevronLeft
           color="#2DBDB6"
@@ -26,9 +26,18 @@ export default function PrivacyPolicyPage() {
         />
       </div>
 
-      <Nav isMain={false} value="Privacy Policy" />
+      {/* Nav Bar */}
+      <div className="fixed top-0 left-0 right-0 z-[100]">
+        <Nav isMain={false} value="Privacy Policy" />
+      </div>
+
       <SideBar />
-      <PrivacyPolicy/>
+      
+      {/**/}
+      <div className="pt-[80px] pb-24 sm:pb-8">
+        <PrivacyPolicy/>
+      </div>
+      
       <BottomBar />
     </div>
   );
