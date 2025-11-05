@@ -2,7 +2,7 @@ import Image from "next/image";
 import React from "react";
 
 const Banner = ({
-  imageSrc = "/banner/Banner.webp",
+  imageSrc = "/banner/Partner.webp",
   altText = "Banner",
   height = "h-64 md:h-80 lg:h-96",
 }) => {
