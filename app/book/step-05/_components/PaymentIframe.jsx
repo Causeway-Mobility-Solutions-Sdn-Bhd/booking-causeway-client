@@ -8,21 +8,21 @@ import {
 } from "@/store/api/reservationApiSlice";
 import { PaymentLoader } from "@/components/custom/Skeleton";
 import { useDispatch } from "react-redux";
-import { setFinalPayment, setVoucherCode } from "@/store/slices/reservationSlice";
+import {
+  setFinalPayment,
+  setVoucherCode,
+} from "@/store/slices/reservationSlice";
 import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 
 function PaymentIframe() {
   const finalPayment = useAppSelector(
     (state) => state.reservation.finalPayment
   );
-  const voucherCode = useAppSelector(
-    (state) => state.reservation.voucherCode
-  );
+  const voucherCode = useAppSelector((state) => state.reservation.voucherCode);
 
   const [loadingState, setLoadingState] = useState("loading");
   const [showIframe, setShowIframe] = useState(false);
-  const [discount , setDiscount] = useState(false)
-  
+  const [discount, setDiscount] = useState(false);
 
   const [confirmReservation, { isLoading: isConfirming }] =
     useConfirmReservationMutation();
@@ -30,10 +30,10 @@ function PaymentIframe() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(voucherCode) {
+    if (voucherCode) {
       setDiscount(true);
-    } 
-  },[])
+    }
+  }, []);
 
   useEffect(() => {
     if (!finalPayment?.link) {
@@ -81,7 +81,7 @@ function PaymentIframe() {
     try {
       const response = await confirmReservation({
         couponCode: data?.couponCode,
-        isRemove : data?.isRemove 
+        isRemove: data?.isRemove,
       }).unwrap();
 
       if (response?.status_code === 200) {
@@ -97,11 +97,11 @@ function PaymentIframe() {
             : parseFloat(outstandingBalance / 2).toFixed(2);
         const reservationUid = reservationData?.uuid;
         const domain = window.location.origin;
-        
-        if(reservedReservationDetail?.applicable_discounts?.length > 0){
-          setDiscount(true)
-        }else{
-          setDiscount(false)
+
+        if (reservedReservationDetail?.applicable_discounts?.length > 0) {
+          setDiscount(true);
+        } else {
+          setDiscount(false);
           dispatch(setVoucherCode(""));
         }
 
@@ -118,9 +118,9 @@ function PaymentIframe() {
         if (paymentLink) {
           if (data?.couponCode) {
             if (reservedReservationDetail?.applicable_discounts?.length === 0) {
-              if(data?.isRemove){
+              if (data?.isRemove) {
                 showErrorToast("Coupan Code Removed");
-              }else{
+              } else {
                 showErrorToast("Invalid Coupan Code");
               }
             } else {
@@ -139,7 +139,12 @@ function PaymentIframe() {
 
   return (
     <div>
-      <PaymentOptionCard voucherCode={voucherCode} setVoucherCode={setVoucherCode} discount={discount} handleConfirmReservation={handleConfirmReservation} />
+      <PaymentOptionCard
+        voucherCode={voucherCode}
+        setVoucherCode={setVoucherCode}
+        discount={discount}
+        handleConfirmReservation={handleConfirmReservation}
+      />
 
       {loadingState === "loading" || isPaying || isConfirming ? (
         <PaymentLoader />
@@ -149,12 +154,11 @@ function PaymentIframe() {
             <iframe
               src={finalPayment?.link}
               className="w-full h-full border-0"
-              allow="payment"
+              allow="payment *"
               allowFullScreen
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation allow-top-navigation-by-user-activation"
               title="Payment Gateway"
-            >
-            </iframe>
+            ></iframe>
           </div>
         )
       )}
