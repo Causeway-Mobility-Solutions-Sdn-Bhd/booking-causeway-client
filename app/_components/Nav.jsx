@@ -54,7 +54,7 @@ function Nav({ isMain = true, value = "" }) {
           <Link href="/" className="cursor-pointer">
             <Image
               priority
-              className="object-contain w-[150px] sm:w-[200px]"
+              className="object-contain w-[150px] sm:w-[200px] mt-1"
               src="/logo/logo-black.svg"
               alt="Causeway Logo"
               width={200}
@@ -70,7 +70,7 @@ function Nav({ isMain = true, value = "" }) {
             <Link href="/" className="hidden sm:block cursor-pointer">
               <Image
                 priority
-                className="object-contain w-[150px] sm:w-[200px] grayscale sm:grayscale-0"
+                className="object-contain w-[150px] sm:w-[200px] mt-1 grayscale sm:grayscale-0"
                 src="/logo/logo-black.svg"
                 alt="Causeway Logo"
                 width={200}
