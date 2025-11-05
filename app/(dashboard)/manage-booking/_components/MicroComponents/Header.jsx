@@ -33,7 +33,7 @@ function Header({ activeTab, setActiveTab }) {
             onClick={handleBack}
           />
 
-          {/* Title - Centered on Mobile */}
+          {/* Title  */}
           <h3 className="font-semibold text-[17px] absolute left-1/2 -translate-x-1/2 sm:relative sm:left-0 sm:translate-x-0">
             Manage Bookings
           </h3>
@@ -48,7 +48,7 @@ function Header({ activeTab, setActiveTab }) {
 
           {/* Desktop Menu Placeholder */}
           <div className="hidden sm:block">
-            {/* Add desktop navigation items here if needed */}
+            
           </div>
         </div>
       </div>
