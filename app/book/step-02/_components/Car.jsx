@@ -29,12 +29,13 @@ function Car({ car }) {
   const [booked, setBooked] = useState(false);
   const router = useRouter();
   const formatPrice = useFormatPrice();
-
   const favorites = useAppSelector((state) => state.reservation.favorites);
+
+  const isThisCarBooked =
+    Number(reservation?.vehicle_class_id) === car?.id || booked;
 
   const toggleFavorite = (vc) => {
     const prev = Array.isArray(favorites) ? favorites : [];
-
     const updated = prev.includes(vc?.id)
       ? prev.filter((id) => id !== vc?.id)
       : [...prev, vc?.id];
@@ -48,6 +49,7 @@ function Car({ car }) {
     );
   };
 
+  // Booking handler
   const handleBooking = async () => {
     setLoader(true);
     try {
@@ -75,7 +77,7 @@ function Car({ car }) {
         dispatch(setReservation(response?.data?.reservation));
         dispatch(setAdditionalCharges(response?.data?.additional_charges));
         dispatch(setSelectedVehicle(response?.data?.selected_vehicle));
-        setBooked(true); // ✅ Mark as booked
+        setBooked(true); // remain in "Booking..." state
         router.push(`/book/step-03?ssid=${currentUUID}`);
       }
     } catch (error) {
@@ -85,12 +87,10 @@ function Car({ car }) {
     }
   };
 
-  const isThisCarBooked =
-    Number(reservation?.vehicle_class_id) === car?.id || booked;
-
   return (
     <Card className="h-full relative py-3">
       <CardContent className="px-4">
+        {/* Favorite button */}
         <div className="absolute top-4 right-4 mb-2">
           <Button
             variant="ghost"
@@ -114,6 +114,7 @@ function Car({ car }) {
           </Button>
         </div>
 
+        {/* Recommended badge */}
         {car?.recommended && (
           <div className="absolute top-3 bg-[#2dbdb636] text-[12px] left-3 mb-2 rounded-md px-2 py-1 text-cSecondary">
             Top choice
@@ -131,6 +132,7 @@ function Car({ car }) {
           />
         </div>
 
+        {/* Car name */}
         <div className="flex justify-between items-center">
           <div className="text-left mb-4">
             <h3 className="font-semibold text-[18px] text-foreground">
@@ -149,6 +151,7 @@ function Car({ car }) {
                 className="h-full w-[20px] object-contain"
                 width={200}
                 height={70}
+                unoptimized
                 priority
               />
               <span className="text-xs text-muted-foreground">{f?.label}</span>
@@ -156,6 +159,7 @@ function Car({ car }) {
           ))}
         </div>
 
+        {/* Price + Book button */}
         <div className="mt-2 flex justify-between items-start gap-3.5">
           {/* Price */}
           <div className="mb-4 w-full">
@@ -167,48 +171,29 @@ function Car({ car }) {
             </p>
           </div>
 
+          {/* Booking Button */}
           <div className="flex flex-col w-full items-end">
-            {loader ? (
-              <>
-                <SecondaryButton
-                  style="h-12 lg:h-[47px] border-cSecondary text-cSecondary w-full hidden md:block opacity-70 cursor-not-allowed"
-                  content="Booking..."
-                />
-                <Button
-                  disabled
-                  className="py-6 w-[160px] bg-cSecondary flex justify-center items-center md:hidden opacity-70 cursor-not-allowed"
-                >
-                  <span className="-mt-1">Booking...</span>
-                </Button>
-              </>
-            ) : isThisCarBooked ? (
-              <>
-                <SecondaryButton
-                  style="h-12 lg:h-[47px] border-cSecondary text-cSecondary w-full hidden md:block"
-                  content="Booked"
-                />
-                <Button
-                  disabled
-                  className="py-6 w-[160px] bg-cSecondary flex justify-center items-center md:hidden"
-                >
-                  <span className="-mt-1">Booked</span>
-                </Button>
-              </>
-            ) : (
-              <>
-                <SecondaryButton
-                  style="h-12 lg:h-[47px] w-full hidden md:block"
-                  content="Book Now"
-                  onClick={handleBooking}
-                />
-                <Button
-                  onClick={handleBooking}
-                  className="py-6 w-[160px] bg-cPrimary flex justify-center items-center md:hidden"
-                >
-                  <span className="-mt-1">Book Now</span>
-                </Button>
-              </>
-            )}
+            <SecondaryButton
+              style={`h-12 lg:h-[47px] w-full hidden md:block ${
+                loader ? "opacity-70 cursor-wait" : ""
+              }`}
+              content={
+                loader || isThisCarBooked ? "Booking..." : "Book Now"
+              }
+              onClick={handleBooking}
+            />
+            <Button
+              onClick={handleBooking}
+              className={`py-6 w-[160px] flex justify-center items-center md:hidden ${
+                loader || isThisCarBooked
+                  ? "bg-cSecondary opacity-80 cursor-wait"
+                  : "bg-cPrimary"
+              }`}
+            >
+              <span className="-mt-1">
+                {loader || isThisCarBooked ? "Booking..." : "Book Now"}
+              </span>
+            </Button>
           </div>
         </div>
       </CardContent>

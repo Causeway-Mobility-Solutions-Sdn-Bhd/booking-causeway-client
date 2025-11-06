@@ -11,6 +11,7 @@ import SubHead from "@/components/custom/SubHead";
 import InsuranceComparison from "./InsuranceComparison";
 import InfoTabs from "./InfoTabs";
 import PolicyLeftContent from "./PolicyLeftContent";
+import Image from "next/image";
 
 const currentLanguage = "en";
 
@@ -23,7 +24,6 @@ function AdditionalCharges({
   const additionalCharges = useAppSelector(
     (state) => state?.reservation?.additionalCharges
   );
-
 
   const formatPrice = useFormatPrice();
   const [shouldFetch, setShouldFetch] = useState(false);
@@ -100,7 +100,6 @@ function AdditionalCharges({
     });
   };
 
-
   if (fetchLoader) {
     return <AdditionalChargesSkeleton />;
   }
@@ -115,15 +114,21 @@ function AdditionalCharges({
           desiredOrder.indexOf(a.category.id) -
           desiredOrder.indexOf(b.category.id)
       );
-  }
+  };
 
   return (
     <div className="pb-[70px]">
-      <InsuranceComparison selectedCharges={selectedCharges} setSelectedCharges={setSelectedCharges} fetchData={fetchData} />
-      <InfoTabs /> 
+      <InsuranceComparison
+        selectedCharges={selectedCharges}
+        setSelectedCharges={setSelectedCharges}
+        fetchData={fetchData}
+      />
+      <InfoTabs />
       {getUpdatedAdditionalCharges(additionalCharges).map((ac) => (
         <div key={ac?.category?.id} className="mb-5">
-          <SubHead text={ac?.category?.label?.[currentLanguage] ?? "No label"} />
+          <SubHead
+            text={ac?.category?.label?.[currentLanguage] ?? "No label"}
+          />
 
           <div className="flex justify-start items-baseline gap-4 sm:gap-4 mt-4 flex-wrap">
             {ac?.charges?.map((acc, index) => {
@@ -273,12 +278,13 @@ const AccordionItem = ({ ac, acc, active }) => {
       >
         <div className="flex justify-start items-center gap-2">
           {acc?.image && (
-            <SmartImage
+            <Image
               src={acc?.image}
-              width={30}
-              height={30}
-              alt={`${acc.id}`}
-              className="h-full w-[30px]"
+              alt={acc.id}
+              width={35}
+              height={35}
+              unoptimized
+              className="object-contain"
             />
           )}
           <h3 className="text-[16px] font-semibold">{acc?.label}</h3>

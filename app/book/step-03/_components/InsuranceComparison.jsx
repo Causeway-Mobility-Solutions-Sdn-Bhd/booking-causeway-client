@@ -98,7 +98,7 @@ export default function InsuranceComparison({
   };
 
   return (
-    <div className="bg-white px-6 pt-6 rounded-2xl shadow-lg w-full max-w-2xl mx-auto mb-4">
+    <div className="bg-white px-3 pt-4 rounded-2xl shadow-lg w-full max-w-2xl mx-auto mb-4">
       <div className="grid grid-cols-4 gap-0 text-center text-sm font-medium border-b border-gray-200 pb-4 mb-2">
         <div className="text-gray-700 text-left text-xs"></div>
         {plans.map((plan) => (

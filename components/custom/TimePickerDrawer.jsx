@@ -33,7 +33,7 @@ const TimePickerDrawer = ({
   const hourScrollTimeout = useRef(null);
   const minuteScrollTimeout = useRef(null);
 
-  const hours = Array.from({ length: 16 }, (_, i) => i + 8);
+   const hours = Array.from({ length: 16 }, (_, i) => i + 8);
 
   const minutes = [0, 30];
   const itemHeight = 48;
@@ -102,10 +102,14 @@ const TimePickerDrawer = ({
         );
 
         const newHour = hours[boundedIndex];
-       
 
         if (newHour !== tempHour) {
           setTempHour(newHour);
+          // If hour is 11, force minute to be 0
+          if (newHour === 23 && tempMinute === 30) {
+            setTempMinute(0);
+            scrollToCenter(minuteScrollRef.current, 0, itemHeight, true);
+          }
         }
         scrollToCenter(container, boundedIndex, itemHeight, true);
       } else {
@@ -114,7 +118,12 @@ const TimePickerDrawer = ({
           Math.min(minutes.length - 1, centerIndex)
         );
         const newMinute = minutes[boundedIndex];
-        if (newMinute !== tempMinute) {
+        
+        // Prevent selecting 11:30
+        if (tempHour === 23 && newMinute === 30) {
+          setTempMinute(0);
+          scrollToCenter(minuteScrollRef.current, 0, itemHeight, true);
+        } else if (newMinute !== tempMinute) {
           setTempMinute(newMinute);
         }
         scrollToCenter(container, boundedIndex, itemHeight, true);
@@ -204,14 +213,24 @@ const TimePickerDrawer = ({
   const handleItemClick = (type, value) => {
     if (type === "hour") {
       setTempHour(value);
-      const hourIndex = hours.indexOf(hour);
+      const hourIndex = hours.indexOf(value);
       scrollToCenter(
         hourScrollRef.current,
         hourIndex >= 0 ? hourIndex : 0,
         itemHeight,
-        false
+        true
       );
+
+      if (value === 23 && tempMinute === 30) {
+        setTempMinute(0);
+        scrollToCenter(minuteScrollRef.current, 0, itemHeight, true);
+      }
     } else {
+      // Prevent selecting 30 minutes when hour is 11
+      if (tempHour === 23 && value === 30) {
+        showErrorToast("23:30 is not available. Maximum time is 23:00.");
+        return;
+      }
       setTempMinute(value);
       const minuteIndex = minutes.indexOf(value);
       scrollToCenter(minuteScrollRef.current, minuteIndex, itemHeight, true);
@@ -413,20 +432,27 @@ const TimePickerDrawer = ({
                 }
               `}</style>
               <div className="py-24">
-                {minutes.map((minute) => (
-                  <div
-                    key={minute}
-                    className={`h-12 flex items-center justify-center text-xl cursor-pointer transition-all duration-300 ease-out ${
-                      tempMinute === minute
-                        ? "text-black font-semibold"
-                        : "text-gray-300 hover:text-gray-500"
-                    }`}
-                    style={getItemStyle("minute", minute, tempMinute)}
-                    onClick={() => handleItemClick("minute", minute)}
-                  >
-                    {minute.toString().padStart(2, "0")}
-                  </div>
-                ))}
+                {minutes.map((minute) => {
+                  // Disable 30 minutes when hour is 11
+                  const isDisabled = tempHour === 23 && minute === 30;
+                  
+                  return (
+                    <div
+                      key={minute}
+                      className={`h-12 flex items-center justify-center text-xl transition-all duration-300 ease-out ${
+                        isDisabled
+                          ? "text-red-300 cursor-not-allowed"
+                          : tempMinute === minute
+                          ? "text-black font-semibold cursor-pointer"
+                          : "text-gray-300 hover:text-gray-500 cursor-pointer"
+                      }`}
+                      style={getItemStyle("minute", minute, tempMinute)}
+                      onClick={() => handleItemClick("minute", minute)}
+                    >
+                      {minute.toString().padStart(2, "0")}
+                    </div>
+                  );
+                })}
               </div>
             </div>
             {/* Center selection indicator with smooth transitions */}

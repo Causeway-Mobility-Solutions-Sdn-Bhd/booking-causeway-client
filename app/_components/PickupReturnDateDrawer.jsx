@@ -289,9 +289,6 @@ function PickupReturnDateDrawer({ booking, setBooking }) {
               monthsToShow={8}
               minDate={
                 subDays(new Date(), 1)
-                // tempBooking?.pickupDate
-                //   ? tempBooking?.pickupDate
-                //   : subDays(new Date(), 1)
               }
               pickupDate={tempBooking?.pickupDate}
               returnDate={tempBooking?.returnDate}
