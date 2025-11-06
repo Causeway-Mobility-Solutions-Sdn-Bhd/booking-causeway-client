@@ -52,7 +52,7 @@ function SideBar() {
       }`}
     >
       {/* Logo Section */}
-      <div className="flex justify-center items-center mb-8">
+      <div className="flex justify-left items-left mb-8">
         <Link href="/" onClick={handleCloseSidebar}>
           <Image
             priority
