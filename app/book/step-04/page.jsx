@@ -37,6 +37,10 @@ function Page() {
   const voucherCode = useAppSelector((state) => state.reservation.voucherCode);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
     if (!reservation?.vehicle_class_id) {
       router.push(`/`);
     }
