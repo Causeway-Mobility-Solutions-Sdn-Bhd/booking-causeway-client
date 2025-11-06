@@ -7,22 +7,32 @@ function WhyCauseway() {
     {
       img: '/whyCauseway/why-couseway-01.webp',
       title: "Book now pay later",
-      description: "Lorem Ipsum is simply dummy text"
+      description: "Unlock exclusive car rental prices for your booked flights or hotels"
     },
     {
       img: '/whyCauseway/why-couseway-02.webp',
       title: "24/7 Support",
-      description: "Lorem Ipsum is simply dummy text"
+      description: "We answer your call within 30 seconds, ensuring reliable support throughout your journey"
     },
     {
       img: '/whyCauseway/why-couseway-03.webp',
       title: "Quality Vehicles",
-      description: "Lorem Ipsum is simply dummy text"
+      description: "Well-maintained, modern vehicles from trusted suppliers across destinations"
     },
     {
       img: '/whyCauseway/why-couseway-04.webp',
       title: "Easy Booking",
-      description: "Lorem Ipsum is simply dummy text"
+      description: "Simple and fast booking process - reserve your vehicle in just a few clicks"
+    },
+    {
+      img: '/whyCauseway/why-couseway-03.webp',
+      title: "Free Cancellation",
+      description: "Flexible cancellation policy - plan your trip with ease and peace of mind"
+    },
+    {
+      img: '/whyCauseway/why-couseway-04.webp',
+      title: "New Vehicles Policy",
+      description: "Drive with confidence in our regularly updated fleet of latest model vehicles"
     }
   ]
 
@@ -30,27 +40,28 @@ function WhyCauseway() {
     <div className='max-w-[1400px] mx-auto w-[90%] sm:w-[95%] mt-[7px]'>
       <TitleHead name={'Why Choose Causeway'} />
      
-      {/* Vertical List Layout */}
-      <div className="flex flex-col gap-7 mt-5 sm:mt-8">
+      
+      <div className="flex flex-col gap-3 mt-3 sm:mt-4">
         {features.map((feature, index) => (
-          <div key={index} className="flex items-start gap-5 sm:gap-6">
-            {/* Icon */}
-            <div className="flex-shrink-0">
+          <div key={index} className="flex items-start gap-3">
+            
+            <div className="flex-shrink-0 -mt-1">
               <Image
                 src={feature.img}
                 alt={`${feature.title} icon`}
-                width={80}
-                height={80}
-                className="object-contain w-[70px] sm:w-[80px]"
+                width={48}
+                height={48}
+                quality={100}
+                priority={index < 2}
+                className="object-contain w-[42px] sm:w-[48px]"
               />
             </div>
             
-            {/* Text Content */}
-            <div className="flex-1 pt-2">
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 ">
+            <div className="flex-1">
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-0.5">
                 {feature.title}
               </h3>
-              <p className="text-sm sm:text-base text-gray-600">
+              <p className="text-xs sm:text-[13px] text-gray-600 leading-snug">
                 {feature.description}
               </p>
             </div>
