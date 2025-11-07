@@ -6,6 +6,7 @@ import { useGetReservationAttemptQuery } from "@/store/api/reservationApiSlice";
 import { useGetCurrenciesQuery } from "@/store/api/fleetApiSlice";
 import { useDispatch } from "react-redux";
 import { setFavorites } from "@/store/slices/reservationSlice";
+import { useAppSelector } from "@/store/hooks";
 
 export default function BookLayoutClient({ children }) {
   const router = useRouter();
@@ -17,12 +18,13 @@ export default function BookLayoutClient({ children }) {
 
   const { data: allCurrencies } = useGetCurrenciesQuery();
   const {
-    data: reservation,
+    data: data,
     isLoading,
     isError,
   } = useGetReservationAttemptQuery();
 
   const dispatch = useDispatch();
+  const reservation = useAppSelector((state) => state.reservation.reservation);
 
   useEffect(() => {
     const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -31,10 +33,13 @@ export default function BookLayoutClient({ children }) {
 
   useEffect(() => {
     if (isLoading) return;
+    console.log("Reservation data in BookLayoutClient:", reservation);
+    console.log(isError)
 
-    if (isError || !reservation) {
+    if (isError && !reservation._id) {
       router.replace("/");
       setSessionState("invalid");
+      console.log("No valid reservation found, redirecting to home.");
       return;
     }
 

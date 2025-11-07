@@ -13,6 +13,7 @@ import TopRanked from "./_components/Topranked";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setFavorites } from "@/store/slices/reservationSlice";
+import CurrentBooking from "./_components/CurrentBooking";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ export default function Home() {
       <Banner />
       <Feauters />
       <SpecialOffer />
+      <CurrentBooking />
       <BottomBar />
       <SideBar />
       <CarList />

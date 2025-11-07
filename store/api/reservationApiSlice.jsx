@@ -156,7 +156,7 @@ export const reservationApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-
+          console.log("Fetched reservation attempt:", data);
           if (data) {
             dispatch(setCurrentUUID(data._id));
             dispatch(setReservation(data));
