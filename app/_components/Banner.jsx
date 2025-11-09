@@ -8,7 +8,7 @@ function Banner() {
       <div className="relative w-full h-full">
         {/* Mobile Image */}
         <Image
-          src="/banner/MOBILE.webp"
+          src="/banner/MOBILE(4).webp"
           alt="Banner"
           fill
           className="object-cover block sm:hidden"
