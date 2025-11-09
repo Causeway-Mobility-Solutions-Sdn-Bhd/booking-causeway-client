@@ -31,12 +31,12 @@ function WhyCauseway() {
       description: "Simple and fast booking process - reserve your vehicle in just a few clicks"
     },
     {
-      img: '/whyCauseway/why-couseway-03.webp',
+      img: '/whyCauseway/why-couseway-05.webp',
       title: "Free Cancellation",
       description: "Flexible cancellation policy - plan your trip with ease and peace of mind"
     },
     {
-      img: '/whyCauseway/why-couseway-04.webp',
+      img: '/whyCauseway/why-couseway-06.webp',
       title: "New Vehicles Policy",
       description: "Drive with confidence in our regularly updated fleet of latest model vehicles"
     }
