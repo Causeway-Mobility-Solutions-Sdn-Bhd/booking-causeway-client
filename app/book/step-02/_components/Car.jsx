@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Bookmark } from "lucide-react";
 import Image from "next/image";
 import SecondaryButton from "@/components/custom/SecondaryButton";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import hqApi from "@/lib/hqApi";
 import { useRouter } from "next/navigation";
 import SmartImage from "@/components/custom/SmartImage";
@@ -31,8 +31,11 @@ function Car({ car }) {
   const formatPrice = useFormatPrice();
   const favorites = useAppSelector((state) => state.reservation.favorites);
 
-  const isThisCarBooked =
-    Number(reservation?.vehicle_class_id) === car?.id || booked;
+  useEffect(() => {
+    if(Number(reservation?.vehicle_class_id) === car?.id){
+      setBooked(true);
+    }
+  },[reservation])
 
   const toggleFavorite = (vc) => {
     const prev = Array.isArray(favorites) ? favorites : [];
@@ -52,6 +55,8 @@ function Car({ car }) {
   // Booking handler
   const handleBooking = async () => {
     setLoader(true);
+    setBooked(false); // reset previous success state
+
     try {
       const requestData = {
         pick_up_date: reservation?.pick_up_date
@@ -77,7 +82,7 @@ function Car({ car }) {
         dispatch(setReservation(response?.data?.reservation));
         dispatch(setAdditionalCharges(response?.data?.additional_charges));
         dispatch(setSelectedVehicle(response?.data?.selected_vehicle));
-        setBooked(true); // remain in "Booking..." state
+        setBooked(true);
         router.push(`/book/step-03?ssid=${currentUUID}`);
       }
     } catch (error) {
@@ -175,23 +180,27 @@ function Car({ car }) {
           <div className="flex flex-col w-full items-end">
             <SecondaryButton
               style={`h-12 lg:h-[47px] w-full hidden md:block ${
-                loader ? "opacity-70 cursor-wait" : ""
+                loader
+                  ? "opacity-70 cursor-wait"
+                  : booked
+                  ? "bg-cSecondary text-white"
+                  : "bg-cPrimary"
               }`}
-              content={
-                loader || isThisCarBooked ? "Booking..." : "Book Now"
-              }
-              onClick={handleBooking}
+              content={loader ? "Booking..." : "Book Now"}
+              onClick={!loader ? handleBooking : undefined}
             />
             <Button
-              onClick={handleBooking}
+              onClick={!loader ? handleBooking : undefined}
               className={`py-6 w-[160px] flex justify-center items-center md:hidden ${
-                loader || isThisCarBooked
+                loader
                   ? "bg-cSecondary opacity-80 cursor-wait"
+                  : booked
+                  ? "bg-cSecondary"
                   : "bg-cPrimary"
               }`}
             >
               <span className="-mt-1">
-                {loader || isThisCarBooked ? "Booking..." : "Book Now"}
+                {loader ? "Booking..." : "Book Now"}
               </span>
             </Button>
           </div>

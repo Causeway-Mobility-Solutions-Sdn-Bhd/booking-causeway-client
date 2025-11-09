@@ -101,8 +101,8 @@ const NavCenter = ({ reservation, setTobBarFilter }) => {
       ?.replace(/ ,/g, ",") // Remove space before commas
       ?.replace(/Hotel/, "Hotel,") // Add comma after "Hotel"
       ?.trim()
-      ?.split(/[^a-zA-Z0-9\s]/)[0] // ✅ Stop at first special character
-      ?.slice(0, 14); // Limit to 14 characters
+      ?.split(/[^a-zA-Z0-9\s]/)[0] 
+      ?.slice(0, 12); 
 
   const pickup = cleanString(reservation.pick_up_location?.name);
   const dropoff = cleanString(reservation.return_location?.name);
@@ -137,8 +137,8 @@ const NavCenter = ({ reservation, setTobBarFilter }) => {
 
   return (
     <div className="text-sm w-full sm:text-base text-center leading-tight">
-      <h3 className="font-semibold text-[15px] text-center">{cleanLocation}</h3>
-      <p className="text-gray-500 text-[11px] flex justify-center items-center gap-1 text-center">
+      <h3 className="font-semibold text-[14px] text-center">{cleanLocation}</h3>
+      <p className="text-gray-500 text-[10px] flex justify-center items-center gap-1 text-center">
         <span>
           {pickupDateTime} – {returnDateTime}
         </span>
