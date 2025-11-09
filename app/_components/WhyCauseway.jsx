@@ -1,45 +1,39 @@
 import React from 'react'
 
+// Mock TitleHead component
 const TitleHead = ({ name }) => (
   <h2 className="text-[20px] lg:text-[28px] font-bold text-gray-900 mb-4">{name}</h2>
 )
 
+// Mock Image component (using img for demo)
 const Image = ({ src, alt, width, height, className }) => (
   <img src={src} alt={alt} width={width} height={height} className={className} />
 )
 
 function WhyCauseway() {
   const features = [
-    {
-      img: '/whyCauseway/why-couseway-01.webp',
-      title: "Book now pay later",
+     {
+      img: '/whyCauseway/why-couseway-04.webp',
+      title: "Book Now - Pay Later",
       description: "Unlock exclusive car rental prices for your booked flights or hotels"
     },
-    {
-      img: '/whyCauseway/why-couseway-02.webp',
-      title: "24/7 Support",
-      description: "We answer your call within 30 seconds, ensuring reliable support throughout your journey"
-    },
-    {
+       {
       img: '/whyCauseway/why-couseway-03.webp',
-      title: "Quality Vehicles",
-      description: "Well-maintained, modern vehicles from trusted suppliers across destinations"
-    },
-    {
-      img: '/whyCauseway/why-couseway-04.webp',
-      title: "Easy Booking",
-      description: "Simple and fast booking process - reserve your vehicle in just a few clicks"
-    },
-    {
-      img: '/whyCauseway/why-couseway-05.webp',
-      title: "Free Cancellation",
-      description: "Flexible cancellation policy - plan your trip with ease and peace of mind"
+      title: "CDW - 0 Excess Insurnace",
+      description: "Drive with confidence in our regularly updated fleet of latest model vehicles"
     },
     {
       img: '/whyCauseway/why-couseway-06.webp',
-      title: "New Vehicles Policy",
-      description: "Drive with confidence in our regularly updated fleet of latest model vehicles"
-    }
+      title: "Modern Fleets - Less Than 3 Years",
+      description: "Well-maintained, modern vehicles from trusted suppliers across destinations"
+    },
+   
+    {
+      img: '/whyCauseway/why-couseway-05.webp',
+      title: "Flexible - Free Cancelation",
+      description: "Flexible cancellation policy - plan your trip with ease and peace of mind"
+    },
+ 
   ]
 
   return (
@@ -55,19 +49,19 @@ function WhyCauseway() {
               <Image
                 src={feature.img}
                 alt={`${feature.title} icon`}
-                width={60}
-                height={60}
+                width={68}
+                height={68}
                 quality={100}
                 priority={index < 2}
-                className="object-contain w-[52px] sm:w-[58px] md:w-[60px]"
+                className="object-contain w-[58px] sm:w-[64px] md:w-[68px]"
               />
             </div>
             
             <div className="flex-1">
-              <h3 className="text-sm sm:text-[15px] md:text-base font-semibold text-gray-900 mb-0.5">
+              <h3 className="text-[15px] sm:text-base md:text-[17px] font-semibold text-gray-900 mb-0.5">
                 {feature.title}
               </h3>
-              <p className="text-xs sm:text-[13px] md:text-sm text-gray-600 leading-relaxed">
+              <p className="text-[13px] sm:text-sm md:text-[15px] text-gray-600 leading-relaxed">
                 {feature.description}
               </p>
             </div>
