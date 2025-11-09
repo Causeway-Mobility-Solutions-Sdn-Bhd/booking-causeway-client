@@ -281,10 +281,14 @@ const AccordionItem = ({ ac, acc, active }) => {
             <Image
               src={acc?.image}
               alt={acc.id}
-              width={35}
-              height={35}
+              width={30}
+              height={30}
               unoptimized
               className="object-contain"
+              style={{
+                filter:
+                  "brightness(0) saturate(100%) invert(9%) sepia(98%) saturate(3545%) hue-rotate(353deg) brightness(91%) contrast(95%)",
+              }}
             />
           )}
           <h3 className="text-[16px] font-semibold">{acc?.label}</h3>
