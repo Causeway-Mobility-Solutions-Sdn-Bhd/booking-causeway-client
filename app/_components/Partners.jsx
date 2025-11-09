@@ -1,5 +1,8 @@
 import React from "react";
-import Image from "next/image";
+
+const Image = ({ src, alt, width, height, className, loading }) => (
+  <img src={src} alt={alt} width={width} height={height} className={className} />
+);
 
 const allBrands = [
   {
@@ -15,7 +18,7 @@ const allBrands = [
 function Partners() {
   return (
     <section className="w-[90%] sm:w-[95%] max-w-[1400px] mx-auto mt-[30px] pb-[80px]">
-      <h2 className="text-2xl font-bold text-gray-900 mb-8">Partners</h2>
+      <h2 className="text-[20px] lg:text-[28px] font-bold text-gray-900 mb-8">Partners</h2>
 
       <div className="flex items-center justify-center gap-20 md:gap-28">
         {allBrands.map((brand, index) => (
