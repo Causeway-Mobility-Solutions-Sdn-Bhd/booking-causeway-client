@@ -1,6 +1,9 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import Image from "next/image";
+
+const Image = ({ src, alt, width, height, className, priority, quality }) => (
+  <img src={src} alt={alt} width={width} height={height} className={className} />
+);
 
 const allAwards = [
   {
@@ -67,7 +70,7 @@ function TopRanked() {
     <section className="w-[90%] sm:w-[95%] max-w-[1400px] mx-auto mt-[7px] pb-[0px]">
       <div
         ref={scrollRef}
-        className="relative flex overflow-x-scroll scrollbar-hide gap-1"
+        className="relative flex overflow-x-scroll scrollbar-hide gap-0"
       >
         {[...allAwards, ...allAwards].map((award, index) => (
           <div
@@ -77,9 +80,9 @@ function TopRanked() {
             <Image
               src={award.image}
               alt={`Award Badge ${index + 1}`}
-              className="w-[200px] h-[90px] object-contain hover:scale-105 transition-transform duration-300"
-              width={200}
-              height={90}
+              className="w-[220px] h-[100px] object-contain hover:scale-105 transition-transform duration-300"
+              width={220}
+              height={100}
               priority={index < 6}
               quality={100}
             />
