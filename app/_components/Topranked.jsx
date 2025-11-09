@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 
+// Mock Image component for demo
 const Image = ({ src, alt, width, height, className, priority, quality }) => (
   <img src={src} alt={alt} width={width} height={height} className={className} />
 );
@@ -75,14 +76,14 @@ function TopRanked() {
         {[...allAwards, ...allAwards].map((award, index) => (
           <div
             key={index}
-            className="shrink-0 flex items-center justify-center"
+            className="shrink-0 flex items-center justify-center -mx-4"
           >
             <Image
               src={award.image}
               alt={`Award Badge ${index + 1}`}
-              className="w-[220px] h-[100px] object-contain hover:scale-105 transition-transform duration-300"
-              width={220}
-              height={100}
+              className="w-[240px] h-[110px] object-contain hover:scale-105 transition-transform duration-300"
+              width={240}
+              height={110}
               priority={index < 6}
               quality={100}
             />
