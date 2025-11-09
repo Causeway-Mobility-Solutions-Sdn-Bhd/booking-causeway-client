@@ -1,6 +1,12 @@
-import TitleHead from '@/components/custom/TitleHead'
-import Image from 'next/image'
 import React from 'react'
+
+const TitleHead = ({ name }) => (
+  <h2 className="text-[20px] lg:text-[28px] font-bold text-gray-900 mb-4">{name}</h2>
+)
+
+const Image = ({ src, alt, width, height, className }) => (
+  <img src={src} alt={alt} width={width} height={height} className={className} />
+)
 
 function WhyCauseway() {
   const features = [
@@ -43,25 +49,25 @@ function WhyCauseway() {
       
       <div className="flex flex-col gap-3 mt-3 sm:mt-4">
         {features.map((feature, index) => (
-          <div key={index} className="flex items-start gap-3">
+          <div key={index} className="flex items-start gap-2.5">
             
             <div className="flex-shrink-0 -mt-1">
               <Image
                 src={feature.img}
                 alt={`${feature.title} icon`}
-                width={48}
-                height={48}
+                width={60}
+                height={60}
                 quality={100}
                 priority={index < 2}
-                className="object-contain w-[42px] sm:w-[48px]"
+                className="object-contain w-[52px] sm:w-[58px] md:w-[60px]"
               />
             </div>
             
             <div className="flex-1">
-              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-0.5">
+              <h3 className="text-sm sm:text-[15px] md:text-base font-semibold text-gray-900 mb-0.5">
                 {feature.title}
               </h3>
-              <p className="text-xs sm:text-[13px] text-gray-600 leading-snug">
+              <p className="text-xs sm:text-[13px] md:text-sm text-gray-600 leading-relaxed">
                 {feature.description}
               </p>
             </div>
