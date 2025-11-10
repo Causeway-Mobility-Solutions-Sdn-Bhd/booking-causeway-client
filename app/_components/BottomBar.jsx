@@ -43,7 +43,7 @@ function BottomBar() {
   ];
 
   return (
-    <div className="z-45 border-top fixed bottom-0 border-cGray right-0 left-0 py-3 bg-white block sm:hidden">
+    <div className="z-40 border-top fixed bottom-0 border-cGray right-0 left-0 py-3 bg-white block sm:hidden">
       <div className="max-w-[1400px] w-[90%] sm:w-[95%] mx-auto flex justify-between items-center gap-1">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
