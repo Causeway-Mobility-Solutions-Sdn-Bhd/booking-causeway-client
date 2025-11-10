@@ -28,7 +28,6 @@ const nextConfig = {
     ],
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days for optimized images
-    // Add device sizes for better responsive images
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
@@ -39,9 +38,13 @@ const nextConfig = {
   // Compress static assets
   compress: true,
   
-  // Optimize caching headers for static assets
+  // Optimize caching headers for static assets - PRODUCTION ONLY
   async headers() {
-    const staticAssetCache = 'public, max-age=31536000, immutable';
+    // Only apply caching headers in production
+    if (process.env.NODE_ENV !== 'production') {
+      return [];
+    }
+    
     const oneYearCache = 'public, max-age=31536000, immutable';
     const oneMonthCache = 'public, max-age=2592000, immutable';
     
@@ -138,7 +141,6 @@ const nextConfig = {
       },
       {
         // Cache HTML pages with shorter cache (5 minutes)
-        // This allows for faster updates while still benefiting from cache
         source: '/:path*.html',
         headers: [
           {
@@ -165,9 +167,6 @@ const nextConfig = {
   
   // Optimize production builds
   poweredByHeader: false,
-  
-  // Enable gzip compression
-  compress: true,
 };
 
 // Export the configuration
