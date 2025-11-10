@@ -39,7 +39,7 @@ function VehicleDetail() {
                   className="h-full w-[15px] object-contain"
                   width={15}
                   height={15}
-                  priority
+                  loading="lazy"
                 />
                 <span className="text-xs  text-muted-foreground">
                   {f?.label}

@@ -80,6 +80,7 @@ function Features() {
                 alt={`Brand ${index + 1}`}
                 fill
                 className="object-contain opacity-70 hover:opacity-100 transition-opacity duration-300"
+                loading="lazy"
               />
             </div>
           </div>

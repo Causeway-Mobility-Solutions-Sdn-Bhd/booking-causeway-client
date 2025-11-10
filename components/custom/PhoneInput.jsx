@@ -119,6 +119,7 @@ const PhoneInput = ({
                     alt={`${country.country} flag`}
                     width={20}
                     height={20}
+                    loading="lazy"
                   />
                   <span>{country.code}</span>
                   <span className="text-gray-500 text-sm">

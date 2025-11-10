@@ -108,6 +108,7 @@ export default function InsuranceComparison({
               width={16}
               height={16}
               alt="thumbs up"
+              loading="lazy"
               />
               <span>Excess refunded</span>
 

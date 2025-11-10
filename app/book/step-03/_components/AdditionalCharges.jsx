@@ -284,6 +284,7 @@ const AccordionItem = ({ ac, acc, active }) => {
               width={30}
               height={30}
               unoptimized
+              loading="lazy"
               className="object-contain"
               style={{
                 filter:

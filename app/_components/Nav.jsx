@@ -53,7 +53,7 @@ function Nav({ isMain = true, value = "" }) {
         {isMain ? (
           <Link href="/" className="cursor-pointer">
             <Image
-              priority
+              loading="lazy"
               className="object-contain w-[150px] sm:w-[200px] mt-1"
               src="/logo/logo-black.svg"
               alt="Causeway Logo"
@@ -69,7 +69,7 @@ function Nav({ isMain = true, value = "" }) {
             </h3>
             <Link href="/" className="hidden sm:block cursor-pointer">
               <Image
-                priority
+                loading="lazy"
                 className="object-contain w-[150px] sm:w-[200px] mt-1 grayscale sm:grayscale-0"
                 src="/logo/logo-black.svg"
                 alt="Causeway Logo"

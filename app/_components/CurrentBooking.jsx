@@ -84,6 +84,7 @@ function CurrentBooking() {
                         width={14}
                         height={14}
                         className="object-contain"
+                        loading="lazy"
                       />
                     ) : icon ? (
                       <i className={`${icon} text-gray-500 text-sm`} />

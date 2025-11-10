@@ -84,7 +84,7 @@ function TopRanked() {
               className="w-[240px] h-[110px] object-contain hover:scale-105 transition-transform duration-300"
               width={240}
               height={110}
-              priority={index < 6}
+              loading="lazy"
               quality={100}
             />
           </div>

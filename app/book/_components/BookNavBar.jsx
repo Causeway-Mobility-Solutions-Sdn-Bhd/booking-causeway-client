@@ -51,7 +51,7 @@ function BookNavBar({
         <div className="flex gap-4 relative justify-between items-center w-[95%] max-w-[1400px] mx-auto">
           <Link href="/" className="hidden sm:block cursor-pointer">
             <Image
-              priority
+              loading="lazy"
               className="object-contain w-[150px] sm:w-[200px]"
               src="/logo/logo-black.svg"
               alt="Causeway Logo"

@@ -179,7 +179,7 @@ function Car({ car }) {
                 className="h-full w-[20px] object-contain"
                 width={200}
                 height={70}
-                priority
+                loading="lazy"
               />
               <span className="text-xs text-muted-foreground">
                 {[1, 2].includes(f?.id) ? f?.label?.split(" ")[0] : f?.label}
