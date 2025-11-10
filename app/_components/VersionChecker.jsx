@@ -59,7 +59,7 @@ function VersionChecker() {
   };
 
   return (
-    <Dialog open={showUpdatePopup} >
+    <Dialog open={true} >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>New Version Available</DialogTitle>
