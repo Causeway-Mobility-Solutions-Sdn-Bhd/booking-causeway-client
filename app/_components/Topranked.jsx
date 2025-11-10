@@ -34,7 +34,7 @@ function TopRanked() {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
 
-    let scrollSpeed = 1;
+    let scrollSpeed = 0.8;
     let animationFrame;
 
     const scrollStep = () => {
