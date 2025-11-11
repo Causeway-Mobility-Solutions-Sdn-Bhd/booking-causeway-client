@@ -21,7 +21,7 @@ function BottomBar() {
 
     {
       name: "My Trips",
-      href: !user ? "/manage" : "/manage-booking",
+      href: !user ? "/find-booking" : "/manage-booking",
       icon: <FaSuitcase size={16} />,
     },
     user
