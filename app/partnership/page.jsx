@@ -36,9 +36,9 @@ function PartnershipPage() {
       </div>
 
       <SideBar />
-      
+
       {/* Main Content with padding for fixed navbar and bottom bar */}
-      <div className="pt-[80px] pb-24 sm:pb-8">
+      <div className="pt-[80px] pb-0 ">
         {/* Partnership Page: */}
         <Banner />
         <WhyHost />
@@ -46,7 +46,7 @@ function PartnershipPage() {
         <Partners />
         <SubmitVehicleInfoForm />
       </div>
-      
+
       <BottomBar />
     </div>
   );
