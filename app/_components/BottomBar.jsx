@@ -18,10 +18,10 @@ function BottomBar() {
       href: "/",
       icon: <FaHome size={20} />,
     },
-    
+
     {
       name: "My Trips",
-      href: !user ? "/manage" : "manage-booking",
+      href: !user ? "/manage" : "/manage-booking",
       icon: <FaSuitcase size={16} />,
     },
     user
