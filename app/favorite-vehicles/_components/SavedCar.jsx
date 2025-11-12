@@ -124,6 +124,7 @@ function SavedCar({ car }) {
                   width={20}
                   height={20}
                   className="object-contain"
+                  loading="lazy"
                 />
                 <span className="text-xs text-muted-foreground mt-1">
                   {f?.label}

@@ -108,6 +108,7 @@ const DropdownInput = ({
                     alt={`${item.label} flag`}
                     width={20}
                     height={20}
+                    loading="lazy"
                   />
                   <span>{item.label}</span>
                 </div>

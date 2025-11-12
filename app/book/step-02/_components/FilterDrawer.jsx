@@ -40,6 +40,7 @@ function FilterDrawer({
             className="h-full w-[20px] cursor-pointer object-contain"
             width={20}
             height={20}
+            loading="lazy"
           />
         </div>
       </DrawerTrigger>

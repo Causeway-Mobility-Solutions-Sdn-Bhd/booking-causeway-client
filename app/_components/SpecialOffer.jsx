@@ -73,7 +73,7 @@ function SpecialOffer() {
                     fill
                     sizes="(max-width: 768px) 85vw, (min-width: 768px) 33vw"
                     className="object-fill rounded-lg"
-                    priority={slide.id === 1}
+                    loading="lazy"
                   />
                 </div>
               </div>

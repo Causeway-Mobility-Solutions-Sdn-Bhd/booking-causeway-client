@@ -157,7 +157,7 @@ function Car({ car }) {
                 width={200}
                 height={70}
                 unoptimized
-                priority
+                loading="lazy"
               />
               <span className="text-xs text-muted-foreground">{f?.label}</span>
             </div>

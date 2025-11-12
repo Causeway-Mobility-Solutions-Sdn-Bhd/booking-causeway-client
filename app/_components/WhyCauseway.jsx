@@ -52,7 +52,7 @@ function WhyCauseway() {
                 width={68}
                 height={68}
                 quality={100}
-                priority={index < 2}
+                loading="lazy"
                 className="object-contain w-[58px] sm:w-[64px] md:w-[68px]"
               />
             </div>

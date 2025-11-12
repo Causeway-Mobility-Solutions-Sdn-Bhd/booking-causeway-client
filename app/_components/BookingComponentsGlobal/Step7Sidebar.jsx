@@ -130,6 +130,7 @@ const Step7Sidebar = ({ manage = false, reservation = null }) => {
                     width={80}
                     height={80}
                     className="w-20 h-20 md:w-24 md:h-24 object-contain"
+                    loading="lazy"
                   />
                 </div>
                 <div className="flex-1">

@@ -55,7 +55,7 @@ function SideBar() {
       <div className="flex justify-left items-left mb-8">
         <Link href="/" onClick={handleCloseSidebar}>
           <Image
-            priority
+            loading="lazy"
             className="object-contain w-[150px]"
             src="/logo/logo-black.svg"
             alt="Causeway Logo"

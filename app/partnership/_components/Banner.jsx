@@ -14,7 +14,7 @@ const Banner = ({
           src={imageSrc}
           alt={altText}
           fill
-          priority
+          loading="lazy"
           className="object-cover object-top"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
         />

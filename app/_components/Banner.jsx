@@ -15,7 +15,7 @@ function Banner() {
           style={{ objectPosition: "center 2%" }}
           quality={100}
           sizes="100vw"
-          priority
+          loading="lazy"
         />
         
         {/* Desktop Image */}
@@ -26,7 +26,7 @@ function Banner() {
           className="object-cover object-top hidden sm:block"
           quality={100}
           sizes="100vw"
-          priority
+          loading="lazy"
         />
     
       </div>
