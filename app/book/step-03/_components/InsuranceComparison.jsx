@@ -68,6 +68,7 @@ export default function InsuranceComparison({
 
   const handleAdditionalCharges = (id) => {
     setChargeId(id);
+    console.log(id);
     const protectionIds = [9, 10, 11, 20];
 
     setSelectedCharges((prev) => {
@@ -105,11 +106,9 @@ export default function InsuranceComparison({
     <div className="bg-white p-4 rounded-2xl shadow-lg w-full max-w-2xl mx-auto mb-4">
       <div className="relative">
         <div
-          className={`absolute bottom-0 ${
-            chargeId === 10 ? "right-[25%]" : "right-[0]"
-          } flex flex-col items-end mb-[-33px] mr-[-15px]`}
+          className={`absolute bottom-0 right-0 flex flex-col items-end mb-[-33px] mr-[-15px]`}
         >
-          <div className="relative bg-cPrimary text-white px-4 py-1 rounded-sm text-xs flex items-center space-x-1">
+          <div className="relative bg-cSecondary text-white px-4 py-1 rounded-sm text-xs flex items-center space-x-1">
             <Image
               src="/icons/thumbs-up.svg"
               width={16}
@@ -119,7 +118,7 @@ export default function InsuranceComparison({
             />
             <span>Excess refunded</span>
 
-            <div className="absolute top-0 right-4 w-0 h-0 border-l-[6px] border-r-[6px] border-b-[6px] border-l-transparent border-r-transparent border-b-cPrimary -mt-[6px]"></div>
+            <div className="absolute top-0 right-4 w-0 h-0 border-l-[6px] border-r-[6px] border-b-[6px] border-l-transparent border-r-transparent border-b-cSecondary -mt-[6px]"></div>
           </div>
         </div>
 
@@ -177,11 +176,13 @@ export default function InsuranceComparison({
           <Row
             label="Excess"
             chargeId={chargeId}
+            handleAdditionalCharges={handleAdditionalCharges}
             values={plans.map((p) => p.excess)}
           />
           <Row
             label="3rd Party Liability"
             chargeId={chargeId}
+            handleAdditionalCharges={handleAdditionalCharges}
             values={plans.map((p) =>
               p.thirdParty ? (
                 <Check
@@ -196,6 +197,7 @@ export default function InsuranceComparison({
           <Row
             label="Towing And Road Side Assistance"
             chargeId={chargeId}
+            handleAdditionalCharges={handleAdditionalCharges}
             values={plans.map((p) =>
               p.towing ? (
                 <Check
@@ -210,6 +212,7 @@ export default function InsuranceComparison({
           <Row
             label="Vehicle Theft And Fire"
             chargeId={chargeId}
+            handleAdditionalCharges={handleAdditionalCharges}
             values={plans.map((p) =>
               p.theft ? (
                 <Check
@@ -224,6 +227,7 @@ export default function InsuranceComparison({
           <Row
             label="Damage To Vehicle Exterior (Excluding Interior Damage)"
             chargeId={chargeId}
+            handleAdditionalCharges={handleAdditionalCharges}
             values={plans.map((p) =>
               p.exterior ? (
                 <Check
@@ -238,15 +242,16 @@ export default function InsuranceComparison({
           <Row
             label="Price"
             chargeId={chargeId}
+            handleAdditionalCharges={handleAdditionalCharges}
             values={plans.map((p) =>
               selectedCharges.hasOwnProperty(p.id) ? (
                 <div className="flex flex-col items-center py-3">
-                  {p.id !== 20 && (
+                  {p.id !== 21 && (
                     <div className="mb-2">
-                      <p className="font-semibold text-sm text-left text-gray-800">
-                        {p.price}
+                      <p className="font-semibold text-[11px] flex justify-center items-center text-left text-gray-800">
+                        <span>{p.price} </span>
+                        <span> / Day</span>
                       </p>
-                      <p className="text-gray-800 text-left">/Day</p>
                     </div>
                   )}
                   {p.id === 20 ? (
@@ -266,12 +271,12 @@ export default function InsuranceComparison({
                 </div>
               ) : (
                 <div className="flex flex-col items-center py-3">
-                  {p.id !== 20 && (
+                  {p.id !== 21 && (
                     <div className="mb-2">
-                      <p className="font-semibold text-sm text-left text-gray-800">
-                        {p.price}
+                      <p className="font-semibold text-[11px] flex justify-center items-center text-left text-gray-800">
+                        <span>{p.price} </span>
+                        <span> / Day</span>
                       </p>
-                      <p className="text-gray-800 text-left">/Day</p>
                     </div>
                   )}
                   {p.id === 20 ? (
@@ -301,8 +306,14 @@ export default function InsuranceComparison({
   );
 }
 
-function Row({ label, chargeId, values }) {
+function Row({ label, chargeId, handleAdditionalCharges, values }) {
   console.log("Row chargeId:", chargeId);
+
+  const handleAddCharges = (i) => {
+    if (i === 1) handleAdditionalCharges(10);
+    if (i === 2) handleAdditionalCharges(11);
+  };
+
   return (
     <div
       className={`grid grid-cols-4 gap-0 items-center  border-gray-100 border-dashed`}
@@ -310,7 +321,9 @@ function Row({ label, chargeId, values }) {
       <div
         className={`text-gray-700 text-left flex ${
           label === "Price" && "rounded-bl-2xl"
-        }  items-center text-xs ${label === "Price" && "border-b"} ${
+        }  ${label !== "Price" ? "items-center" : "pt-3"} text-xs ${
+          label === "Price" && "border-b"
+        } ${
           label !== "Price" ? "py-4" : "h-full"
         } font-medium pr-2 border-l pl-2 border-r border-gray-200`}
       >
@@ -332,6 +345,7 @@ function Row({ label, chargeId, values }) {
         return (
           <div
             key={i}
+            onClick={() => handleAddCharges(i)}
             className={`text-center relative text-sm font-medium h-full flex justify-center items-center text-gray-800 border-r ${
               label === "Price" && i === 2 && "rounded-br-2xl"
             } ${label === "Price" ? "border-b" : ""}`}
