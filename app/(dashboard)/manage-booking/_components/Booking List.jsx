@@ -6,6 +6,7 @@ import Header from "./MicroComponents/Header";
 import BookingContent from "./MicroComponents/BookingContent";
 import { useGetAllReservationsQuery } from "@/store/api/reservationApiSlice";
 import Spinner from "@/components/custom/Spinner";
+import BottomBar from "@/app/_components/BottomBar";
 
 function BookingList() {
   const searchParams = useSearchParams();
@@ -50,11 +51,14 @@ function BookingList() {
   const bookings = reservations?.data;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#F0F0F0" }}>
-      {/* Header receives handler that updates both state & URL */}
-      <Header activeTab={activeTab} setActiveTab={handleTabChange} />
-      <BookingContent activeTab={activeTab} bookings={bookings} />
-    </div>
+    <>
+      <div className="min-h-screen" style={{ backgroundColor: "#F0F0F0" }}>
+        {/* Header receives handler that updates both state & URL */}
+        <Header activeTab={activeTab} setActiveTab={handleTabChange} />
+        <BookingContent activeTab={activeTab} bookings={bookings} />
+      </div>
+      <BottomBar />
+    </>
   );
 }
 
