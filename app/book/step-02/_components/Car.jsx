@@ -19,6 +19,7 @@ import {
   setSelectedVehicle,
 } from "@/store/slices/reservationSlice";
 import { showSuccessToast } from "@/app/_lib/toast";
+import Spinner from "@/components/custom/Spinner";
 
 function Car({ car }) {
   const reservation = useAppSelector((state) => state.reservation.reservation);
@@ -32,10 +33,10 @@ function Car({ car }) {
   const favorites = useAppSelector((state) => state.reservation.favorites);
 
   useEffect(() => {
-    if(Number(reservation?.vehicle_class_id) === car?.id){
+    if (Number(reservation?.vehicle_class_id) === car?.id) {
       setBooked(true);
     }
-  },[reservation])
+  }, [reservation]);
 
   const toggleFavorite = (vc) => {
     const prev = Array.isArray(favorites) ? favorites : [];
@@ -180,28 +181,24 @@ function Car({ car }) {
           <div className="flex flex-col w-full items-end">
             <SecondaryButton
               style={`h-12 lg:h-[47px] w-full hidden md:block ${
-                loader
-                  ? "opacity-70 cursor-wait"
-                  : booked
-                  ? "bg-cSecondary text-white"
-                  : "bg-cPrimary"
-              }`}
-              content={loader ? "Booking..." : "Book Now"}
+                booked ? "bg-cSecondary text-white" : "bg-cPrimary"
+              } flex items-center justify-center`}
+              content={
+                loader ? (
+                  <Spinner  size={20} color="#fff" thickness={3}/> 
+                ) : (
+                  "Book Now"
+                )
+              }
               onClick={!loader ? handleBooking : undefined}
             />
+
+            {/* Mobile button */}
             <Button
               onClick={!loader ? handleBooking : undefined}
-              className={`py-6 w-[160px] flex justify-center items-center md:hidden ${
-                loader
-                  ? "bg-cSecondary opacity-80 cursor-wait"
-                  : booked
-                  ? "bg-cSecondary"
-                  : "bg-cPrimary"
-              }`}
+              className={`py-6 w-[160px] flex justify-center bg-cPrimary items-center md:hidden `}
             >
-              <span className="-mt-1">
-                {loader ? "Booking..." : "Book Now"}
-              </span>
+              {loader ? <Spinner size={20} color="#fff" thickness={3} /> : <span className="-mt-1">Book Now</span>}
             </Button>
           </div>
         </div>
