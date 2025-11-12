@@ -4,6 +4,7 @@ import PhoneInput from "@/components/custom/PhoneInput";
 import ErrorMessage from "../../../../components/custom/ErrorMessage";
 import { InfoIcon } from "lucide-react";
 import { Tooltip } from "@/components/custom/InputInfoTooltip";
+import { useAppSelector } from "@/store/hooks";
 
 const DriversContactInfo = ({
   register,
@@ -12,6 +13,9 @@ const DriversContactInfo = ({
   firstErrorField,
   errors,
 }) => {
+  const loggedUser = useAppSelector((state) => state.auth.loggedUser);
+  console.log(loggedUser);
+
   return (
     <div className="space-y-6">
       <h2 className="text-lg font-bold mb-4 text-gray-800">
@@ -41,9 +45,14 @@ const DriversContactInfo = ({
               })}
               type="email"
               placeholder="Email Address"
-              className={`border-gray-200 !h-11 placeholder:font-light placeholder:text-sm placeholder-gray-500 focus-visible:ring-teal-500 focus-visible:ring-2 hover:border-teal-500 transition-colors pr-10 ${
+              className={`border-gray-200 disabled:!opacity-100 !h-11 placeholder:font-light placeholder:text-sm placeholder-gray-500 focus-visible:ring-teal-500 focus-visible:ring-2 hover:border-teal-500 transition-colors pr-10 ${
                 errors.email ? "border-red-500" : ""
+              } ${
+                loggedUser
+                  ? "bg-gray-100 text-black opacity-100 cursor-not-allowed"
+                  : ""
               }`}
+              disabled={!!loggedUser}
             />
             <div className="absolute right-3 top-6 -translate-y-1/2">
               <Tooltip
