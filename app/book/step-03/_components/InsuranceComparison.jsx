@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Check, X } from "lucide-react";
 import Image from "next/image";
+import { IoCheckmark } from "react-icons/io5";
 
 export default function InsuranceComparison({
   selectedCharges = {},
@@ -103,7 +104,11 @@ export default function InsuranceComparison({
   return (
     <div className="bg-white p-4 rounded-2xl shadow-lg w-full max-w-2xl mx-auto mb-4">
       <div className="relative">
-        <div className={`absolute bottom-0 ${chargeId === 10 ? "right-[25%]" : "right-[0]" } flex flex-col items-end mb-[-33px] mr-[-15px]`}>
+        <div
+          className={`absolute bottom-0 ${
+            chargeId === 10 ? "right-[25%]" : "right-[0]"
+          } flex flex-col items-end mb-[-33px] mr-[-15px]`}
+        >
           <div className="relative bg-cPrimary text-white px-4 py-1 rounded-sm text-xs flex items-center space-x-1">
             <Image
               src="/icons/thumbs-up.svg"
@@ -152,7 +157,16 @@ export default function InsuranceComparison({
                   <span className="font-semibold text-base text-[14px]">
                     {plan.name}
                   </span>
-                  {plan.icon}
+                  <div className="flex justify-center items-center gap-1 mt-2">
+                    <Image
+                      src="/icons/security-check.svg"
+                      width={15}
+                      height={15}
+                      alt="insurance plan icon"
+                      loading="lazy"
+                    />
+                    {plan.icon}
+                  </div>
                 </div>
               </div>
             );
@@ -294,9 +308,9 @@ function Row({ label, chargeId, values }) {
       className={`grid grid-cols-4 gap-0 items-center  border-gray-100 border-dashed`}
     >
       <div
-        className={`text-gray-700 text-left flex ${ label === "Price" && "rounded-bl-2xl"}  items-center text-xs ${
-          label === "Price" && "border-b"
-        } ${
+        className={`text-gray-700 text-left flex ${
+          label === "Price" && "rounded-bl-2xl"
+        }  items-center text-xs ${label === "Price" && "border-b"} ${
           label !== "Price" ? "py-4" : "h-full"
         } font-medium pr-2 border-l pl-2 border-r border-gray-200`}
       >
@@ -318,16 +332,19 @@ function Row({ label, chargeId, values }) {
         return (
           <div
             key={i}
-            className={`text-center text-sm font-medium h-full flex justify-center items-center text-gray-800 border-r ${
-              (label === "Price" && i === 2) && "rounded-br-2xl"
-            } ${
-              label === "Price" ? "border-b" : ""
-            }`}
+            className={`text-center relative text-sm font-medium h-full flex justify-center items-center text-gray-800 border-r ${
+              label === "Price" && i === 2 && "rounded-br-2xl"
+            } ${label === "Price" ? "border-b" : ""}`}
             style={{
               borderRightColor,
               borderBottomColor,
             }}
           >
+            {label === "Price" && i === 0 && (
+              <div className="py-1 px-1 absolute bottom-0 right-0 bg-cPrimary z-20 flex justify-center items-center rounded-tl-2xl">
+                <IoCheckmark color="#fff" />
+              </div>
+            )}
             {v}
           </div>
         );
@@ -337,7 +354,7 @@ function Row({ label, chargeId, values }) {
 }
 
 const ProgressBar = ({ colors = [] }) => (
-  <div className="w-[63px] rounded-full h-[8px] bg-white relative overflow-hidden mt-2">
+  <div className="w-[63px] rounded-full h-[8px] bg-white relative overflow-hidden">
     {colors.map((color, index) => (
       <div
         key={index}
