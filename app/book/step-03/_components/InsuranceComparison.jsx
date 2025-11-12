@@ -8,6 +8,7 @@ export default function InsuranceComparison({
   fetchData = () => {},
 }) {
   const [shouldFetch, setShouldFetch] = useState(false);
+  const [chargeId, setChargeId] = useState(null);
 
   useEffect(() => {
     if (shouldFetch) {
@@ -65,6 +66,7 @@ export default function InsuranceComparison({
   ];
 
   const handleAdditionalCharges = (id) => {
+    setChargeId(id);
     const protectionIds = [9, 10, 11, 20];
 
     setSelectedCharges((prev) => {
@@ -101,7 +103,7 @@ export default function InsuranceComparison({
   return (
     <div className="bg-white p-4 rounded-2xl shadow-lg w-full max-w-2xl mx-auto mb-4">
       <div className="relative">
-        <div className="absolute bottom-0 right-0 flex flex-col items-end mb-[-33px] mr-[-15px]">
+        <div className={`absolute bottom-0 ${chargeId === 10 ? "right-[25%]" : "right-[0]" } flex flex-col items-end mb-[-33px] mr-[-15px]`}>
           <div className="relative bg-cPrimary text-white px-4 py-1 rounded-sm text-xs flex items-center space-x-1">
             <Image
               src="/icons/thumbs-up.svg"
@@ -109,28 +111,38 @@ export default function InsuranceComparison({
               height={16}
               alt="thumbs up"
               loading="lazy"
-              />
-              <span>Excess refunded</span>
+            />
+            <span>Excess refunded</span>
 
             <div className="absolute top-0 right-4 w-0 h-0 border-l-[6px] border-r-[6px] border-b-[6px] border-l-transparent border-r-transparent border-b-cPrimary -mt-[6px]"></div>
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-0 text-center text-sm border-t border-gray-100">
-          <div className="text-gray-700 text-left  pr-2 border-r border-gray-200 border-l pl-2"></div>
+        <div className="grid grid-cols-4 gap-0 text-center text-sm border-b border-gray-200">
+          <div className="text-gray-700 text-left border-t rounded-tl-2xl pr-2 border-r border-gray-200 border-l pl-2"></div>
           {plans.map((plan, index) => {
-            const borderColor =
-              index === 1 || index === 2 ? "#811311" : "#E5E7EB";
-            const hasTopBorder = index === 2;
+            const borderColor = (chargeId === 10 ? index === 1 : index === 2)
+              ? "#811311"
+              : "#E5E7EB";
+            const borderRightColor = (
+              chargeId === 10
+                ? index === 0 || index === 1
+                : index === 1 || index === 2
+            )
+              ? "#811311"
+              : "#E5E7EB";
+
+            const hasTopBorder = chargeId === 10 ? index === 1 : index === 2;
 
             return (
               <div
                 key={plan.name}
-                className={`pb-2 px-2 border-r ${
-                  hasTopBorder ? "border-t" : ""
+                className={`pb-2 px-2  border-r border-t ${
+                  index === 2 && "rounded-tr-2xl"
                 }`}
                 style={{
-                  borderColor,
+                  borderTopColor: borderColor,
+                  borderRightColor: borderRightColor,
                   background: hasTopBorder
                     ? "linear-gradient(to bottom, #ffdee3 , #FFFFFF)"
                     : "transparent",
@@ -148,9 +160,14 @@ export default function InsuranceComparison({
         </div>
 
         <div className="divide-y divide-gray-100">
-          <Row label="Excess" values={plans.map((p) => p.excess)} />
+          <Row
+            label="Excess"
+            chargeId={chargeId}
+            values={plans.map((p) => p.excess)}
+          />
           <Row
             label="3rd Party Liability"
+            chargeId={chargeId}
             values={plans.map((p) =>
               p.thirdParty ? (
                 <Check
@@ -164,6 +181,7 @@ export default function InsuranceComparison({
           />
           <Row
             label="Towing And Road Side Assistance"
+            chargeId={chargeId}
             values={plans.map((p) =>
               p.towing ? (
                 <Check
@@ -177,6 +195,7 @@ export default function InsuranceComparison({
           />
           <Row
             label="Vehicle Theft And Fire"
+            chargeId={chargeId}
             values={plans.map((p) =>
               p.theft ? (
                 <Check
@@ -190,6 +209,7 @@ export default function InsuranceComparison({
           />
           <Row
             label="Damage To Vehicle Exterior (Excluding Interior Damage)"
+            chargeId={chargeId}
             values={plans.map((p) =>
               p.exterior ? (
                 <Check
@@ -203,9 +223,10 @@ export default function InsuranceComparison({
           />
           <Row
             label="Price"
+            chargeId={chargeId}
             values={plans.map((p) =>
               selectedCharges.hasOwnProperty(p.id) ? (
-                <div className="flex flex-col items-center pt-3">
+                <div className="flex flex-col items-center py-3">
                   {p.id !== 20 && (
                     <div className="mb-2">
                       <p className="font-semibold text-sm text-left text-gray-800">
@@ -219,7 +240,7 @@ export default function InsuranceComparison({
                   ) : (
                     <button
                       onClick={() => handleRemoveAdditionalCharges(p.id)}
-                      className="text-xs text-white font-medium px-6 py-2 rounded-lg mt-3"
+                      className="text-xs text-white font-medium px-4 py-2 rounded-lg mt-3"
                       style={{
                         backgroundColor: "#ff748b",
                         border: "1px solid #ff748b",
@@ -246,7 +267,7 @@ export default function InsuranceComparison({
                   ) : (
                     <button
                       onClick={() => handleAdditionalCharges(p.id)}
-                      className="text-xs font-medium px-6 py-2 rounded-lg mt-3"
+                      className="text-xs font-medium px-4 py-2 rounded-lg mt-3"
                       style={{
                         color: "#ff748b",
                         border: "1px solid #ff748b",
@@ -266,13 +287,14 @@ export default function InsuranceComparison({
   );
 }
 
-function Row({ label, values }) {
+function Row({ label, chargeId, values }) {
+  console.log("Row chargeId:", chargeId);
   return (
     <div
-      className={`grid grid-cols-4 gap-0 items-center  border-t border-gray-100`}
+      className={`grid grid-cols-4 gap-0 items-center  border-gray-100 border-dashed`}
     >
       <div
-        className={`text-gray-700 text-left flex items-center text-xs ${
+        className={`text-gray-700 text-left flex ${ label === "Price" && "rounded-bl-2xl"}  items-center text-xs ${
           label === "Price" && "border-b"
         } ${
           label !== "Price" ? "py-4" : "h-full"
@@ -281,14 +303,24 @@ function Row({ label, values }) {
         {label}
       </div>
       {values.map((v, i) => {
-        const borderRightColor = i === 1 || i === 2 ? "#811311" : "#E5E7EB";
+        const borderRightColor = (
+          chargeId === 10 ? i === 0 || i === 1 : i === 1 || i === 2
+        )
+          ? "#811311"
+          : "#E5E7EB";
         const borderBottomColor =
-          label === "Price" ? (i === 2 ? "#811311" : "#E5E7EB") : "transparent";
+          label === "Price"
+            ? i === (chargeId === 10 ? 1 : 2)
+              ? "#811311"
+              : "#E5E7EB"
+            : "transparent";
 
         return (
           <div
             key={i}
             className={`text-center text-sm font-medium h-full flex justify-center items-center text-gray-800 border-r ${
+              (label === "Price" && i === 2) && "rounded-br-2xl"
+            } ${
               label === "Price" ? "border-b" : ""
             }`}
             style={{
