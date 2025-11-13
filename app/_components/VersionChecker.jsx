@@ -10,7 +10,7 @@ import hqApi from "@/lib/hqApi";
 
 function VersionChecker() {
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
-  const [data , setData] = useState({})
+  const [data, setData] = useState({});
 
   const checkForUpdate = async () => {
     try {
@@ -18,14 +18,13 @@ function VersionChecker() {
       console.log("Version data:", response.data);
       const data = response.data;
       const storedVersion = localStorage.getItem("appVersion");
-      setData(data)
+      setData(data);
 
       if (storedVersion && storedVersion !== data.version) {
         setShowUpdatePopup(true); // Show update popup
       }
 
-      localStorage.setItem("appVersion", data.version); 
-     
+      localStorage.setItem("appVersion", data.version);
     } catch (error) {
       console.error("Error checking app version:", error);
     }
@@ -35,36 +34,43 @@ function VersionChecker() {
     checkForUpdate();
   }, []);
 
-  const handleUpdate = () => {
-
-    // Clear local storage
+  const handleUpdate = async () => {
+    // Clear storage
     localStorage.clear();
-
-    // Clear session storage
     sessionStorage.clear();
 
-    // Clear caches
-    caches.keys().then((names) => names.forEach((name) => caches.delete(name)));
+    // Clear Cache API
+    if ("caches" in window) {
+      const cacheNames = await caches.keys();
+      await Promise.all(cacheNames.map((name) => caches.delete(name)));
+    }
 
-    // Clear all cookies
+    // Clear cookies
     document.cookie.split(";").forEach((cookie) => {
-      document.cookie = cookie
-        .replace(/^ +/, "") // Trim spaces
-        .replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`); // Expire the cookie
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;`;
     });
 
+    // Unregister service workers
+    if ("serviceWorker" in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      regs.forEach((reg) => reg.unregister());
+    }
 
-    // Reload to fetch the latest version
-    window.location.replace(window.location.href);
+    // Force reload bypassing HTTP cache
+    const currentUrl = window.location.href.split("?")[0];
+    window.location.replace(`${currentUrl}?v=${Date.now()}`);
   };
 
   return (
-    <Dialog open={showUpdatePopup} >
+    <Dialog open={showUpdatePopup}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>New Version Available</DialogTitle>
           <DialogDescription>
-            A new version of the application is available. Please click the button to update.
+            A new version of the application is available. Please click the
+            button to update.
           </DialogDescription>
         </DialogHeader>
         <button
