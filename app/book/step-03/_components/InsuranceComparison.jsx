@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Check, X } from "lucide-react";
 import Image from "next/image";
 import { IoCheckmark } from "react-icons/io5";
+import { useAppSelector } from "@/store/hooks";
+import { useFormatPrice } from "@/app/_lib/formatPrice";
 
 export default function InsuranceComparison({
   selectedCharges = {},
@@ -10,24 +12,11 @@ export default function InsuranceComparison({
 }) {
   const [shouldFetch, setShouldFetch] = useState(false);
   const [chargeId, setChargeId] = useState(null);
-
-  useEffect(() => {
-    if (shouldFetch) {
-      const ac = transformSelectedCharges();
-      console.log(ac);
-      fetchData(ac, false);
-      setShouldFetch(false);
-    }
-  }, [shouldFetch]);
-
-  const transformSelectedCharges = () => {
-    return Object.entries(selectedCharges).map(([id, { quantity }]) => {
-      const parsedId = parseInt(id, 10);
-      return quantity === 0 ? `${parsedId}` : `${parsedId}_${quantity}`;
-    });
-  };
-
-  const plans = [
+  const additionalCharges = useAppSelector(
+    (state) => state?.reservation?.additionalCharges
+  );
+  const formatPrice = useFormatPrice();
+  const [plans, setPlans] = useState([
     {
       id: 20,
       name: "Standard",
@@ -64,11 +53,62 @@ export default function InsuranceComparison({
       color: "border-[#FF002A]",
       icon: <ProgressBar colors={["#05C7194D", "#05C71999", "#05C719"]} />,
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    if (!additionalCharges?.length) return;
+    const allCharges = additionalCharges.flatMap(c => c.charges || []);
+
+    const filteredCharges = allCharges.filter(c =>
+      [10, 11, 20].includes(c.id)
+    );
+
+    const updatedPlans = plans.map(plan => {
+      const match = filteredCharges.find(c => c.id === plan.id);
+      if (!match) return plan;
+      const formattedPrice = formatPrice(match?.total_price); 
+      return {
+        ...plan,
+        price:
+          plan.id === 20
+            ? formattedPrice // e.g. “RM 0.00”
+            : `+${formattedPrice}`, // e.g. “+RM 40.00”
+      };
+    });
+
+    setPlans(updatedPlans);
+  }, [additionalCharges]);
+
+  useEffect(() => {
+    if (selectedCharges) {
+      if (selectedCharges[10]) {
+        setChargeId(10);
+      } else if (selectedCharges[11]) {
+        setChargeId(11);
+      } else {
+        setChargeId(null);
+      }
+    }
+  }, [selectedCharges]);
+
+  useEffect(() => {
+    if (additionalCharges && additionalCharges.length > 0) {
+      const allCharges = additionalCharges.flatMap((cat) => cat.charges || []);
+      const filteredCharges = allCharges.filter((charge) =>
+        [10, 11, 20].includes(charge.id)
+      );
+    }
+  }, [additionalCharges]);
+
+  const transformSelectedCharges = () => {
+    return Object.entries(selectedCharges).map(([id, { quantity }]) => {
+      const parsedId = parseInt(id, 10);
+      return quantity === 0 ? `${parsedId}` : `${parsedId}_${quantity}`;
+    });
+  };
 
   const handleAdditionalCharges = (id) => {
     setChargeId(id);
-    console.log(id);
     const protectionIds = [9, 10, 11, 20];
 
     setSelectedCharges((prev) => {
@@ -100,6 +140,11 @@ export default function InsuranceComparison({
     });
 
     setShouldFetch(true);
+  };
+
+  const handleAddCharges = (i) => {
+    if (i === 1) handleAdditionalCharges(10);
+    if (i === 2) handleAdditionalCharges(11);
   };
 
   return (
@@ -140,6 +185,7 @@ export default function InsuranceComparison({
 
             return (
               <div
+                onClick={() => handleAddCharges(index)}
                 key={plan.name}
                 className={`pb-2 px-2  border-r border-t ${
                   index === 2 && "rounded-tr-2xl"
@@ -248,9 +294,9 @@ export default function InsuranceComparison({
                 <div className="flex flex-col items-center py-3">
                   {p.id !== 21 && (
                     <div className="mb-2">
-                      <p className="font-semibold text-[11px] flex justify-center items-center text-left text-gray-800">
+                      <p className="font-semibold text-[11px] flex justify-center flex-col items-center text-left text-gray-800">
                         <span>{p.price} </span>
-                        <span> / Day</span>
+                        <span>/Day</span>
                       </p>
                     </div>
                   )}
@@ -273,7 +319,7 @@ export default function InsuranceComparison({
                 <div className="flex flex-col items-center py-3">
                   {p.id !== 21 && (
                     <div className="mb-2">
-                      <p className="font-semibold text-[11px] flex justify-center items-center text-left text-gray-800">
+                      <p className="font-semibold text-[11px] flex justify-center flex-col items-center text-left text-gray-800">
                         <span>{p.price} </span>
                         <span> / Day</span>
                       </p>
@@ -307,7 +353,6 @@ export default function InsuranceComparison({
 }
 
 function Row({ label, chargeId, handleAdditionalCharges, values }) {
-  console.log("Row chargeId:", chargeId);
 
   const handleAddCharges = (i) => {
     if (i === 1) handleAdditionalCharges(10);

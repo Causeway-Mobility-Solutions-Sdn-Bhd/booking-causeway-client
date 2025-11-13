@@ -14,15 +14,11 @@ function BookingCard({ booking, activeTab, index }) {
   const [reBook, { isLoading }] = useReBookMutation();
 
   const onRebook = async () => {
-    console.log("Rebooking...");
-    console.log(booking.id);
-
     try {
       const response = await reBook({ id: booking.id }).unwrap();
       const { reservation } = response;
 
       showSuccessToast("Booking rebooked successfully!");
-      console.log(reservation);
 
       // Redirect user to the booking step with new ssid
       if (reservation?._id) {

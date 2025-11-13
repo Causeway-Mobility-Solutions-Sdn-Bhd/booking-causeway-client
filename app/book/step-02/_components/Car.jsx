@@ -196,7 +196,9 @@ function Car({ car }) {
             {/* Mobile button */}
             <Button
               onClick={!loader ? handleBooking : undefined}
-              className={`py-6 w-[160px] flex justify-center bg-cPrimary items-center md:hidden `}
+              className={`py-6 w-[160px] flex justify-center ${
+                booked ? "bg-cSecondary text-white" : "bg-cPrimary"
+              } items-center md:hidden `}
             >
               {loader ? <Spinner size={20} color="#fff" thickness={3} /> : <span className="-mt-1">Book Now</span>}
             </Button>

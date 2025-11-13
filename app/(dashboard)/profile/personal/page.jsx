@@ -30,7 +30,6 @@ const Page = () => {
     if (isSuccess && customer) {
       const transformed = transformCustomerData(customer);
       setDataAvailable(transformed);
-      console.log("Transformed Customer Data:", transformed);
     }
   }, [customer, isSuccess]);
 

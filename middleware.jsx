@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 export async function middleware(req) {
   const pathname = req.nextUrl.pathname;
   const env = process.env.STAGE;
-  console.log("Current Environment:", env);
 
   const token = req.cookies.get("refreshToken")?.value;
 
