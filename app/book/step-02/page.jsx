@@ -147,7 +147,7 @@ const NavCenter = ({ reservation, setTobBarFilter }) => {
           isDrawerOpen={editLocDateOpen}
           setIsDrawerOpen={setEditLocDateOpen}
           setTobBarFilter={setTobBarFilter}
-          isMid={false}
+          isMid={true}
         />
       </p>
     </div>

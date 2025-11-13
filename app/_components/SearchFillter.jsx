@@ -98,12 +98,12 @@ function SearchFillter({
         if (response?.data?.VehicleClasses?.length > 0) {
           setLoader(false);
           dispatch(setReservation(response?.data?.reservation));
+          dispatch(setSelectedVehicleClasses(response?.data?.VehicleClasses));
+
           const reservation = response?.data?.reservation;
           const sessionIDNew = reservation?._id;
 
           if (!isMid) {
-            // localStorage.setItem("ssid", sessionIDNew);
-            dispatch(setSelectedVehicleClasses(response?.data?.VehicleClasses));
             router.push(`/book/step-02?ssid=${sessionIDNew}`);
             handleReset();
           }

@@ -56,7 +56,6 @@ function Car({ car }) {
   // Booking handler
   const handleBooking = async () => {
     setLoader(true);
-    setBooked(false); // reset previous success state
 
     try {
       const requestData = {
