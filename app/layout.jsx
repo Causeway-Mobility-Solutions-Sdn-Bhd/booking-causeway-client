@@ -4,6 +4,7 @@ import BlackBg from "@/components/custom/BlackBg";
 import { Toaster } from "sonner";
 import Providers from "./provider";
 import RefreshTokenLoader from "./_components/RefreshTokenLoader";
+import VersionChecker from "./_components/VersionChecker";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${poppins.variable} antialiased`}>
         <Providers>
+            <VersionChecker />
           <RefreshTokenLoader>{children}</RefreshTokenLoader>
           <BlackBg />
           <Toaster

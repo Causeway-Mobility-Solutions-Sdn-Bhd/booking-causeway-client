@@ -14,7 +14,6 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setFavorites } from "@/store/slices/reservationSlice";
 import CurrentBooking from "./_components/CurrentBooking";
-import VersionChecker from "./_components/VersionChecker";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -26,7 +25,7 @@ export default function Home() {
 
   return (
     <div>
-      <VersionChecker />
+    
       <Nav isMain={true} value="Home" />
       <Banner />
       <Feauters />
