@@ -117,6 +117,7 @@ function SearchFillter({
     } catch (err) {
       console.log(err);
       setLoader(false);
+       setIsDrawerOpenSecondary(false);
       if (err?.response) {
         showErrorToast(err?.response?.data?.message);
       }

@@ -18,7 +18,7 @@ import {
   setReservation,
   setSelectedVehicle,
 } from "@/store/slices/reservationSlice";
-import { showSuccessToast } from "@/app/_lib/toast";
+import { showErrorToast, showSuccessToast } from "@/app/_lib/toast";
 import Spinner from "@/components/custom/Spinner";
 
 function Car({ car }) {
@@ -87,6 +87,7 @@ function Car({ car }) {
       }
     } catch (error) {
       console.error(error);
+      showErrorToast("Something Went Wrong")
     } finally {
       setLoader(false);
     }

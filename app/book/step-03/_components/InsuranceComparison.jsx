@@ -55,6 +55,16 @@ export default function InsuranceComparison({
     },
   ]);
 
+   useEffect(() => {
+    if (shouldFetch) {
+      const ac = transformSelectedCharges();
+      console.log(ac);
+      fetchData(ac, false);
+      setShouldFetch(false);
+    }
+  }, [shouldFetch]);
+
+
   useEffect(() => {
     if (!additionalCharges?.length) return;
     const allCharges = additionalCharges.flatMap(c => c.charges || []);
