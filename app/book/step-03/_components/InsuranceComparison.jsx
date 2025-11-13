@@ -331,7 +331,7 @@ export default function InsuranceComparison({
                     <div className="mb-2">
                       <p className="font-semibold text-[11px] flex justify-center flex-col items-center text-left text-gray-800">
                         <span>{p.price} </span>
-                        <span> / Day</span>
+                        <span>/Day</span>
                       </p>
                     </div>
                   )}
