@@ -165,7 +165,7 @@ export default function InsuranceComparison({
         >
           <div className="relative bg-cSecondary text-white px-4 py-1 rounded-sm text-xs flex items-center space-x-1">
             <Image
-              src="/icons/thumbs-up.svg"
+              src="/icons/thumbs-up-02.svg"
               width={16}
               height={16}
               alt="thumbs up"
