@@ -1,19 +1,15 @@
 "use client";
 import React, { useState } from "react";
-import { ChevronLeft } from "lucide-react";
-
 import { useRouter } from "next/navigation";
 import { useFindBookingMutation } from "@/store/api/reservationApiSlice";
 import { showErrorToast } from "@/app/_lib/toast";
 import Spinner from "@/components/custom/Spinner";
-import SubNavBar from "@/components/custom/SubNavBar";
 
 function FindBookingForm() {
   const router = useRouter();
   const [reservationNumber, setReservationNumber] = useState("");
   const [email, setEmail] = useState("");
 
-  // RTK Query lazy hook
   const [findBooking, { isLoading }] = useFindBookingMutation();
 
   const handleFindBooking = async (e) => {
@@ -48,14 +44,9 @@ function FindBookingForm() {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#F0F0F0" }}>
-      <SubNavBar name="Find Bookings" />
-
+    <div style={{ backgroundColor: "#F0F0F0" }} className="min-h-screen">
       {/* Main content */}
-      <div
-        className="max-w-7xl mx-auto px-4 py-6"
-        style={{ paddingTop: "20px" }}
-      >
+      <div className="max-w-7xl mx-auto px-4 py-6">
         <h2
           className="mb-4 px-1"
           style={{
