@@ -235,14 +235,14 @@ export default function InsuranceComparison({
           <div className="grid grid-cols-4 text-center text-sm border-b border-gray-200">
             <div className="text-gray-700 text-left border-t rounded-tl-2xl pr-2 border-r border-l pl-2" />
 
-            {plans.map((plan) => {
+            {plans.map((plan  , index) => {
               const isHighlighted = chargeId === plan.id;
 
               return (
                 <div
                   key={plan.id}
                   onClick={() => handleAdditionalCharges(plan.id)}
-                  className={`pb-2 px-2 border-r border-l border-t ${
+                  className={`pb-2 px-2 border-r border-l border-t ${index === 2 && 'rounded-tr-2xl'} ${
                     isHighlighted ? "rounded-t-2xl" : ""
                   }`}
                   style={{
