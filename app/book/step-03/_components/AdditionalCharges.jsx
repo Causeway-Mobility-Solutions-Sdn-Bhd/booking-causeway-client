@@ -140,7 +140,7 @@ function AdditionalCharges({
                   key={acc.id ?? index}
                   className={`bg-white ${
                     acc?.id === 11 && "mt-2 sm:mt-0"
-                  } shadow-lg rounded-md p-6 basis-[100%] w-full sm:basis-[calc(33%-16px)] relative`}
+                  } shadow-lg rounded-md px-6 py-4 basis-[100%] w-full sm:basis-[calc(33%-16px)] relative`}
                 >
                   {acc?.id === 11 && (
                     <div className="absolute top-[0] translate-y-[-50%] right-[8px] text-white text-[11px] font-semibold px-5 py-[6px] bg-[#006643] z-2 rounded-full">
@@ -156,7 +156,7 @@ function AdditionalCharges({
                     </div>
                     {/* Extra Visual Indicator */}
                     {ac?.category?.id === 1 && acc?.id !== 20 && (
-                      <div className="flex justify-start gap-2 items-center pb-[15px]">
+                      <div className="flex justify-start gap-2 items-center pb-[10px]">
                         {acc?.id === 9 && (
                           <>
                             <div className="h-7 flex justify-end flex-col items-center">
@@ -191,13 +191,13 @@ function AdditionalCharges({
                     )}
                   </div>
 
-                  <div className="pt-[18px] flex justify-between items-center gap-2">
+                  <div className="pt-3 pb-2 flex justify-between items-center gap-2">
                     {acc?.base_price?.amount !== "0.00" ? (
                       <div>
                         <h2 className="text-[17px] font-semibold">
                           {formatPrice(acc?.base_price)}
                         </h2>
-                        <p className="leading-[8px]">/ day</p>
+                        <p className="leading-[4px]">/ day</p>
                       </div>
                     ) : (
                       <h2 className="text-[17px] font-semibold">Included</h2>
@@ -206,7 +206,7 @@ function AdditionalCharges({
                     {acc?.selection_type !== "multiple" ? (
                       <Button
                         onClick={() => handleAddSingle(acc, ac)}
-                        className={`h-10 cursor-pointer border border-cSecondary flex justify-center items-center gap-1 shadow-none w-[110px] font-bold  ${
+                        className={`h-8 cursor-pointer border border-cSecondary flex justify-center items-center gap-1 shadow-none w-[110px] font-bold  ${
                           isSelected
                             ? "bg-cSecondary text-white hover:bg-cSecondary"
                             : "text-cSecondary bg-transparent hover:bg-transparent"
@@ -224,7 +224,7 @@ function AdditionalCharges({
                     ) : (
                       <div className="flex justify-end gap-3 items-center">
                         <div
-                          className={`h-8 w-8 flex justify-center items-center text-white shadow-none rounded-full text-[17px] font-bold cursor-pointer 
+                          className={`h-6 w-6 flex justify-center items-center text-white shadow-none rounded-full text-[17px] font-bold cursor-pointer 
                                 ${
                                   quantity > 0
                                     ? "bg-cSecondary"
@@ -235,15 +235,15 @@ function AdditionalCharges({
                             quantity > 0 && handleDecrement(acc, ac)
                           }
                         >
-                          <FaMinus size={15} />
+                          <FaMinus size={12} />
                         </div>
 
-                        <h3 className="text-[17px] font-bold">{quantity}</h3>
+                        <h3 className="text-[15px] font-bold">{quantity}</h3>
                         <div
-                          className="h-8 w-8 flex justify-center items-center text-white bg-cSecondary shadow-none rounded-full text-[17px] font-bold cursor-pointer"
+                          className="h-6 w-6 flex justify-center items-center text-white bg-cSecondary shadow-none rounded-full text-[17px] font-bold cursor-pointer"
                           onClick={() => handleIncrement(acc, ac)}
                         >
-                          <FaPlus size={15} />
+                          <FaPlus size={12} />
                         </div>
                       </div>
                     )}
@@ -281,8 +281,8 @@ const AccordionItem = ({ ac, acc, active }) => {
             <Image
               src={acc?.image}
               alt={acc.id}
-              width={30}
-              height={30}
+              width={25}
+              height={25}
               unoptimized
               loading="lazy"
               className="object-contain"
@@ -292,7 +292,7 @@ const AccordionItem = ({ ac, acc, active }) => {
               }}
             />
           )}
-          <h3 className="text-[16px] font-semibold">{acc?.label}</h3>
+          <h3 className="text-[14px] font-semibold">{acc?.label}</h3>
         </div>
 
         {acc?.description && (
