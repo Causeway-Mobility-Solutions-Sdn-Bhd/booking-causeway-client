@@ -49,7 +49,7 @@ function Nav({ isMain = true, value = "" }) {
 
   return (
     <div className="w-full py-5 sm:py-4 bg-white z-100">
-      <div className="flex justify-between items-center w-[95%] max-w-[1400px] mx-auto relative">
+      <div className="flex justify-between items-center w-[90%] sm:w-[95%] max-w-[1400px] mx-auto relative">
         {isMain ? (
           <Link href="/" className="cursor-pointer">
             <Image
