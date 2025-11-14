@@ -4,6 +4,7 @@ import Image from "next/image";
 import { IoCheckmark } from "react-icons/io5";
 import { useAppSelector } from "@/store/hooks";
 import { useFormatPrice } from "@/app/_lib/formatPrice";
+import SubHead from "@/components/custom/SubHead";
 
 export default function InsuranceComparison({
   selectedCharges = {},
@@ -14,6 +15,10 @@ export default function InsuranceComparison({
   const [chargeId, setChargeId] = useState(null);
   const additionalCharges = useAppSelector(
     (state) => state?.reservation?.additionalCharges
+  );
+  const currency = useAppSelector((state) => state.reservation.currency);
+  const allCurrencies = useAppSelector(
+    (state) => state.reservation.allCurrencies
   );
   const formatPrice = useFormatPrice();
   const [plans, setPlans] = useState([
@@ -55,7 +60,7 @@ export default function InsuranceComparison({
     },
   ]);
 
-   useEffect(() => {
+  useEffect(() => {
     if (shouldFetch) {
       const ac = transformSelectedCharges();
       console.log(ac);
@@ -64,25 +69,21 @@ export default function InsuranceComparison({
     }
   }, [shouldFetch]);
 
-
   useEffect(() => {
     if (!additionalCharges?.length) return;
-    const allCharges = additionalCharges.flatMap(c => c.charges || []);
+    const allCharges = additionalCharges.flatMap((c) => c.charges || []);
 
-    const filteredCharges = allCharges.filter(c =>
+    const filteredCharges = allCharges.filter((c) =>
       [10, 11, 20].includes(c.id)
     );
 
-    const updatedPlans = plans.map(plan => {
-      const match = filteredCharges.find(c => c.id === plan.id);
+    const updatedPlans = plans.map((plan) => {
+      const match = filteredCharges.find((c) => c.id === plan.id);
       if (!match) return plan;
-      const formattedPrice = formatPrice(match?.total_price); 
+      const formattedPrice = finalPrice(match?.total_price);
       return {
         ...plan,
-        price:
-          plan.id === 20
-            ? formattedPrice // e.g. “RM 0.00”
-            : `+${formattedPrice}`, // e.g. “+RM 40.00”
+        price: formattedPrice,
       };
     });
 
@@ -153,209 +154,229 @@ export default function InsuranceComparison({
   };
 
   const handleAddCharges = (i) => {
+     if (i === 0) handleAdditionalCharges(20);
     if (i === 1) handleAdditionalCharges(10);
     if (i === 2) handleAdditionalCharges(11);
   };
 
+  const finalPrice = (price) => {
+    const rate =
+      allCurrencies?.find((cur) => cur?.code === currency)?.exchange_rate || 1;
+    const amount = (rate * price?.usd_amount) / 2;
+
+    return `${amount.toFixed(2)}`;
+  };
+
+  const showCurrency = (id) => {
+    const isMYR = currency === "myr";
+    const prefix = id === 20 ? "" : "+";
+
+    if (isMYR) {
+      return `${prefix}RM`;
+    }
+
+    return `${prefix}${currency}`;
+  };
+
   return (
-    <div className="bg-white p-4 rounded-2xl shadow-lg w-full max-w-2xl mx-auto mb-4">
-      <div className="relative">
-        <div
-          className={`absolute bottom-0 right-0 flex flex-col items-end mb-[-33px] mr-[-15px]`}
-        >
-          <div className="relative bg-cSecondary text-white px-4 py-1 rounded-sm text-xs flex items-center space-x-1">
-            <Image
-              src="/icons/thumbs-up-02.svg"
-              width={16}
-              height={16}
-              alt="thumbs up"
-              loading="lazy"
-            />
-            <span>Excess refunded</span>
+    <div>
+      <SubHead text={"Select Packages"} />
+      <div className="bg-white p-4 rounded-2xl shadow-lg w-full max-w-2xl mx-auto my-4">
+        <div className="relative border border-gray-200 rounded-2xl">
+          <div
+            className={`absolute bottom-0 right-0 flex flex-col items-end mb-[-33px] mr-[-15px]`}
+          >
+            <div className="relative bg-cSecondary text-white px-4 py-1 rounded-sm text-xs flex items-center space-x-1">
+              <Image
+                src="/icons/thumbs-up-02.svg"
+                width={16}
+                height={16}
+                alt="thumbs up"
+                loading="lazy"
+              />
+              <span>Smart Choice</span>
 
-            <div className="absolute top-0 right-4 w-0 h-0 border-l-[6px] border-r-[6px] border-b-[6px] border-l-transparent border-r-transparent border-b-cSecondary -mt-[6px]"></div>
+              <div className="absolute top-0 right-4 w-0 h-0 border-l-[6px] border-r-[6px] border-b-[6px] border-l-transparent border-r-transparent border-b-cSecondary -mt-[6px]"></div>
+            </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-4 gap-0 text-center text-sm border-b border-gray-200">
-          <div className="text-gray-700 text-left border-t rounded-tl-2xl pr-2 border-r border-gray-200 border-l pl-2"></div>
-          {plans.map((plan, index) => {
-            const borderColor = (chargeId === 10 ? index === 1 : index === 2)
-              ? "#811311"
-              : "#E5E7EB";
-            const borderRightColor = (
-              chargeId === 10
-                ? index === 0 || index === 1
-                : index === 1 || index === 2
-            )
-              ? "#811311"
-              : "#E5E7EB";
+          <div className="grid grid-cols-4 gap-0 text-center text-sm border-b border-gray-200">
+            <div className="text-gray-700 text-left border-t rounded-tl-2xl pr-2 border-r  border-gray-200 border-l pl-2"></div>
+            {plans.map((plan, index) => {
+              const borderColor = (chargeId === 10 ? index === 1 : index === 2)
+                ? "#811311"
+                : "#E5E7EB";
+              const borderRightColor = (
+                chargeId === 10 ? index === 1 : index === 2
+              )
+                ? "#811311"
+                : "#E5E7EB";
 
-            const hasTopBorder = chargeId === 10 ? index === 1 : index === 2;
+              const hasTopBorder = chargeId === 10 ? index === 1 : index === 2;
 
-            return (
-              <div
-                onClick={() => handleAddCharges(index)}
-                key={plan.name}
-                className={`pb-2 px-2  border-r border-t ${
-                  index === 2 && "rounded-tr-2xl"
-                }`}
-                style={{
-                  borderTopColor: borderColor,
-                  borderRightColor: borderRightColor,
-                  background: hasTopBorder
-                    ? "linear-gradient(to bottom, #ffdee3 , #FFFFFF)"
-                    : "transparent",
-                }}
-              >
-                <div className="text-xs flex flex-col items-center py-3">
-                  <span className="font-semibold text-base text-[14px]">
-                    {plan.name}
-                  </span>
-                  <div className="flex justify-center items-center gap-1 mt-2">
-                    <Image
-                      src="/icons/security-check.svg"
-                      width={15}
-                      height={15}
-                      alt="insurance plan icon"
-                      loading="lazy"
-                    />
-                    {plan.icon}
+              return (
+                <div
+                  onClick={() => handleAddCharges(index)}
+                  key={plan.name}
+                  className={`pb-2 px-2  border-r border-l border-t ${
+                    hasTopBorder && "rounded-t-2xl"
+                  } ${index === 2 && "rounded-tr-2xl"}`}
+                  style={{
+                    borderTopColor: borderColor,
+                    borderRightColor: borderRightColor,
+                    borderLeftColor: borderRightColor,
+                    background: hasTopBorder
+                      ? "linear-gradient(to bottom, #ffdee3 , #FFFFFF)"
+                      : "transparent",
+                  }}
+                >
+                  <div className="text-xs flex flex-col items-center py-3">
+                    <span className="font-semibold text-base text-[14px]">
+                      {plan.name}
+                    </span>
+                    <div className="flex justify-center items-center gap-1 mt-2">
+                      <Image
+                        src="/icons/security-check.svg"
+                        width={15}
+                        height={15}
+                        alt="insurance plan icon"
+                        loading="lazy"
+                      />
+                      {plan.icon}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
 
-        <div className="divide-y divide-gray-100">
-          <Row
-            label="Excess"
-            chargeId={chargeId}
-            handleAdditionalCharges={handleAdditionalCharges}
-            values={plans.map((p) => p.excess)}
-          />
-          <Row
-            label="3rd Party Liability"
-            chargeId={chargeId}
-            handleAdditionalCharges={handleAdditionalCharges}
-            values={plans.map((p) =>
-              p.thirdParty ? (
-                <Check
-                  className="w-5 h-5 mx-auto"
-                  style={{ color: "#2dbdb6" }}
-                />
-              ) : (
-                <X className="w-5 h-5 mx-auto" style={{ color: "#ff748b" }} />
-              )
-            )}
-          />
-          <Row
-            label="Towing And Road Side Assistance"
-            chargeId={chargeId}
-            handleAdditionalCharges={handleAdditionalCharges}
-            values={plans.map((p) =>
-              p.towing ? (
-                <Check
-                  className="w-5 h-5 mx-auto"
-                  style={{ color: "#2dbdb6" }}
-                />
-              ) : (
-                <X className="w-5 h-5 mx-auto" style={{ color: "#ff748b" }} />
-              )
-            )}
-          />
-          <Row
-            label="Vehicle Theft And Fire"
-            chargeId={chargeId}
-            handleAdditionalCharges={handleAdditionalCharges}
-            values={plans.map((p) =>
-              p.theft ? (
-                <Check
-                  className="w-5 h-5 mx-auto"
-                  style={{ color: "#2dbdb6" }}
-                />
-              ) : (
-                <X className="w-5 h-5 mx-auto" style={{ color: "#ff748b" }} />
-              )
-            )}
-          />
-          <Row
-            label="Damage To Vehicle Exterior (Excluding Interior Damage)"
-            chargeId={chargeId}
-            handleAdditionalCharges={handleAdditionalCharges}
-            values={plans.map((p) =>
-              p.exterior ? (
-                <Check
-                  className="w-5 h-5 mx-auto"
-                  style={{ color: "#2dbdb6" }}
-                />
-              ) : (
-                <X className="w-5 h-5 mx-auto" style={{ color: "#ff748b" }} />
-              )
-            )}
-          />
-          <Row
-            label="Price"
-            chargeId={chargeId}
-            handleAdditionalCharges={handleAdditionalCharges}
-            values={plans.map((p) =>
-              selectedCharges.hasOwnProperty(p.id) ? (
-                <div className="flex flex-col items-center py-3">
-                  {p.id !== 21 && (
-                    <div className="mb-2">
-                      <p className="font-semibold text-[11px] flex justify-center flex-col items-center text-left text-gray-800">
-                        <span>{p.price} </span>
-                        <span>/Day</span>
+          <div className="divide-y divide-gray-100">
+            <Row
+              label="Excess"
+              chargeId={chargeId}
+              handleAdditionalCharges={handleAdditionalCharges}
+              values={plans.map((p) => p.excess)}
+            />
+            <Row
+              label="3rd Party Liability"
+              chargeId={chargeId}
+              handleAdditionalCharges={handleAdditionalCharges}
+              values={plans.map((p) =>
+                p.thirdParty ? (
+                  <Check
+                    className="w-5 h-5 mx-auto"
+                    style={{ color: "#2dbdb6" }}
+                  />
+                ) : (
+                  <X className="w-5 h-5 mx-auto" style={{ color: "#ff748b" }} />
+                )
+              )}
+            />
+            <Row
+              label="Towing And Road Side Assistance"
+              chargeId={chargeId}
+              handleAdditionalCharges={handleAdditionalCharges}
+              values={plans.map((p) =>
+                p.towing ? (
+                  <Check
+                    className="w-5 h-5 mx-auto"
+                    style={{ color: "#2dbdb6" }}
+                  />
+                ) : (
+                  <X className="w-5 h-5 mx-auto" style={{ color: "#ff748b" }} />
+                )
+              )}
+            />
+            <Row
+              label="Vehicle Theft And Fire"
+              chargeId={chargeId}
+              handleAdditionalCharges={handleAdditionalCharges}
+              values={plans.map((p) =>
+                p.theft ? (
+                  <Check
+                    className="w-5 h-5 mx-auto"
+                    style={{ color: "#2dbdb6" }}
+                  />
+                ) : (
+                  <X className="w-5 h-5 mx-auto" style={{ color: "#ff748b" }} />
+                )
+              )}
+            />
+            <Row
+              label="Damage To Vehicle Exterior (Excluding Interior Damage)"
+              chargeId={chargeId}
+              handleAdditionalCharges={handleAdditionalCharges}
+              values={plans.map((p) =>
+                p.exterior ? (
+                  <Check
+                    className="w-5 h-5 mx-auto"
+                    style={{ color: "#2dbdb6" }}
+                  />
+                ) : (
+                  <X className="w-5 h-5 mx-auto" style={{ color: "#ff748b" }} />
+                )
+              )}
+            />
+            <Row
+              label="Price"
+              chargeId={chargeId}
+              handleAdditionalCharges={handleAdditionalCharges}
+              values={plans.map((p) => {
+                const isSelected = selectedCharges.hasOwnProperty(p.id);
+                const isIncluded = p.id === 20;
+
+                const priceBlock = (
+                  <div className="mb-2">
+                    <div className="font-semibold text-[11px] flex justify-center flex-col items-center text-left text-gray-800">
+                      <p>
+                        <span className="text-ctextGray">
+                          {showCurrency(p.id)}
+                        </span>
+                        <span> {p.price}</span>
                       </p>
+                      <p className="text-ctextGray">/Day</p>
                     </div>
-                  )}
-                  {p.id === 20 ? (
-                    <p className="text-gray-400 text-xs">Currently Included</p>
-                  ) : (
-                    <button
-                      onClick={() => handleRemoveAdditionalCharges(p.id)}
-                      className="text-xs text-white font-medium px-4 py-2 rounded-lg mt-3"
-                      style={{
-                        backgroundColor: "#ff748b",
-                        border: "1px solid #ff748b",
-                      }}
-                    >
-                      Added
-                    </button>
-                  )}
-                </div>
-              ) : (
-                <div className="flex flex-col items-center py-3">
-                  {p.id !== 21 && (
-                    <div className="mb-2">
-                      <p className="font-semibold text-[11px] flex justify-center flex-col items-center text-left text-gray-800">
-                        <span>{p.price} </span>
-                        <span>/Day</span>
-                      </p>
-                    </div>
-                  )}
-                  {p.id === 20 ? (
-                    <p className="text-gray-400 text-xs mt-2">
-                      Currently Included
-                    </p>
-                  ) : (
-                    <button
-                      onClick={() => handleAdditionalCharges(p.id)}
-                      className="text-xs font-medium px-4 py-2 rounded-lg mt-3"
-                      style={{
-                        color: "#ff748b",
-                        border: "1px solid #ff748b",
-                        backgroundColor: "white",
-                      }}
-                    >
-                      Add
-                    </button>
-                  )}
-                </div>
-              )
-            )}
-          />
+                  </div>
+                );
+
+                const buttonBlock = isIncluded ? (
+                  <p className="text-gray-400 text-xs mt-3">
+                    Currently Included
+                  </p>
+                ) : isSelected ? (
+                  <button
+                    onClick={() => handleRemoveAdditionalCharges(p.id)}
+                    className="text-xs text-white font-medium px-4 py-2 rounded-lg mt-3"
+                    style={{
+                      backgroundColor: "#ff748b",
+                      border: "1px solid #ff748b",
+                    }}
+                  >
+                    Added
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleAdditionalCharges(p.id)}
+                    className="text-xs font-medium px-4 py-2 rounded-lg mt-3"
+                    style={{
+                      color: "#ff748b",
+                      border: "1px solid #ff748b",
+                      backgroundColor: "white",
+                    }}
+                  >
+                    Add
+                  </button>
+                );
+
+                return (
+                  <div key={p.id} className="flex flex-col items-center py-3">
+                    {priceBlock}
+                    {buttonBlock}
+                  </div>
+                );
+              })}
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -363,8 +384,8 @@ export default function InsuranceComparison({
 }
 
 function Row({ label, chargeId, handleAdditionalCharges, values }) {
-
   const handleAddCharges = (i) => {
+    if (i === 0) handleAdditionalCharges(20);
     if (i === 1) handleAdditionalCharges(10);
     if (i === 2) handleAdditionalCharges(11);
   };
@@ -385,9 +406,7 @@ function Row({ label, chargeId, handleAdditionalCharges, values }) {
         {label}
       </div>
       {values.map((v, i) => {
-        const borderRightColor = (
-          chargeId === 10 ? i === 0 || i === 1 : i === 1 || i === 2
-        )
+        const borderRightColor = (chargeId === 10 ? i === 1 : i === 2)
           ? "#811311"
           : "#E5E7EB";
         const borderBottomColor =
@@ -401,17 +420,22 @@ function Row({ label, chargeId, handleAdditionalCharges, values }) {
           <div
             key={i}
             onClick={() => handleAddCharges(i)}
-            className={`text-center relative text-sm font-medium h-full flex justify-center items-center text-gray-800 border-r ${
-              label === "Price" && i === 2 && "rounded-br-2xl"
-            } ${label === "Price" ? "border-b" : ""}`}
+            className={`text-center relative text-sm font-medium h-full flex justify-center items-center text-gray-800 border-r border-l ${
+              label === "Price" &&
+              (chargeId === 10 ? i === 1 : i === 2) &&
+              "rounded-b-2xl"
+            } ${i === 2 && label === "Price" && "rounded-br-2xl"} ${
+              label === "Price" ? "border-b" : ""
+            }`}
             style={{
-              borderRightColor,
+              borderRightColor: borderRightColor,
+              borderLeftColor: borderRightColor,
               borderBottomColor,
             }}
           >
             {label === "Price" && i === 0 && (
-              <div className="py-1 px-1 absolute bottom-0 right-0 bg-cPrimary z-20 flex justify-center items-center rounded-tl-2xl">
-                <IoCheckmark color="#fff" />
+              <div className="w-4 h-4 absolute bottom-0 right-0 bg-cPrimary z-20 flex justify-center items-center rounded-tl-2xl">
+                <IoCheckmark className="text-[11px]" color="#fff" />
               </div>
             )}
             {v}
