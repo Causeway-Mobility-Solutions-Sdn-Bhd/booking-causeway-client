@@ -162,6 +162,7 @@ const CustomerDetailsForm = ({
         const outstandingBalance =
           reservedReservationDetail?.total?.outstanding_balance?.amount ||
           "0.00";
+          console.log(outstandingBalance)
 
         const reservationId = reservationData?.id || "N/A";
         // const paymentDue = parseFloat(outstandingBalance).toFixed(2);

@@ -93,6 +93,8 @@ export default function InsuranceComparison({
     (state) => state.reservation.allCurrencies
   );
 
+  console.log(additionalCharges)
+
   // PLANS (NO JSX INSIDE STATE)
   const [plans, setPlans] = useState([
     {
@@ -134,7 +136,7 @@ export default function InsuranceComparison({
     const rate =
       allCurrencies?.find((cur) => cur?.code === currency)?.exchange_rate ||
       1;
-    return `${(rate * price?.usd_amount).toFixed(2)}`;
+    return `${(rate * price?.usd_amount).toFixed(0)}`;
   };
 
   const showCurrency = (id) => {
@@ -158,7 +160,7 @@ export default function InsuranceComparison({
     const updated = plans.map((plan) => {
       const match = filtered.find((c) => c.id === plan.id);
       return match
-        ? { ...plan, price: formatFinalPrice(match?.total_price) }
+        ? { ...plan, price: formatFinalPrice(match?.base_price) }
         : plan;
     });
 
@@ -328,7 +330,7 @@ export default function InsuranceComparison({
                         <span className="text-ctextGray">
                           {showCurrency(p.id)}
                         </span>
-                        <span> {p.price}</span>
+                        <span> {`${p.price}.00`}</span>
                       </p>
                       <p className="text-ctextGray">/Day</p>
                     </div>
