@@ -60,10 +60,10 @@ const DriverInformation = ({
                   value: 2,
                   message: "First name must be at least 2 characters",
                 },
-                pattern: {
-                  value: /^[A-Za-z\s]+$/,
-                  message: "Only alphabets are allowed",
-                },
+                // pattern: {
+                //   value: /^[A-Za-z\s]+$/,
+                //   message: "Only alphabets are allowed",
+                // },
               })}
               placeholder="First Name"
               className={`h-11 placeholder:font-light placeholder:text-sm border-gray-200 placeholder-gray-500 focus-visible:ring-teal-500 focus-visible:ring-2 hover:border-teal-500 transition-colors ${
@@ -83,10 +83,10 @@ const DriverInformation = ({
                   value: 2,
                   message: "Last name must be at least 2 characters",
                 },
-                pattern: {
-                  value: /^[A-Za-z\s]+$/,
-                  message: "Only alphabets are allowed",
-                },
+                // pattern: {
+                //   value: /^[A-Za-z\s]+$/,
+                //   message: "Only alphabets are allowed",
+                // },
               })}
               placeholder="Last Name"
               className={`h-11 placeholder:font-light placeholder:text-sm border-gray-200 placeholder-gray-500 focus-visible:ring-teal-500 focus-visible:ring-2 hover:border-teal-500 transition-colors ${
