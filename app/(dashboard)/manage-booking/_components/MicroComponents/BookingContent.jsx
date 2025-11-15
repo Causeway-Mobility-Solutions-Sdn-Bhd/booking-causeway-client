@@ -7,7 +7,7 @@ function BookingContent({ activeTab, bookings }) {
       className="max-w-7xl mx-auto"
       style={{
         paddingTop: "140px",
-        paddingBottom: "24px",
+        paddingBottom: "65px",
         paddingLeft: "16px",
         paddingRight: "16px",
       }}
